@@ -1,0 +1,37 @@
+#!/bin/sh
+
+function usage {
+  echo "Usage: $0 [-s|--selection] [-S|--screen] [-c|--clipboard] [-f|--file] [-h|--help]"
+  exit 1
+}
+
+flags=""
+destination="file"
+
+while (( $# > 0 )); do
+  case "$1" in
+    -s|--selection )
+      flags="-s -l -b 1.75 -c 0.4,0.1,0.6,0.55"
+      shift;;
+    -S|--screen )
+      flags=""
+      shift;;
+    -c|--clipboard )
+      destination="clipboard"
+      shift;;
+    -f|--file )
+      destination="file"
+      shift;;
+    -h|--help )
+      usage;;
+    *)
+      echo "Invalid argument: $1"
+      usage;;
+  esac
+done
+
+if [[ "$destination" == "file" ]]; then
+  maim $flags $HOME/Pictures/$(date +%s).png
+elif [[ "$destination" == "clipboard" ]]; then
+  maim $flags | xclip -selection clipboard -t image/png
+fi

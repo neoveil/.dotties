@@ -1,0 +1,21 @@
+[init]
+	defaultBranch = main
+[user]
+	name = Lucas A. F. Vitor
+	email = luca.oetdbem@gmail.com
+	signingkey = 774B9DC2BAB13D7B
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
+[commit]
+	gpgsign = true
+[pull]
+  rebase = true
+[color]
+  ui = auto
+[web]
+  browser = google-chrome-stable
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

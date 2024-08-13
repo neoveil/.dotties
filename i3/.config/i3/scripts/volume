@@ -1,0 +1,74 @@
+#!/bin/sh
+
+function check_for_dunstify {
+  if ! command -v dunstify &> /dev/null; then
+    echo "dunstify could not be found. is it installed?"
+    exit 1
+  fi
+}
+
+function current_volume {
+  pactl get-sink-volume @DEFAULT_SINK@ | head -n $(($SINK + 1)) | awk '{print $5}' | sed 's/%//g'
+}
+
+function is_mute {
+  pactl get-sink-mute @DEFAULT_SINK@ | grep -q 'yes'
+}
+
+function bar {
+  local volume=$1
+  local icon=""
+  local bar=""
+
+  if [[ $volume -gt 0 ]]; then
+    bar=$(printf "%0.s❚" $(seq 1 $(($volume / 5))))
+    bar+=" $volume%"
+
+    if [[ $volume -gt 66 ]]; then icon=" "
+    elif [[ $volume -gt 33 ]]; then icon=" "
+    else icon=""
+    fi
+  elif [[ $volume -eq -1 ]]; then
+    bar="mute"
+    icon=" "
+  else
+    icon=""
+    bar="0%"
+  fi
+
+  echo "$icon $bar"
+}
+
+function notify_volume {
+  check_for_dunstify
+  dunstify -t 3000 -r 2593 -u normal "$(bar $(current_volume))"
+}
+
+function notify_mute {
+  check_for_dunstify
+  dunstify -t 3000 -r 2593 -u normal "$(bar -1)"
+}
+
+case $1 in
+  up)
+    current_vol=$(current_volume)
+
+    if (( $current_vol >= 100 )) || (( $current_vol + 5 > 100 )); then
+      pactl set-sink-volume @DEFAULT_SINK@ 100%
+    else
+      pactl set-sink-volume @DEFAULT_SINK@ +5%
+    fi
+
+    notify_volume
+    ;;
+  down)
+    if [[ $(current_volume) -gt 0 ]]; then
+      pactl set-sink-volume @DEFAULT_SINK@ -5%
+    fi
+
+    notify_volume
+    ;;
+  mute)
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+    if is_mute; then notify_mute; else notify_volume; fi;;
+esac

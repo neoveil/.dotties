@@ -1,0 +1,12 @@
+#!/bin/sh
+
+echo $(curl -s 'https://wttr.in?format=%c%t+%p\n' \
+  | sed \
+    -e 's/+//g' \
+    -e 's/  / /g' \
+    -e 's/ 0.0mm//g' \
+  | awk '{
+    printf "%{F#bd93f9}%s%{F-} %s", $1, $2
+      if ($3 != "") printf " %{F#bd93f9}%{F-} %s", $3
+      print ""
+    }')

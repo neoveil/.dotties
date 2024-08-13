@@ -1,0 +1,19 @@
+alias path="echo $PATH | tr -s ':' '\n'"
+alias yayc="yay -Yc && yay -Scc --noconfirm && paccache -rk0"
+alias pbcopy="xsel --clipboard --input"
+alias pbpaste="xsel --clipboard --output"
+alias cat="bat"
+alias fzp="fzf --preview='$HOME/.config/fzf/scripts/preview {}'"
+alias fzn="fzp | xargs -r nvim"
+alias mkdir="mkdir -pv"
+alias whatsmyip="https -b ipinfo.io/ip | cat"
+alias weather="https -b wttr.in | cat"
+alias switchbg="systemctl --user start background"
+alias cmf="CM_LAUNCHER=fzf clipmenu"
+
+if [[ "$TERM" = "xterm-kitty" ]]; then
+  alias ssh="kitten ssh"
+  alias icat="kitten icat"
+fi
+
+# vim:ft=zsh

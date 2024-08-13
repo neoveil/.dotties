@@ -1,0 +1,60 @@
+#!/bin/sh
+
+uptime=$(uptime -p | sed 's/up //g')
+rofi_command="rofi -theme ~/.config/rofi/powermenu.rasi"
+
+# options
+terminal="  terminal"
+shutdown="  shutdown"
+reboot="󰜉  restart"
+suspend="󰒲  sleep"
+lock="  lock"
+logout="  logout"
+
+# confirmation
+confirm_exit() {
+  rofi -dmenu -i -no-fixed-num-lines -p "are you sure? (y/N) > " -theme ~/.config/rofi/powermenu.rasi
+}
+
+# variable passed to rofi
+options="$shutdown\n$reboot\n$lock\n$logout\n$suspend\n$terminal"
+
+chosen="$(echo -e "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
+case $chosen in
+  $shutdown)
+    ans=$(confirm_exit &)
+    if [[ $ans == "y" || $ans == "Y" ]]; then systemctl poweroff
+    else exit 0
+    fi
+    ;;
+
+  $reboot)
+    ans=$(confirm_exit &)
+    if [[ $ans == "y" || $ans == "Y" ]]; then systemctl reboot
+    else exit 0
+    fi
+    ;;
+
+  $lock)
+    ~/.config/i3/scripts/lock-screen
+    ;;
+
+  $suspend)
+    ans=$(confirm_exit &)
+    if [[ $ans == "y" || $ans == "Y" ]]; then
+      playerctl -a pause
+      systemctl suspend
+    else exit 0
+    fi
+    ;;
+
+  $logout)
+    ans=$(confirm_exit &)
+    if [[ $ans == "y" || $ans == "Y" ]]; then i3-msg exit
+    else exit 0
+    fi
+    ;;
+
+  $terminal)
+    kitty ~/
+esac

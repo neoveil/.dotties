@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if ! pgrep -f xidlehook > /dev/null; then
+  xidlehook \
+    --not-when-fullscreen \
+    --not-when-audio \
+    --detect-sleep \
+    --timer 300 \
+      '~/.config/i3/scripts/dim-screen dim' \
+      '~/.config/i3/scripts/dim-screen undim' \
+    --timer 600 \
+      '~/.config/i3/scripts/dim-screen undim; ~/.config/i3/scripts/lock-screen' \
+      '' \
+    --timer 900 \
+      'systemctl suspend' \
+      ''
+else
+  echo "idle: $(xidlehook --print)"
+fi

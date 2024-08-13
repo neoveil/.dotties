@@ -1,0 +1,112 @@
+#!/bin/bash
+
+function get-spotify-sink {
+  pactl list sink-inputs | grep -P '(^Sink Input)|(media.name = "Spotify"$)' | awk -F'#' '/Spotify/ { print sink } { sink = $2 }' | tail -1
+}
+
+function get-spotify-volume {
+  pactl list sink-inputs | awk -v RS='' '/media.name = "Spotify"/ { for (i = 1; i <= NF; i++) if ($i ~ /Volume:/) print $(i+4) }' | sed 's/%//'
+}
+
+while (( $# > 0 )); do
+  case "$1" in
+    -o|--output )
+      zscroll -l 25 \
+        --delay 0.2 \
+        --scroll-padding "   " \
+        --match-command "$(realpath "$0") -s" \
+        --match-text "Playing" "--scroll 1" \
+        --match-text "Paused" "--scroll 0" \
+        --update-check true \
+        "$(realpath "$0") -r"
+      shift ;;
+
+    -c|--play-pause )
+      playerctl -p spotify play-pause
+      shift ;;
+
+    -p|--prev )
+      playerctl -p spotify previous
+      shift ;;
+
+    -n|--next )
+      playerctl -p spotify next
+      shift ;;
+
+    -r|--raw-meta )
+      playerctl -p spotify metadata --format '{{ artist }} - {{ title }}' 2> /dev/null || echo "open spotify"
+      shift ;;
+
+    -s|--status )
+      playerctl -p spotify status 2> /dev/null || echo "open spotify"
+      shift ;;
+
+    -m|--polybar-media-control )
+      spotify_applet_path="~/.config/polybar/applets/spotify-applet"
+      separator="%{F#6272a4}|%{F-}"
+      prev="%{A1:$spotify_applet_path -p:} %{A}"
+      next="%{A1:$spotify_applet_path -n:} %{A}"
+
+      if [[ "$(playerctl -p spotify status)" == "Playing" ]]; then
+        play_pause_symbol=""
+      else
+        play_pause_symbol=""
+      fi
+
+      play_pause="%{A1:$spotify_applet_path -c:}$play_pause_symbol%{A}"
+
+      current_vol=$(get-spotify-volume)
+      volume_control=""
+      if [[ ! -z "$current_vol" ]]; then
+        if [[ $current_vol -gt 66 ]]; then
+          vol_icon=" "
+        elif [[ $current_vol -gt 33 ]]; then
+          vol_icon=" "
+        else
+          vol_icon=""
+        fi
+
+        volume_control=" $separator %{A1:$spotify_applet_path -v t:}%{A4:$spotify_applet_path -v '+5':}%{A5:$spotify_applet_path -v '-5':}%{F#bd93f9}$vol_icon%{F-} $current_vol%%{A}%{A}%{A}"
+      fi
+
+      echo " $separator %{F#bd93f9}$prev $play_pause $next%{F-}$volume_control"
+      shift ;;
+
+    -v|--volume )
+      sink=$(get-spotify-sink)
+      vol="$2"
+
+      if [[ "$vol" == "m" ]]; then
+        pactl set-sink-input-mute "$sink" 1
+      elif [[ "$vol" == "u" ]]; then
+        pactl set-sink-input-mute "$sink" 0
+      elif [[ "$vol" == "t" ]]; then
+        pactl set-sink-input-mute "$sink" toggle
+      else
+        vol="$(grep -Po '(\+|-)?\d+' <<< "$vol")"
+        current_vol=$(get-spotify-volume)
+
+        if [[ "${vol:0:1}" == '+' ]]; then
+          rel='+'
+
+          if (($current_vol >= 100)); then
+            pactl set-sink-input-volume "$sink" "100%"
+            exit 0
+          elif (( $current_vol + ${vol:1} >= 100 )); then
+            vol=$((100 - $current_vol))
+          else vol="${vol:1}"
+          fi
+        elif [[ "${vol:0:1}" == '-' ]]; then
+          rel='-'
+          vol="${vol:1}"
+        fi
+
+        pactl set-sink-input-volume "$sink" "${rel}${vol}%"
+      fi
+      shift 2;;
+
+    * )
+      (>&2 echo Unkown option "$1")
+      shift ;;
+  esac
+done

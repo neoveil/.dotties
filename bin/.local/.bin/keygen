@@ -1,0 +1,33 @@
+#!/bin/sh
+
+function usage {
+  echo "usage: keygen [--no-newline] [size?]"
+}
+
+function version {
+  echo "keygen - v0.1.0"
+}
+
+size=64
+print_newline=true
+
+while (( $# > 0 )); do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0;;
+    -v|--version)
+      version
+      exit 0;;
+    --no-newline)
+      print_newline=false
+      shift;;
+    *)
+      if [[ -n "$1" ]] && [ "$1" -eq "$1" ] 2> /dev/null; then size=$1; fi
+      shift;;
+  esac
+done
+
+key=$(tr -cd '[:alnum:]' < /dev/urandom | fold -w $size | head -n 1)
+
+if [[ "$print_newline" = true ]] && [[ -t 1 ]]; then echo $key; else echo -n $key; fi

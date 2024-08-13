@@ -1,0 +1,125 @@
+#!/bin/sh
+
+function usage {
+  echo "usage: install [-u|--uninstall] [-p|--packages <packages>]"
+}
+
+function version {
+  echo "dotties install - v0.1.0"
+}
+
+function has_package {
+  for element in "${packages[@]}"; do
+    if [[ "$element" == "$1" ]]; then return 0; fi
+  done
+
+  return 1
+}
+
+function link {
+  package=$1
+  from=$2
+  to=$3
+
+  if ! has_package "$package"; then
+    echo "$package package not found. skipping linking phase"
+    return
+  fi
+
+  if [ ! -d "$to" ]; then mkdir -pv "$to"; fi
+
+  for file in "$from/"*; do
+    [ -e "$file" ] || continue
+
+    if [ -L "$to/$(basename "$file")" ]; then
+      echo "skipping $file: already linked"
+    else
+      ln -sv "$file" "$to"
+    fi
+  done
+}
+
+function unlink {
+  package=$1
+  from=$2
+  matching_with=$3
+
+  if ! has_package "$package"; then
+    echo "$package package not found. skipping unlinking phase"
+    return
+  fi
+
+  if [ -d "$from" ]; then
+    for file in "$matching_with/"*; do
+      if [ -L "$from/$(basename "$file")" ]; then
+        rm -v "$from/$(basename "$file")"
+      fi
+    done
+  fi
+}
+
+if ! command -v stow &> /dev/null; then
+  echo "stow could not be found. is it installed?"
+  exit 1
+fi
+
+uninstall=false
+packages=(
+  zsh
+  git
+  bin
+  kitty
+  nvim
+  rofi
+  picom
+  polybar
+  betterlockscreen
+  dunst
+  fzf
+  gpg
+  gtk
+  xorg
+  yazi
+  backgrounds
+  bat
+  systemd
+  chrome
+  i3
+)
+
+while (( $# > 0 )); do
+  case "$1" in
+    -h|--help)
+      usage
+      exit 0;;
+    -v|--version)
+      version
+      exit 0;;
+    -u|--uninstall)
+      uninstall=true
+      shift;;
+    -p|--packages)
+      shift
+      packages=()
+      while (( $# > 0 )) && [[ "$1" != -* ]]; do
+        packages+=("$1")
+        shift
+      done;;
+    *)
+      echo "unknown option: $1"
+      usage
+      exit 1;;
+  esac
+done
+
+if [ "$uninstall" = true ]; then
+  unlink systemd $HOME/.config/systemd/user $HOME/.config/systemd/units
+  unlink systemd $HOME/.config/systemd/user $HOME/.config/systemd/timers
+  unlink bin $HOME/.local/bin $HOME/.local/.bin
+  stow -D -vv "${packages[@]}"
+else
+  stow -vv "${packages[@]}"
+  link systemd $HOME/.config/systemd/units $HOME/.config/systemd/user
+  link systemd $HOME/.config/systemd/timers $HOME/.config/systemd/user
+  link bin $HOME/.local/.bin $HOME/.local/bin
+fi

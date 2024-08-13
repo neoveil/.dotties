@@ -1,0 +1,33 @@
+#!/bin/sh
+
+#bar=" ▁▂▃▄▅▆▇█"
+bar="▁▂▃▄▅▆▇█"
+dict="s/;//g;"
+
+# creating "dictionary" to replace char with bar
+for i in $(seq 0 $((${#bar} - 1))); do
+  dict="${dict}s/$i/${bar:$i:1}/g;"
+done
+
+# write cava config
+config_file="/tmp/polybar_cava_config"
+cat << EOF > $config_file
+[general]
+bars = 27
+framerate = 144
+sensitivity = 125
+
+[output]
+channels = stereo
+method = raw
+raw_target = /dev/stdout
+data_format = ascii
+;ascii_max_range = 8
+ascii_max_range = 7
+EOF
+
+# read stdout from cava
+cava -p $config_file | while read -r line; do
+  #printf "\r\033[K%s" "$(echo $line | sed $dict)"
+  echo $line | sed "$dict"
+done
