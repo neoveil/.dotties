@@ -55,6 +55,9 @@ tiling_drag modifier titlebar
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
 
+# start emacs
+bindsym $mod+e exec emacsclient -nc
+
 # kill focused window
 bindsym $mod+q kill
 
@@ -83,8 +86,8 @@ focus_follows_mouse no
 bindsym $mod+f fullscreen toggle
 
 # change container layout (tabbed, toggle split)
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+t layout tabbed
+bindsym $mod+Shift+t layout toggle split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle

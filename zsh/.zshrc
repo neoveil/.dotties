@@ -40,6 +40,7 @@ plugins=(
 
 # zsh completions
 fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src
+fpath+=$ZSH_CUSTOM/eza
 
 source $ZSH/oh-my-zsh.sh
 
