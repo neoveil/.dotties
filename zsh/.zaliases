@@ -23,6 +23,7 @@ alias cummit="git commit -S -m \"\$(curl -s https://whatthecommit.com/index.txt)
 alias pbcopy="xsel --clipboard --input"
 alias pbpaste="xsel --clipboard --output"
 alias cat="bat"
+alias jenv="sudo archlinux-java"
 alias fzp="fzf --preview='$HOME/.config/fzf/scripts/preview {}'"
 alias fzn="fzp | xargs -r nvim"
 alias mkdir="mkdir -pv"
