@@ -3,4 +3,4 @@ Description=Set background image
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/feh --no-fehbg --bg-scale --randomize %h/.config/backgrounds/
+ExecStart=%h/.config/i3/scripts/background next

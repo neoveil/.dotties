@@ -1,6 +1,5 @@
 #!/bin/sh
 
 if ! pgrep -f betterlockscreen; then
-  betterlockscreen --lock blur &
-  betterlockscreen -u ~/.config/backgrounds
+  betterlockscreen --lock blur
 fi
