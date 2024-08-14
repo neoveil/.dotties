@@ -80,7 +80,6 @@ packages=(
   gtk
   xorg
   yazi
-  backgrounds
   bat
   systemd
   chrome
