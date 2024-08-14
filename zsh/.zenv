@@ -55,7 +55,7 @@ export FZF_DEFAULT_OPTS="\
 --bind=ctrl-j:preview-down"
 
 # eza
-export EXA_ICON_SPACING=2
+#export EXA_ICON_SPACING=2
 export EXA_COLORS="\
 uu=36:\
 gu=37:\
