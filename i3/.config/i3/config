@@ -82,6 +82,9 @@ bindsym $mod+Shift+Right move right
 # focus doesnt follow mouse
 focus_follows_mouse no
 
+# back and forth switch of workspaces
+workspace_auto_back_and_forth yes
+
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 

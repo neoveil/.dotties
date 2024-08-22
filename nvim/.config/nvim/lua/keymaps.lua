@@ -32,6 +32,9 @@ set({ 'n', 'v' }, '<leader>y', [["+y]])
 set('n', '<leader>Y', [["+Y]])
 set({ 'n', 'v' }, '<leader>d', [["_d]])
 
+set('i', '<C-e>', '<ESC>A')
+set('i', '<C-a>', '<ESC>I')
+
 set('n', '<C-d>', '<C-d>zz')
 set('n', '<C-u>', '<C-u>zz')
 set({ 'n', 'v' }, '<Up>', '<Up>zz')
