@@ -1,0 +1,7 @@
+auto-save-list/
+elpa/
+emojis/
+transient/
+.mc-lists.el
+.smex-items
+.last-package-update-day
