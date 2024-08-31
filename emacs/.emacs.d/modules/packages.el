@@ -10,9 +10,8 @@
  json-mode)
 
 (use-package exec-path-from-shell
-  :if (eq system-type 'darwin)
   :ensure t
-  :config (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize)))
+  :config (exec-path-from-shell-initialize))
 
 (use-package move-text
   :ensure t
@@ -21,7 +20,8 @@
 
 (use-package magit
   :ensure t
-  :bind ("C-c m s" . magit-status)
+  :bind (("C-c m s" . magit-status)
+         ("C-c m l" . magit-log))
   :config (setq git-commit-summary-max-length 70))
 
 (use-package smex
