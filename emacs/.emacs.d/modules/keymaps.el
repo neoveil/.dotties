@@ -1,0 +1,30 @@
+(global-set-key (kbd "C-,") 'duplicate-line-down)
+(global-set-key (kbd "C-x C-d") 'dired)
+(global-set-key (kbd "C-c p") 'find-file-at-point)
+
+(global-set-key (kbd "C-<return>") (lambda ()
+                                     (interactive)
+                                     (end-of-line)
+                                     (newline-and-indent)))
+
+(global-set-key (kbd "C-S-<return>") (lambda ()
+                                       (interactive)
+                                       (beginning-of-line)
+                                       (newline-and-indent)
+                                       (previous-line)
+                                       (indent-for-tab-command)))
+
+(global-set-key (kbd "C-;") 'comment-line)
+(global-set-key (kbd "C-S-<down>") 'duplicate-line-down)
+(global-set-key (kbd "C-S-<up>") 'duplicate-line)
+(global-set-key (kbd "C-x f") 'find-file)
+(global-set-key (kbd "C-x c") 'compile)
+(global-set-key (kbd "C-c C-M-<left>") 'windmove-swap-states-left)
+(global-set-key (kbd "C-c C-M-<right>") 'windmove-swap-states-right)
+(global-set-key (kbd "C-c C-M-<up>") 'windmove-swap-states-up)
+(global-set-key (kbd "C-c C-M-<down>") 'windmove-swap-states-down)
+
+(global-set-key (kbd "M-%") 'query-replace-global)
+(global-set-key (kbd "C-c C-/") 'query-replace-global)
+
+(provide 'keymaps)
