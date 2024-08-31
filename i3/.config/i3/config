@@ -58,6 +58,9 @@ bindsym $mod+Return exec i3-sensible-terminal
 # start emacs
 bindsym $mod+e exec --no-startup-id emacsclient -nc
 
+# start thunar
+bindsym Ctrl+$mod+f exec --no-startup-id thunar
+
 # kill focused window
 bindsym $mod+q kill
 
