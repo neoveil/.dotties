@@ -57,13 +57,14 @@
          (cider-repl-mode . enable-paredit-mode))
   :bind (:map paredit-mode-map
               ("M-<down>" . nil)
-              ("M-<up>" . nil))
+              ("M-<up>" . nil)
+              ("C-<left>" . nil)
+              ("C-<right>" . nil))
   :config (show-paren-mode t))
 
 (use-package multiple-cursors
   :ensure t
-  :bind (("C-c l" . mc/edit-lines)
-         ("C-S-d" . mc/mark-next-like-this)
+  :bind (("C-c C-l" . mc/edit-lines)
          ("M-S-<down>" . mc/mark-next-like-this)
          ("M-S-<up>" . mc/mark-previous-like-this)
          ("M-S-<mouse-1>" . mc/add-cursor-on-click)

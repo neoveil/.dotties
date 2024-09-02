@@ -8,8 +8,8 @@
  inhibit-splah-screen t
  create-lockfiles nil
  make-backup-files nil
- custom-file custom-file-path
  auto-save-default nil
+ custom-file custom-file-path
  fill-column 120
  isearch-wrap-pause 'no-ding
  blink-cursor-blinks 0
@@ -19,7 +19,6 @@
  select-enable-primary t
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t
- uniquify-buffer-name-style 'forward
  ring-bell-function 'ignore
  tramp-auto-save-directory "/tmp"
  dired-dwim-target t
@@ -27,12 +26,7 @@
  confirm-nonexistent-file-or-buffer nil
  dracula-use-24-bit-colors-on-256-colors-terms t
  vterm-always-compile-module t
- vterm-max-scrollback 20000
- c-basic-offset 2
- c-default-style '((java-mode . "java")
-                   (awk-mode . "awk")
-                   (other . "bsd"))
- sh-basic-offset 2)
+ vterm-max-scrollback 50000)
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -45,8 +39,15 @@
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 (windmove-default-keybindings 'meta)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(global-auto-revert-mode 1)
 (electric-pair-mode 1)
+(global-auto-revert-mode 1)
+
+(setq-default
+ c-basic-offset 2
+ c-default-style '((java-mode . "java")
+                   (awk-mode . "awk")
+                   (other . "bsd"))
+ sh-basic-offset 2)
 
 (add-hook 'c-mode-hook (lambda ()
                          (interactive)
@@ -58,8 +59,6 @@
   :config
   (set-face-attribute 'default nil
                       :family "JetBrainsMono NF"
-                      ;; :family "Iosevka NF"
-                      ;; :weight 'bold
                       :weight 'semi-bold
                       :height 140)
 

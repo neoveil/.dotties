@@ -25,6 +25,18 @@
     (move-beginning-of-line 1)
     (forward-char column)))
 
+(defun start-line-down ()
+  (interactive)
+  (end-of-line)
+  (newline-and-indent))
+
+(defun start-line-above ()
+  (interactive)
+  (beginning-of-line)
+  (newline-and-indent)
+  (previous-line)
+  (indent-for-tab-command))
+
 (defun kill-other-buffers ()
   (interactive)
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
