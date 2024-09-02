@@ -5,7 +5,7 @@
 (load-file custom-file-path)
 
 (setq-default
- inhibit-splah-screen t
+ inhibit-startup-screen t
  create-lockfiles nil
  make-backup-files nil
  auto-save-default nil
@@ -67,5 +67,11 @@
 
   (set-face-attribute 'line-number-current-line nil
                       :foreground "#BD93F9"))
+
+(when (eq system-type 'darwin)
+  (add-to-list 'default-frame-alist '(height . 42))
+  (add-to-list 'default-frame-alist '(width . 176))
+  (add-to-list 'default-frame-alist '(left . 5))
+  (add-to-list 'default-frame-alist '(top . 45)))
 
 (provide 'options)
