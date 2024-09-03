@@ -49,6 +49,6 @@
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (call-interactively 'query-replace)))
+    (call-interactively 'query-replace-regexp)))
 
 (provide 'functions)
