@@ -9,6 +9,7 @@
  create-lockfiles nil
  make-backup-files nil
  auto-save-default nil
+ require-final-newline t
  custom-file custom-file-path
  fill-column 120
  isearch-wrap-pause 'no-ding
@@ -22,7 +23,7 @@
  ring-bell-function 'ignore
  tramp-auto-save-directory "/tmp"
  dired-dwim-target t
- dired-listing-switches "-alh"
+ dired-listing-switches "-alh --group-directories-first"
  dired-free-space 'separate
  vc-follow-symlinks t
  epg-pinentry-mode 'loopback
@@ -37,7 +38,7 @@
                    (awk-mode . "awk")
                    (other . "bsd")))
 
-(menu-bar-mode 0)
+(unless (eq system-type 'darwin) (menu-bar-mode 0))
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
 (column-number-mode 1)
@@ -49,6 +50,7 @@
 (windmove-default-keybindings 'meta)
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (electric-pair-mode 1)
+(delete-selection-mode 1)
 (global-auto-revert-mode 1)
 
 (add-hook 'c-mode-hook (lambda ()
