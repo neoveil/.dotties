@@ -4,8 +4,8 @@
                  `(keymap-global-set ,key ,command))
                keys)))
 
-(keymap-global-set "C-RET" 'start-line-down)
-(keymap-global-set "C-S-RET" 'start-line-above)
+(keymap-global-set "C-<return>" 'start-line-down)
+(keymap-global-set "C-S-<return>" 'start-line-above)
 (keymap-global-set "C-x C-d" 'dired)
 (keymap-global-sets 'find-file-at-point "C-c p" "C-c C-p")
 (keymap-global-sets 'kill-other-buffers "C-c C-k C-o" "C-c C-k o" "C-c k o")
