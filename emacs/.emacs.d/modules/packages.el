@@ -76,9 +76,19 @@
          ("C->" . mc/skip-to-next-like-this)
          ("C-<" . mc/skip-to-previous-like-this)))
 
+(use-package sudo-edit
+  :ensure t
+  :defer t
+  :bind (("C-c f s" . sudo-edit)
+         ("C-c f S" . sudo-edit-current-file)))
+
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package rainbow-mode
+  :ensure t
+  :hook ((css-mode . rainbow-mode)))
 
 (use-package xterm-color
   :ensure t
