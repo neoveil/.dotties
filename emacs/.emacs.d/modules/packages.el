@@ -13,6 +13,10 @@
   :ensure t
   :config (exec-path-from-shell-initialize))
 
+(use-package pinentry
+  :ensure t
+  :config (pinentry-start))
+
 (use-package move-text
   :ensure t
   :bind (("C-M-<up>" . move-text-up)
