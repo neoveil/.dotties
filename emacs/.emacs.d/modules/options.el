@@ -13,7 +13,7 @@
  fill-column 120
  isearch-wrap-pause 'no-ding
  blink-cursor-blinks 0
- tab-width 2
+ tab-width 4
  indent-tabs-mode nil
  enable-recursive-minibuffers t
  select-enable-primary t
@@ -22,11 +22,20 @@
  ring-bell-function 'ignore
  tramp-auto-save-directory "/tmp"
  dired-dwim-target t
+ dired-listing-switches "-alh"
+ dired-free-space 'separate
  vc-follow-symlinks t
+ epg-pinentry-mode 'loopback
+ compilation-scroll-output t
  confirm-nonexistent-file-or-buffer nil
  dracula-use-24-bit-colors-on-256-colors-terms t
  vterm-always-compile-module t
- vterm-max-scrollback 50000)
+ vterm-max-scrollback 50000
+ confirm-kill-emacs 'y-or-n-p
+ c-basic-offset 4
+ c-default-style '((java-mode . "java")
+                   (awk-mode . "awk")
+                   (other . "bsd")))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -41,13 +50,6 @@
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 (electric-pair-mode 1)
 (global-auto-revert-mode 1)
-
-(setq-default
- c-basic-offset 2
- c-default-style '((java-mode . "java")
-                   (awk-mode . "awk")
-                   (other . "bsd"))
- sh-basic-offset 2)
 
 (add-hook 'c-mode-hook (lambda ()
                          (interactive)
