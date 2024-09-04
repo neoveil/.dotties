@@ -1,3 +1,5 @@
+/* -*- mode: css; -*- */
+
 configuration {
   show-icons: false;
   hide-scrollbar: true;

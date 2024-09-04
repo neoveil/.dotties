@@ -1,3 +1,6 @@
+# -*- mode: sh; -*-
+# vim:ft=sh
+
 alias path="echo $PATH | tr -s ':' '\n'"
 alias please="sudo"
 alias eza="eza --time-style=long-iso --color=always --icons --group-directories-first --git"
@@ -41,5 +44,3 @@ if [[ "$TERM" = "xterm-kitty" ]]; then
   alias ssh="kitten ssh"
   alias icat="kitten icat"
 fi
-
-# vim:ft=zsh

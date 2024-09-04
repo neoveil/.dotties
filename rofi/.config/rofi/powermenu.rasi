@@ -1,3 +1,5 @@
+/* -*- mode: css; -*- */
+
 configuration {
   font: "JetBrainsMono Nerd Font Medium 20";
 }

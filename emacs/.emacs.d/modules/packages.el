@@ -5,9 +5,9 @@
  vterm
  clojure-mode-extra-font-locking
  yaml-mode
- lua-mode
  dockerfile-mode
- json-mode)
+ json-mode
+ systemd)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -22,17 +22,26 @@
   :bind (("C-M-<up>" . move-text-up)
          ("C-M-<down>" . move-text-down)))
 
+(use-package dired
+  :bind (:map dired-mode-map
+              ("C-." . dired-up-directory)
+              ("C-x C-." . dired-up-directory))
+  :config (setq-default
+           dired-dwim-target t
+           dired-listing-switches "-alh --group-directories-first"
+           dired-free-space 'separate))
+
 (use-package magit
   :ensure t
   :bind (("C-c m s" . magit-status)
          ("C-c m l" . magit-log))
-  :config (setq git-commit-summary-max-length 70))
+  :config (setq-default git-commit-summary-max-length 70))
 
 (use-package smex
   :ensure t
   :bind (("M-x" . smex)
          ("C-c C-c M-x" . execute-extended-command))
-  :config (setq smex-save-file (concat user-emacs-directory ".smex-items")))
+  :config (setq-default smex-save-file (concat user-emacs-directory ".smex-items")))
 
 (use-package ido-completing-read+
   :ensure t
@@ -44,7 +53,7 @@
 (use-package yasnippet
   :ensure t
   :config
-  (setq yas/triggers-in-field nil)
+  (setq-default yas/triggers-in-field nil)
   (yas-global-mode 1))
 
 (use-package company
@@ -68,7 +77,7 @@
 
 (use-package multiple-cursors
   :ensure t
-  :bind (("C-c C-l" . mc/edit-lines)
+  :bind (("C-c e l" . mc/edit-lines)
          ("M-S-<down>" . mc/mark-next-like-this)
          ("M-S-<up>" . mc/mark-previous-like-this)
          ("M-S-<mouse-1>" . mc/add-cursor-on-click)
@@ -79,8 +88,7 @@
 (use-package sudo-edit
   :ensure t
   :defer t
-  :bind (("C-c f s" . sudo-edit)
-         ("C-c f S" . sudo-edit-current-file)))
+  :bind ("C-c f s" . sudo-edit))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -88,7 +96,7 @@
 
 (use-package rainbow-mode
   :ensure t
-  :hook ((css-mode . rainbow-mode)))
+  :hook (css-mode . rainbow-mode))
 
 (use-package xterm-color
   :ensure t
@@ -106,10 +114,10 @@
   :ensure t
   :bind ("C-x C-t" . vterm-toggle)
   :config
-  (setq vterm-toggle-hide-method 'reset-window-configration)
+  (setq-default vterm-toggle-hide-method 'reset-window-configration)
 
   ;; make the buffer fullscreen
-  ;; (setq vterm-toggle-fullscreen-p nil)
+  ;; (setq-default vterm-toggle-fullscreen-p nil)
 
   ;; show buffer in current window
   ;; (add-to-list 'display-buffer-alist
@@ -132,14 +140,44 @@
   ;;                (window-height . 0.3)))
   )
 
+(use-package cc-mode
+  :hook (c-mode . (lambda ()
+                    (interactive)
+                    (c-toggle-comment-style -1)))
+  :config (setq-default
+           c-basic-offset 2
+           c-default-style '((java-mode . "java")
+                             (awk-mode . "awk")
+                             (other . "bsd"))))
+
+(use-package sh-script
+  :config (setq-default sh-basic-offset 2))
+
+(use-package js
+  :config (setq-default
+           tab-width 2
+           js-indent-level 2))
+
+(use-package lua-mode
+  :config (setq-default
+           lua-indent-level 2
+           lua-indent-nested-block-content-align nil
+           lua-indent-close-paren-align nil))
 
 (use-package markdown-mode
   :ensure t
-  :mode (("\\.md\\'" . markdown-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :hook (markdown-mode . (lambda ()
                            (interactive)
-                           (toggle-word-wrap 1))))
+                           (toggle-word-wrap 1)))
+  :config (setq-default
+           markdown-fontify-code-blocks-natively t
+           markdown-command "cmark-gfm"
+           markdown-css-paths '("https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.6.1/github-markdown-dark.css"
+                                "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css")
+           markdown-xhtml-header-content "<style>.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px}@media (max-width:767px){.markdown-body{padding:15px}}</style><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js></script><script>document.addEventListener(\"DOMContentLoaded\",(()=>document.body.classList.add(\"markdown-body\")));</script><script>hljs.highlightAll()</script>"))
 
 (use-package clojure-mode
   :ensure t

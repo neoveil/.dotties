@@ -12,19 +12,16 @@
  require-final-newline t
  custom-file custom-file-path
  fill-column 120
- isearch-wrap-pause 'no-ding
  blink-cursor-blinks 0
- tab-width 4
+ tab-width 2
  indent-tabs-mode nil
+ isearch-wrap-pause 'no-ding
  enable-recursive-minibuffers t
  select-enable-primary t
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t
  ring-bell-function 'ignore
  tramp-auto-save-directory "/tmp"
- dired-dwim-target t
- dired-listing-switches "-alh --group-directories-first"
- dired-free-space 'separate
  vc-follow-symlinks t
  epg-pinentry-mode 'loopback
  compilation-scroll-output t
@@ -32,11 +29,7 @@
  dracula-use-24-bit-colors-on-256-colors-terms t
  vterm-always-compile-module t
  vterm-max-scrollback 50000
- confirm-kill-emacs 'y-or-n-p
- c-basic-offset 4
- c-default-style '((java-mode . "java")
-                   (awk-mode . "awk")
-                   (other . "bsd")))
+ confirm-kill-emacs 'y-or-n-p)
 
 (unless (eq system-type 'darwin) (menu-bar-mode 0))
 (tool-bar-mode 0)
@@ -53,10 +46,6 @@
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
 
-(add-hook 'c-mode-hook (lambda ()
-                         (interactive)
-                         (c-toggle-comment-style -1)))
-
 (use-theme dracula)
 
 (use-package faces
@@ -71,11 +60,5 @@
 
   (set-face-attribute 'line-number-current-line nil
                       :foreground "#BD93F9"))
-
-(when (eq system-type 'darwin)
-  (add-to-list 'default-frame-alist '(height . 42))
-  (add-to-list 'default-frame-alist '(width . 176))
-  (add-to-list 'default-frame-alist '(left . 5))
-  (add-to-list 'default-frame-alist '(top . 45)))
 
 (provide 'options)
