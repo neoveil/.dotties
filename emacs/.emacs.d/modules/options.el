@@ -29,6 +29,7 @@
  dracula-use-24-bit-colors-on-256-colors-terms t
  vterm-always-compile-module t
  vterm-max-scrollback 50000
+ max-lisp-eval-depth 10000
  confirm-kill-emacs 'y-or-n-p)
 
 (unless (eq system-type 'darwin) (menu-bar-mode 0))

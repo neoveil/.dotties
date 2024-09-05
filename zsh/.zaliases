@@ -43,7 +43,6 @@ alias whatsmyip="https -b ipinfo.io/ip | cat"
 alias weather="https -b wttr.in | cat"
 alias switchbg="suctl start background"
 alias cmf="CM_LAUNCHER=fzf clipmenu"
-alias grip="grip --theme=dark"
 
 if [[ "$TERM" = "xterm-kitty" ]]; then
   alias ssh="kitten ssh"

@@ -46,6 +46,7 @@
 (use-package ido-completing-read+
   :ensure t
   :config
+  (setq-default ido-auto-merge-work-directories-length nil)
   (ido-mode 1)
   (ido-everywhere 1)
   (ido-ubiquitous-mode 1))
@@ -164,20 +165,27 @@
            lua-indent-nested-block-content-align nil
            lua-indent-close-paren-align nil))
 
+(use-package python
+  :config (setq-default
+           tab-width 2
+           python-indent-offset 2))
+
 (use-package markdown-mode
   :ensure t
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
+  :mode (("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode))
   :hook (markdown-mode . (lambda ()
                            (interactive)
                            (toggle-word-wrap 1)))
+  :config (setq-default markdown-fontify-code-blocks-natively t))
+
+(use-package grip-mode
+  :ensure t
   :config (setq-default
-           markdown-fontify-code-blocks-natively t
-           markdown-command "cmark-gfm"
-           markdown-css-paths '("https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.6.1/github-markdown-dark.css"
-                                "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css")
-           markdown-xhtml-header-content "<style>.markdown-body{box-sizing:border-box;min-width:200px;max-width:980px;margin:0 auto;padding:45px}@media (max-width:767px){.markdown-body{padding:15px}}</style><script src=https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js></script><script>document.addEventListener(\"DOMContentLoaded\",(()=>document.body.classList.add(\"markdown-body\")));</script><script>hljs.highlightAll()</script>"))
+           grip-binary-path (concat (getenv "HOME") "/.local/bin/grip")
+           grip-update-after-change nil
+           grip-sleep-time 0))
 
 (use-package clojure-mode
   :ensure t
