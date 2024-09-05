@@ -76,7 +76,6 @@ packages=(
   betterlockscreen
   dunst
   fzf
-  gpg
   gtk
   xorg
   yazi
@@ -85,6 +84,7 @@ packages=(
   chrome
   i3
   emacs
+  grip
 )
 
 while (( $# > 0 )); do
