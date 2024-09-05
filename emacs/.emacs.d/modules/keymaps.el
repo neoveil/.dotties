@@ -21,13 +21,13 @@
 (keymap-global-set "C-c C-<up>" 'windmove-swap-states-up)
 (keymap-global-set "C-c C-<down>" 'windmove-swap-states-down)
 (keymap-global-set "M-/" 'hippie-expand)
+(keymap-global-set "C-c C-k C-a" 'kill-all-buffers)
+(keymap-global-set "C-c C-k C-o" 'kill-other-buffers)
+(keymap-global-set "C-c C-p" 'find-file-at-point)
+(keymap-global-set "C-c C-s C-c" 'shell-command)
+(keymap-global-set "C-c C-s C-a" 'async-shell-command)
 
-(keymap-global-sets 'find-file-at-point "C-c p" "C-c C-p")
-(keymap-global-sets 'kill-other-buffers "C-c C-k C-o" "C-c C-k o" "C-c k o")
-(keymap-global-sets 'kill-all-buffers "C-c C-k C-a" "C-c C-k a" "C-c k a")
 (keymap-global-sets 'compile "C-c C-x C-c" "C-x c")
 (keymap-global-sets 'query-replace-global "M-%" "C-c C-/" "C-x C-/")
-(keymap-global-sets 'shell-command "C-c C-s C-c" "C-c C-s c")
-(keymap-global-sets 'async-shell-command "C-c C-s C-a" "C-c C-s a")
 
 (provide 'keymaps)

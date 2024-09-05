@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: emacs lisp module skeleton
+# key: module
+# --
+$0
+
+(provide '${6:`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`})
