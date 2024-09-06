@@ -1,5 +1,9 @@
 (require 'packages)
 
+(use-packages
+ rainbow-mode
+ tree-sitter-langs)
+
 (use-package yasnippet
   :ensure t
   :config
@@ -31,5 +35,10 @@
 (use-package rainbow-delimiters
   :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
+
+(use-package tree-sitter
+  :ensure t
+  :hook (tree-sitter-after-on . tree-sitter-hl-mode)
+  :config (global-tree-sitter-mode))
 
 (provide 'prog-exts)

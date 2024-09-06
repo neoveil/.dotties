@@ -14,18 +14,6 @@
 
 (set-face-attribute 'show-paren-match nil :background "#6272a4")
 
-(defun prog-opts--c-like-better-highlight (&rest modes)
-  (dolist (mode modes)
-    (font-lock-add-keywords
-     mode
-     '(("\\([~^&|!<>=,.\\+*/%-]\\)" 0 'font-lock-operator-face keep)))
-    (font-lock-add-keywords
-     mode
-     '(("\\([\]\[}{)(:;]\\)" 0 'font-lock-delimit-face keep)))
-    (font-lock-add-keywords
-     mode
-     '(("\\([_a-zA-Z][_a-zA-Z0-9]*\\)\s*(" 1 'font-lock-function-name-face keep)))))
-
 (defun prog-opts--c-line-comment-style ()
   (interactive)
   (c-toggle-comment-style -1))
@@ -44,14 +32,7 @@
 (use-package cc-mode
   :hook (c-mode . prog-opts--c-line-comment-style)
   :bind (:map c-mode-map ("C-c C-s" . nil))
-  :config
-  (setq-default c-basic-offset 2)
-  (prog-opts--c-like-better-highlight
-   'c-mode
-   'c++-mode
-   'java-mode
-   'js-mode))
-
+  :config (setq-default c-basic-offset 2))
 (use-package sh-script
   :config (setq-default sh-basic-offset 2))
 
