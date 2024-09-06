@@ -76,6 +76,12 @@ return {
               capabilities = require 'cmp_nvim_lsp'.default_capabilities(),
               settings = { Lua = { diagnostics = { globals = { 'vim' }}}}
             }
+          end,
+
+          tsserver = function ()
+            require 'lspconfig'.ts_ls.setup {
+              capabilities = require 'cmp_nvim_lsp'.default_capabilities()
+            }
           end
         }
       }
