@@ -16,21 +16,23 @@
 
 (use-package paredit
   :ensure t
-  :bind (:map paredit-mode-map
-              ("M-<down>" . nil)
-              ("M-<up>" . nil)
-              ("C-<left>" . nil)
-              ("C-<right>" . nil)))
+  :bind
+  (:map paredit-mode-map
+        ("M-<down>" . nil)
+        ("M-<up>" . nil)
+        ("C-<left>" . nil)
+        ("C-<right>" . nil)))
 
 (use-package multiple-cursors
   :ensure t
-  :bind (("C-c e l" . mc/edit-lines)
-         ("M-S-<down>" . mc/mark-next-like-this)
-         ("M-S-<up>" . mc/mark-previous-like-this)
-         ("M-S-<mouse-1>" . mc/add-cursor-on-click)
-         ("C-c C->" . mc/mark-all-like-this)
-         ("C->" . mc/skip-to-next-like-this)
-         ("C-<" . mc/unmark-next-like-this)))
+  :bind
+  (("C-c e l" . mc/edit-lines)
+   ("M-S-<down>" . mc/mark-next-like-this)
+   ("M-S-<up>" . mc/mark-previous-like-this)
+   ("M-S-<mouse-1>" . mc/add-cursor-on-click)
+   ("C-c C->" . mc/mark-all-like-this)
+   ("C->" . mc/skip-to-next-like-this)
+   ("C-<" . mc/unmark-next-like-this)))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -38,7 +40,8 @@
 
 (use-package tree-sitter
   :ensure t
-  :hook (tree-sitter-after-on . tree-sitter-hl-mode)
-  :config (global-tree-sitter-mode))
+  :hook
+  ((after-init . global-tree-sitter-mode)
+   (tree-sitter-after-on . tree-sitter-hl-mode)))
 
 (provide 'prog-exts)

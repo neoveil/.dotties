@@ -11,7 +11,7 @@
                       :slant 'normal)
 
   (set-face-attribute 'line-number-current-line nil
-                      :foreground "#BD93F9"))
+                      :foreground "#bd93f9"))
 
 
 (provide 'fonts)

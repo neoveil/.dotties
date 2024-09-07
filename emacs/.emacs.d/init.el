@@ -6,6 +6,7 @@
 (require 'fonts)
 (require 'functions)
 (require 'keymaps)
+(require 'local-conf)
 (require 'tools)
 (require 'prog-tools)
 (require 'prog-exts)

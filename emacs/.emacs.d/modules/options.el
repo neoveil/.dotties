@@ -1,7 +1,6 @@
 (require 'variables)
 (require 'packages)
 
-(add-to-list 'load-path local-directory)
 (load-file custom-file-path)
 
 ;; basic settings

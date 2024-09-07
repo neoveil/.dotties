@@ -25,8 +25,9 @@
 
 (use-package smex
   :ensure t
-  :bind (("M-x" . smex)
-         ("C-c C-c M-x" . execute-extended-command))
+  :bind
+  (("M-x" . smex)
+   ("C-c C-c M-x" . execute-extended-command))
   :config (setq-default smex-save-file (concat user-emacs-directory ".smex-items")))
 
 (use-package ido-completing-read+
@@ -39,17 +40,19 @@
 
 (use-package magit
   :ensure t
-  :bind (("C-c m s" . magit-status)
-         ("C-c m l" . magit-log)
-         ("C-c m d" . magit-diff)
-         ("C-c m i" . magit-init)
-         ("C-c m c c" . magit-clone)
-         ("C-c m c s" . magit-clone-shallow))
+  :bind
+  (("C-c m s" . magit-status)
+   ("C-c m l" . magit-log)
+   ("C-c m d" . magit-diff)
+   ("C-c m i" . magit-init)
+   ("C-c m c c" . magit-clone)
+   ("C-c m c s" . magit-clone-shallow))
   :config (setq-default git-commit-summary-max-length 70))
 
 (use-package move-text
   :ensure t
-  :bind (("C-M-<up>" . move-text-up)
-         ("C-M-<down>" . move-text-down)))
+  :bind
+  (("C-M-<up>" . move-text-up)
+   ("C-M-<down>" . move-text-down)))
 
 (provide 'tools)

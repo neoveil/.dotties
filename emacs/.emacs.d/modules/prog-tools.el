@@ -33,6 +33,7 @@
   :hook (c-mode . prog-opts--c-line-comment-style)
   :bind (:map c-mode-map ("C-c C-s" . nil))
   :config (setq-default c-basic-offset 2))
+
 (use-package sh-script
   :config (setq-default sh-basic-offset 2))
 
@@ -59,9 +60,10 @@
 (use-package markdown-mode
   :ensure t
   :hook (markdown-mode . prog-opts--word-wrap-on-screen-edge)
-  :mode (("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode))
+  :mode
+  (("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode)
+   ("README\\.md\\'" . gfm-mode))
   :config (setq-default markdown-fontify-code-blocks-natively t))
 
 (use-package grip-mode
