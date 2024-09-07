@@ -42,6 +42,10 @@
   :ensure t
   :hook
   ((after-init . global-tree-sitter-mode)
-   (tree-sitter-after-on . tree-sitter-hl-mode)))
+   (tree-sitter-after-on . tree-sitter-hl-mode))
+  :config
+  (set-face-foreground 'tree-sitter-hl-face:function.macro "#ff79c6")
+  (set-face-attribute 'tree-sitter-hl-face:variable.parameter nil
+                      :weight 'semi-bold))
 
 (provide 'prog-exts)

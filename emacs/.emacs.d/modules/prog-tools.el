@@ -12,7 +12,7 @@
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
 
-(set-face-attribute 'show-paren-match nil :background "#6272a4")
+(set-face-background 'show-paren-match "#6272a4")
 
 (defun prog-opts--c-line-comment-style ()
   (interactive)
