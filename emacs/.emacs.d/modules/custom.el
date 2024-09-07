@@ -5,7 +5,7 @@
  ;; If there is more than one, they won't work right.
  '(display-line-numbers-type 'relative)
  '(package-selected-packages
-   '(tree-sitter-langs tree-sitter paredit grip-mode systemd sudo-edit pinentry vterm-toggle vterm rainbow-delimiters yasnippet yaml-mode xterm-color smex multiple-cursors move-text markdown-mode magit lua-mode json-mode ido-completing-read+ exec-path-from-shell dracula-theme dockerfile-mode company clojure-mode-extra-font-locking cider auto-package-update)))
+   '(rainbow-mode tree-sitter-langs tree-sitter paredit grip-mode systemd sudo-edit pinentry vterm-toggle vterm rainbow-delimiters yasnippet yaml-mode xterm-color smex multiple-cursors move-text markdown-mode magit lua-mode json-mode ido-completing-read+ exec-path-from-shell dracula-theme dockerfile-mode company clojure-mode-extra-font-locking cider auto-package-update)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
