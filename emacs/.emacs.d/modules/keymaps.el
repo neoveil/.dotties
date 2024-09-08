@@ -13,8 +13,8 @@
 (keymap-global-set "C-S-<return>" 'start-line-above)
 (keymap-global-set "C-x C-d" 'dired)
 (keymap-global-set "C-;" 'comment-line)
-(keymap-global-set "C-S-<down>" 'duplicate-line-down)
-(keymap-global-set "C-S-<up>" 'duplicate-line)
+(keymap-global-set "C-S-<down>" 'duplicate-line-or-region-down)
+(keymap-global-set "C-S-<up>" 'duplicate-line-or-region-above)
 (keymap-global-set "C-x f" 'find-file)
 (keymap-global-set "C-c C-<left>" 'windmove-swap-states-left)
 (keymap-global-set "C-c C-<right>" 'windmove-swap-states-right)
@@ -28,6 +28,6 @@
 (keymap-global-set "C-c C-s C-a" 'async-shell-command)
 
 (keymap-global-sets 'compile "C-c C-x C-c" "C-x c")
-(keymap-global-sets 'query-replace-global "M-%" "C-c C-/" "C-x C-/")
+(keymap-global-sets 'query-replace-global "C-c C-/" "C-x C-/")
 
 (provide 'keymaps)

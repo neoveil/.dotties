@@ -15,13 +15,22 @@
   (pinentry-start))
 
 (use-package dired
-  :hook (dired-mode . hl-line-mode)
-  :bind (:map dired-mode-map ("C-." . dired-up-directory))
+  :hook
+  (dired-mode . hl-line-mode)
+  (dired-mode . auto-revert-mode)
+  (wdired-mode . (lambda () (hl-line-mode -1)))
+  :bind
+  (:map dired-mode-map
+        ("C-." . dired-up-directory)
+        ("." . dired-up-directory))
   :config
   (setq-default
    dired-dwim-target t
    dired-listing-switches "-alh --group-directories-first"
-   dired-free-space 'separate))
+   dired-free-space 'separate)
+  (mapc
+   (lambda (fn) (advice-add fn :after (lambda (&rest _) (hl-line-mode))))
+   '(wdired-finish-edit wdired-abort-changes)))
 
 (use-package smex
   :ensure t

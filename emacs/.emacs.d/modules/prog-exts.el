@@ -45,7 +45,7 @@
    (tree-sitter-after-on . tree-sitter-hl-mode))
   :config
   (set-face-foreground 'tree-sitter-hl-face:function.macro "#ff79c6")
-  (set-face-attribute 'tree-sitter-hl-face:variable.parameter nil
-                      :weight 'semi-bold))
+  (set-face-attribute 'tree-sitter-hl-face:variable.parameter nil :weight 'semi-bold)
+  (set-face-attribute 'tree-sitter-hl-face:property nil :slant 'normal))
 
 (provide 'prog-exts)
