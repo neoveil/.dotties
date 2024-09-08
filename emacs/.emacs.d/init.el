@@ -3,7 +3,7 @@
 (require 'packages)
 (require 'variables)
 (require 'options)
-(require 'fonts)
+(require 'ui)
 (require 'functions)
 (require 'keymaps)
 (require 'local-conf)
