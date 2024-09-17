@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo $(curl -s 'https://wttr.in?format=%c%t+%p\n' \
+echo $(curl -s -H 'accept-language: pt-BR' 'https://wttr.in?format=%c%t+%p\n' \
          | sed \
              -e 's/+//g' \
              -e 's/  / /g' \
