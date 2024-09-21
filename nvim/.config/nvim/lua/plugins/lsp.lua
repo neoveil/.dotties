@@ -52,7 +52,7 @@ return {
         ensure_installed = {
           'asm_lsp', 'bashls', 'clangd', 'clojure_lsp',
           'dockerls', 'docker_compose_language_service', 'gradle_ls', 'jsonls',
-          'hls', 'html', 'jdtls', 'tsserver',
+          'hls', 'html', 'jdtls', 'ts_ls',
           'kotlin_language_server', 'lua_ls', 'autotools_ls', 'marksman',
           'pyright', 'rust_analyzer', 'sqls', 'taplo',
           'lemminx', 'vimls', 'yamlls', 'zls'
@@ -75,12 +75,6 @@ return {
             require 'lspconfig'.lua_ls.setup {
               capabilities = require 'cmp_nvim_lsp'.default_capabilities(),
               settings = { Lua = { diagnostics = { globals = { 'vim' }}}}
-            }
-          end,
-
-          tsserver = function ()
-            require 'lspconfig'.ts_ls.setup {
-              capabilities = require 'cmp_nvim_lsp'.default_capabilities()
             }
           end
         }
