@@ -1,0 +1,23 @@
+#!/bin/sh
+# -*- mode: sh; -*-
+
+for i in $(seq 10); do
+  if xsetwacom list devices | grep -qi wacom; then
+    break
+  fi
+
+  sleep .25
+done
+
+devices=$(xsetwacom list devices)
+pad=$(echo "${devices}" | awk '/pad/{print $7}')
+stylus=$(echo "${devices}" | awk '/stylus/{print $7}')
+
+if [ -z "${pad}" ]; then
+  exit 0
+fi
+
+xsetwacom set "${stylus}" Mode Relative
+xsetwacom set "${stylus}" Button 2 pan
+xsetwacom set "${stylus}" PanScrollThreshold 100
+xsetwacom set "${stylus}" CursorProximity 50
