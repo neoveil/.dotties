@@ -64,7 +64,12 @@
   (("\\.md\\'" . markdown-mode)
    ("\\.markdown\\'" . markdown-mode)
    ("README\\.md\\'" . gfm-mode))
-  :config (setq-default markdown-fontify-code-blocks-natively t))
+  :config
+  (setq-default markdown-fontify-code-blocks-natively t)
+  (dolist (face '(markdown-header-face-1
+                  markdown-header-face-2
+                  markdown-header-face-3))
+    (set-face-attribute face nil :height 'unspecified)))
 
 (use-package grip-mode
   :ensure t

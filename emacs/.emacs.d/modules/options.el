@@ -11,7 +11,8 @@
  isearch-wrap-pause 'no-ding
  enable-recursive-minibuffers t
  ring-bell-function 'ignore
- confirm-kill-emacs 'y-or-n-p)
+ confirm-kill-emacs 'y-or-n-p
+ native-comp-async-report-warnings-errors 'silent)
 
 ;; files settings
 (setq-default
