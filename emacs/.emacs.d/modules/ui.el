@@ -14,11 +14,13 @@
 (use-package all-the-icons
   :ensure t
   :config
-  (unless (file-exists-p (file-name-concat
-                          (getenv "XDG_DATA_HOME")
-                          "fonts"
-                          all-the-icons-fonts-subdirectory
-                          "all-the-icons.ttf"))
+  (if (file-exists-p (file-name-concat
+                      (or (getenv "XDG_DATA_HOME")
+                          (file-name-concat (getenv "HOME") ".local" "share"))
+                      "fonts"
+                      all-the-icons-fonts-subdirectory
+                      "all-the-icons.ttf"))
+      (message "`all-the-icons' fonts already installed, skipping download/install process")
     (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
