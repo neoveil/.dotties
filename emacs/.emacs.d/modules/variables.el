@@ -1,5 +1,5 @@
-(defvar modules-directory (concat user-emacs-directory "modules/"))
-(defvar custom-file-path  (concat modules-directory "custom.el"))
-(defvar local-directory (concat user-emacs-directory "local/"))
+(defvar modules-directory (file-name-concat user-emacs-directory "modules"))
+(defvar local-directory (file-name-concat user-emacs-directory "local"))
+(defvar custom-file-path  (file-name-concat modules-directory "custom.el"))
 
 (provide 'variables)

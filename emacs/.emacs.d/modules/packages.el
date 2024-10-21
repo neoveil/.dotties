@@ -5,17 +5,10 @@
 
 (package-initialize)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 (require 'use-package)
 
 (defmacro use-packages (&rest packages)
-  `(progn
-     ,@(mapcar (lambda (pkg)
-                 `(use-package ,pkg :ensure t))
-               packages)))
+  `(progn ,@(mapcar (lambda (pkg) `(use-package ,pkg :ensure t)) packages)))
 
 (defmacro use-theme (name &rest settings)
   `(use-package ,(intern (concat (symbol-name name) "-theme"))
@@ -31,7 +24,8 @@
 (use-package auto-package-update
   :ensure t
   :config
-  (setq
+  (setq-default
+   auto-package-update-interval 3
    auto-package-update-delete-old-versions t
    auto-package-update-hide-results t)
   (auto-package-update-maybe))

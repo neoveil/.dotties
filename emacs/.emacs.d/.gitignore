@@ -1,9 +1,13 @@
 auto-save-list/
 elpa/
 transient/
+eln-cache/
 .mc-lists.el
 .smex-items
 .last-package-update-day
 .cider-history
 ido.last
 recentf
+tramp
+projectile-bookmarks.eld
+places
