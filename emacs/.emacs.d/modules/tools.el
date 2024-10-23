@@ -5,10 +5,6 @@
  diminish
  sudo-edit)
 
-(use-package exec-path-from-shell
-  :ensure t
-  :config (exec-path-from-shell-initialize))
-
 (use-package pinentry
   :ensure t
   :config
@@ -30,7 +26,6 @@
   (projectile-mode 1))
 
 (use-package dired-x
-  :hook (dired-mode . dired-omit-mode)
   :config
   (setq-default
    dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
