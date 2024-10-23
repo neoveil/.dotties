@@ -22,14 +22,6 @@ SPACESHIP_PROMPT_ORDER=(
 
 # plugins
 plugins=(
-  mvn
-  gradle
-  docker
-  docker-compose
-  extract
-  httpie
-  lein
-  ufw
   git
   sudo
   colorize
@@ -44,8 +36,11 @@ fpath+=$ZSH_CUSTOM/eza
 
 source $ZSH/oh-my-zsh.sh
 
-# env
-[ -f "$HOME/.zenv" ] && . "$HOME/.zenv"
+# zoxide
+eval "$(zoxide init --cmd cd zsh)"
+
+# fzf
+source <(fzf --zsh)
 
 # aliases
 [ -f "$HOME/.zaliases" ] && . "$HOME/.zaliases"
