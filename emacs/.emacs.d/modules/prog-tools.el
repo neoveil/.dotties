@@ -74,7 +74,8 @@
   :config
   (setq-default
    grip-update-after-change nil
-   grip-sleep-time 0))
+   grip-sleep-time 0
+   grip-theme 'dark))
 
 (use-package clojure-mode
   :ensure t
