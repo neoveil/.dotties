@@ -30,7 +30,7 @@
   (setq-default
    use-package-always-demand t
    straight-use-package-by-default t
-   straight-host-usernames '((github . "lucasarthur"))
+   straight-host-usernames '((github . "neoveil"))
    straight-vc-git-default-clone-depth 1))
 
 (defmacro use-feature (name &rest args)
