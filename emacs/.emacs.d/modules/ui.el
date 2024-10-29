@@ -34,7 +34,7 @@
 (use-package dashboard
   :commands (dashboard-setup-startup-hook)
   :hook (dashboard-mode . (lambda () (setq-local mode-line-format nil)))
-  :bind ("C-c d g" . dashboard-refresh-buffer)
+  :bind ("C-c d g" . dashboard-open)
   :config
   (setq-default
    dashboard-startup-banner 'logo
