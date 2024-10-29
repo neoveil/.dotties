@@ -19,38 +19,34 @@
 (global-auto-revert-mode 1)
 (save-place-mode 1)
 
-(use-package cc-mode
-  :hook
-  (c-mode . (lambda ()
-              (declare-function c-toggle-comment-style "cc-cmds")
-              (c-toggle-comment-style -1)))
+(use-feature cc-mode
+  :commands (c-toggle-comment-style)
+  :hook (c-mode . (lambda () (c-toggle-comment-style -1)))
   :config (setq-default c-basic-offset 2))
 
-(use-package sh-script
+(use-feature sh-script
   :config (setq-default sh-basic-offset 2))
 
-(use-package js
+(use-feature js
   :config
   (setq-default
    tab-width 2
    js-indent-level 2))
 
 (use-package lua-mode
-  :ensure t
   :config
   (setq-default
    lua-indent-level 2
    lua-indent-nested-block-content-align nil
    lua-indent-close-paren-align nil))
 
-(use-package python
+(use-feature python
   :config
   (setq-default
    tab-width 2
    python-indent-offset 2))
 
 (use-package markdown-mode
-  :ensure t
   :hook (markdown-mode . (lambda () (toggle-word-wrap 1)))
   :bind
   (:map markdown-mode-map
@@ -70,7 +66,6 @@
     (set-face-attribute face nil :height 'unspecified)))
 
 (use-package grip-mode
-  :ensure t
   :config
   (setq-default
    grip-update-after-change nil
@@ -78,11 +73,9 @@
    grip-theme 'dark))
 
 (use-package clojure-mode
-  :ensure t
   :hook (clojure-mode . subword-mode))
 
 (use-package cider
-  :ensure t
   :hook (cider-mode . eldoc-mode)
   :config
   (setq-default
@@ -96,7 +89,7 @@
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware"))
 
 (use-package xterm-color
-  :ensure t
+  :commands (xterm-color-filter)
   :config
   (setq-default
    compilation-environment '("TERM=xterm-256color")

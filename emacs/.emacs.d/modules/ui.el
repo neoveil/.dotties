@@ -1,10 +1,9 @@
 (require 'packages)
 
-(use-theme
- dracula
- dracula-use-24-bit-colors-on-256-colors-terms t)
+(use-theme dracula
+           dracula-use-24-bit-colors-on-256-colors-terms t)
 
-(use-package faces
+(use-feature faces
   :config
   (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 150)
   (set-face-attribute 'line-number nil :slant 'normal)
@@ -12,7 +11,7 @@
   (set-face-background 'show-paren-match "#41589c"))
 
 (use-package all-the-icons
-  :ensure t
+  :commands (all-the-icons-install-fonts)
   :config
   (if (file-exists-p (file-name-concat
                       (or (getenv "XDG_DATA_HOME")
@@ -24,7 +23,7 @@
     (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
-  :ensure t
+  :defer t
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (menu-bar-mode 0)
