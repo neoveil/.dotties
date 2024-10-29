@@ -60,7 +60,6 @@
 (use-feature ido
   :commands (ido-everywhere)
   :config
-  (setq-default ido-auto-merge-work-directories-length nil)
   (ido-mode 1)
   (ido-everywhere 1))
 
