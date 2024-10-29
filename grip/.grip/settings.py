@@ -10,4 +10,4 @@ def get_token_from_keyring():
   return output.decode().strip()
 
 PASSWORD = get_token_from_keyring()
-USERNAME = 'lucasarthur'
+USERNAME = 'neoveil'
