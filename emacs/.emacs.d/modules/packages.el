@@ -1,6 +1,10 @@
 (setq-default
  straight-repository-branch "develop"
- straight-process-buffer " *straight-process*")
+ straight-process-buffer " *straight-process*"
+ straight-check-for-modifications (if (and (executable-find "watchexec")
+                                           (executable-find "python3"))
+                                      '(watch-files find-when-checking)
+                                    '(find-at-startup find-when-checking)))
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -26,10 +30,6 @@
   (setq-default
    use-package-always-demand t
    straight-use-package-by-default t
-   straight-check-for-modifications (if (and (executable-find "watchexec")
-                                             (executable-find "python3"))
-                                        '(watch-files find-when-checking)
-                                      '(find-at-startup find-when-checking))
    straight-host-usernames '((github . "lucasarthur"))
    straight-vc-git-default-clone-depth 1))
 
