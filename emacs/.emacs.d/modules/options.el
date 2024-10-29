@@ -32,5 +32,6 @@
 ;; misc
 (fset 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings 'meta)
+(pixel-scroll-precision-mode 1)
 
 (provide 'options)

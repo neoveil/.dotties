@@ -26,6 +26,33 @@
   :defer t
   :hook (dired-mode . all-the-icons-dired-mode))
 
+(use-package page-break-lines
+  :diminish
+  :commands (global-page-break-lines-mode)
+  :config (global-page-break-lines-mode 1))
+
+(use-package dashboard
+  :commands (dashboard-setup-startup-hook)
+  :hook (dashboard-mode . (lambda () (setq-local mode-line-format nil)))
+  :bind ("C-c d g" . dashboard-refresh-buffer)
+  :config
+  (setq-default
+   dashboard-startup-banner 'logo
+   dashboard-center-content t
+   dashboard-vertically-center-content t
+   dashboard-projects-backend 'projectile
+   dashboard-icon-type 'all-the-icons
+   dashboard-set-file-icons t
+   dashboard-startupify-list '(dashboard-insert-banner
+                               dashboard-insert-newline
+                               dashboard-insert-init-info
+                               dashboard-insert-items
+                               dashboard-insert-newline
+                               dashboard-insert-footer)
+   dashboard-items '((recents   . 10) (projects  . 10))
+   initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
+  (dashboard-setup-startup-hook))
+
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
