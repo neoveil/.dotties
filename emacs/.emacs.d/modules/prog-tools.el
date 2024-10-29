@@ -2,7 +2,6 @@
 
 (use-packages
  yaml-mode
- dockerfile-mode
  json-mode
  systemd
  clojure-mode-extra-font-locking)
@@ -87,6 +86,9 @@
    cider-prompt-for-symbol nil
    nrepl-log-messages nil)
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware"))
+
+(use-package dockerfile-mode
+  :config (setq-default dockerfile-indent-offset 2))
 
 (use-package xterm-color
   :commands (xterm-color-filter)

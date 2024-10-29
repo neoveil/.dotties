@@ -50,11 +50,19 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
+(defun tree-sitter--remove-langs (&rest langs)
+    (setq-default
+     tree-sitter-major-mode-language-alist
+     (cl-remove-if
+      (lambda (pair) (member (cdr pair) langs))
+      tree-sitter-major-mode-language-alist)))
+
 (use-package tree-sitter
   :hook
   (after-init . global-tree-sitter-mode)
   (tree-sitter-after-on . tree-sitter-hl-mode)
   :config
+  (tree-sitter--remove-langs 'dockerfile)
   (set-face-foreground 'tree-sitter-hl-face:function.macro "#ff79c6")
   (set-face-attribute 'tree-sitter-hl-face:property nil :slant 'normal))
 
