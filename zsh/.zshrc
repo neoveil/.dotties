@@ -42,6 +42,9 @@ eval "$(zoxide init --cmd cd zsh)"
 # fzf
 source <(fzf --zsh)
 
+# github
+eval "$(gh copilot alias -- zsh)"
+
 # aliases
 [ -f "$HOME/.zaliases" ] && . "$HOME/.zaliases"
 

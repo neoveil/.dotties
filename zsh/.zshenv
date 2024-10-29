@@ -25,7 +25,7 @@ export GDK_DPI_SCALE="1.25"
 export DOTFILES="$HOME/.dotties"
 
 # github
-export GITHUB_TOKEN=$(lssecret -s | grep -i -A1 'master' | tail -n 1 | sed 's/^secret:[[:space:]]//I')
+# export GITHUB_TOKEN=$(lssecret -s | grep -i -A1 'master' | tail -n 1 | sed 's/^secret:[[:space:]]//I')
 export GLAMOUR_STYLE="dracula"
 
 # ssh
