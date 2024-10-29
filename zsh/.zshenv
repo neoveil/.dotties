@@ -45,6 +45,10 @@ export WEBKIT_DISABLE_COMPOSITING_MODE=1
 # ghcup
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 
+# ruby
+export GEM_HOME="$(gem env user_gemhome)"
+export PATH="$PATH:$GEM_HOME/bin"
+
 # fzf
 export FZF_DEFAULT_OPTS="\
 --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 \
