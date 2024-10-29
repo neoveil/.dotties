@@ -2,7 +2,10 @@
 
 (use-packages
  rainbow-mode
- tree-sitter-langs)
+ tree-sitter-langs
+ flycheck-pkg-config
+ flycheck-pyflakes
+ flycheck-clj-kondo)
 
 (use-feature eldoc :diminish)
 
@@ -73,5 +76,21 @@
    flycheck-emacs-lisp-load-path 'inherit
    flycheck-disabled-checkers '(emacs-lisp-checkdoc))
   (global-flycheck-mode))
+
+(use-package flycheck-inline
+  :after flycheck
+  :hook (flycheck-mode . flycheck-inline-mode))
+
+(use-package flycheck-pycheckers
+  :hook (flycheck-mode . flycheck-pycheckers-setup))
+
+(use-package flycheck-checkbashisms
+  :hook (flycheck-mode . flycheck-checkbashisms-setup))
+
+(use-package flycheck-rust
+  :hook (flycheck-mode . flycheck-rust-setup))
+
+(use-package flycheck-kotlin
+  :hook (flycheck-mode . flycheck-kotlin-setup))
 
 (provide 'prog-exts)
