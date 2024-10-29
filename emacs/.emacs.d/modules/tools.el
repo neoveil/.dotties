@@ -23,7 +23,7 @@
   :config
   (setq-default
    projectile-switch-project-action #'projectile-dired
-   projectile-project-search-path '("~/Projects/"))
+   projectile-project-search-path '("~/Projects/" "~/Projects/archive/"))
   (projectile-mode 1))
 
 (use-feature dired-x
@@ -76,6 +76,7 @@
   ("C-c m i" . magit-init)
   ("C-c m c c" . magit-clone)
   ("C-c m c s" . magit-clone-shallow)
+  ("C-c m r a" . magit-remote-add)
   :config (setq-default git-commit-summary-max-length 70))
 
 (use-package move-text
