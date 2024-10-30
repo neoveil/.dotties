@@ -100,4 +100,11 @@
    compilation-scroll-output t)
   (advice-add 'compilation-filter :around (lambda (f p s) (funcall f p (xterm-color-filter s)))))
 
+(use-package quickrun
+  :bind ("C-c q r" . quickrun)
+  :config
+  (setq-default
+   quickrun-focus-p nil
+   quickrun-timeout-seconds nil))
+
 (provide 'prog-tools)
