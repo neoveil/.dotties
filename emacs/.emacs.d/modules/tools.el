@@ -51,22 +51,22 @@
    (lambda (fn) (advice-add fn :after (lambda (&rest _) (hl-line-mode))))
    '(wdired-finish-edit wdired-abort-changes)))
 
-(use-package neotree
-  :bind
-  ("C-c n t" . neotree-toggle)
-  (:map neotree-mode-map
-        ("." . neotree-select-up-node))
-  :config
-  (setq-default
-   neo-theme 'icons
-   neo-smart-open t
-   neo-hide-cursor t
-   neo-show-slash-for-folder nil
-   neo-autorefresh t
-   neo-create-file-auto-open t
-   neo-show-hidden-files t
-   neo-show-updir-line nil
-   neo-window-width 40))
+;; (use-package neotree
+;;   :bind
+;;   ("C-c n t" . neotree-toggle)
+;;   (:map neotree-mode-map
+;;         ("." . neotree-select-up-node))
+;;   :config
+;;   (setq-default
+;;    neo-theme 'icons
+;;    neo-smart-open t
+;;    neo-hide-cursor t
+;;    neo-show-slash-for-folder nil
+;;    neo-autorefresh t
+;;    neo-create-file-auto-open t
+;;    neo-show-hidden-files t
+;;    neo-show-updir-line nil
+;;    neo-window-width 40))
 
 (use-package smex
   :bind
