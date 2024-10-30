@@ -2,6 +2,8 @@
 
 (use-packages
  rainbow-mode
+ yasnippet-snippets
+ string-inflection
  tree-sitter-langs
  flycheck-pkg-config
  flycheck-pyflakes

@@ -1,5 +1,7 @@
 (require 'packages)
 
+(use-packages browse-kill-ring)
+
 (use-package pinentry
   :commands (pinentry-start)
   :config

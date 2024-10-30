@@ -8,7 +8,7 @@
 (require 'options)
 (require 'ui)
 (require 'functions)
-(require 'keymaps)
 (require 'tools)
 (require 'prog-tools)
 (require 'prog-exts)
+(require 'keymaps)

@@ -1,4 +1,5 @@
 (require 'functions)
+(require 'tools)
 
 (keymap-global-set "C-s" 'isearch-forward-regexp)
 (keymap-global-set "C-r" 'isearch-backward-regexp)
@@ -22,5 +23,6 @@
 (keymap-global-set "C-c x c" 'compile)
 (keymap-global-set "C-c /" 'query-replace-global)
 (keymap-global-set "M-%" 'anzu-query-replace)
+(keymap-global-set "C-c b y" 'browse-kill-ring)
 
 (provide 'keymaps)
