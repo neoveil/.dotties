@@ -1,6 +1,8 @@
 (require 'packages)
 
-(use-packages browse-kill-ring)
+(use-packages
+ browse-kill-ring
+ projectile-ripgrep)
 
 (use-package pinentry
   :commands (pinentry-start)

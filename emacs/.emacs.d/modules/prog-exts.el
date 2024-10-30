@@ -6,6 +6,7 @@
  yasnippet-snippets
  string-inflection
  tree-sitter-langs
+ flycheck-projectile
  flycheck-pkg-config
  flycheck-pyflakes
  flycheck-clj-kondo)
