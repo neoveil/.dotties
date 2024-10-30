@@ -61,8 +61,18 @@
   (ido-everywhere 1))
 
 (use-package ido-completing-read+
+  :after ido
   :commands (ido-ubiquitous-mode)
   :config (ido-ubiquitous-mode 1))
+
+(use-package flx-ido
+  :commands (flx-ido-mode)
+  :after ido-completing-read+
+  :config
+  (setq-default
+   ido-enable-flex-matching t
+   flx-ido-use-faces nil)
+  (flx-ido-mode 1))
 
 (use-package magit
   :bind
