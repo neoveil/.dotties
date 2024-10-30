@@ -3,8 +3,7 @@
 (use-packages
  yaml-mode
  json-mode
- systemd
- clojure-mode-extra-font-locking)
+ systemd)
 
 (setq-default
  tab-width 2
