@@ -17,10 +17,16 @@
 
 (use-package company
   :commands (global-company-mode)
+  :bind (:map company-active-map
+              ("<tab>" . company-complete-selection))
   :config
   (setq-default
    company-minimum-prefix-length 1
    company-idle-delay 0.0
+   company-selection-wrap-around t
+   company-tooltip-align-annotations t
+   company-tooltip-limit 15
+   company-tooltip-minimum-width 45
    company-backends (mapcar
                      (lambda (backend)
                        (if (and (listp backend) (member 'company-yasnippet backend))
@@ -33,7 +39,10 @@
 (use-package company-box
   :diminish
   :hook (company-mode . company-box-mode)
-  :config (setq-default company-box-icons-alist 'company-box-icons-all-the-icons))
+  :config
+  (setq-default
+   company-box-icons-alist 'company-box-icons-all-the-icons
+   company-box-scrollbar nil))
 
 (use-package paredit
   :bind
