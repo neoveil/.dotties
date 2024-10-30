@@ -1,5 +1,8 @@
 (require 'packages)
 
+(use-packages
+ svg-lib)
+
 (use-theme dracula
            dracula-use-24-bit-colors-on-256-colors-terms t)
 
@@ -34,6 +37,15 @@
   (set-face-attribute 'anzu-mode-line nil :foreground "#bd93f9" :weight 'bold)
   (set-face-attribute 'anzu-mode-line-no-match nil :foreground "#ff6666" :weight 'bold)
   (global-anzu-mode 1))
+
+;; looks nice, but i'm still thinking about it
+;; (use-package powerline
+;;   :commands (powerline-default-theme)
+;;   :config
+;;   (setq-default
+;;    powerline-display-hud nil
+;;    powerline-default-separator 'bar)
+;;   (powerline-default-theme))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)

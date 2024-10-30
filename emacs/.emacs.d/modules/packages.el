@@ -52,4 +52,9 @@
                      `(setq-default ,(car setting) ,(cadr setting)))
                    (seq-partition settings 2))))))
 
+(use-packages
+ dash
+ crux
+ diminish)
+
 (provide 'packages)

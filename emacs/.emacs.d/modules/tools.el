@@ -1,10 +1,5 @@
 (require 'packages)
 
-(use-packages
- dash
- diminish
- sudo-edit)
-
 (use-package pinentry
   :commands (pinentry-start)
   :config
