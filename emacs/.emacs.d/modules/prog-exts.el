@@ -11,6 +11,14 @@
 
 (use-feature eldoc :diminish)
 
+(use-package devdocs
+  :bind
+  ("C-h d" . nil)
+  ("C-h D" . apropos-documentation)
+  ("C-h d l" . devdocs-lookup)
+  ("C-h d i" . devdocs-install)
+  ("C-h d o" . devdocs-peruse))
+
 (use-package yasnippet
   :commands (yas-global-mode)
   :config (yas-global-mode 1))
@@ -25,8 +33,6 @@
    company-idle-delay 0.0
    company-selection-wrap-around t
    company-tooltip-align-annotations t
-   company-tooltip-limit 15
-   company-tooltip-minimum-width 45
    company-backends (mapcar
                      (lambda (backend)
                        (if (and (listp backend) (member 'company-yasnippet backend))
