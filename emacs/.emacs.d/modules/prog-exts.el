@@ -1,6 +1,7 @@
 (require 'packages)
 
 (use-packages
+ tldr
  rainbow-mode
  yasnippet-snippets
  string-inflection
