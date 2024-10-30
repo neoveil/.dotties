@@ -19,8 +19,9 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (setq-default
-   projectile-switch-project-action #'projectile-dired
-   projectile-project-search-path '("~/Projects/" "~/Projects/archive/"))
+   projectile-switch-project-action 'projectile-dired
+   projectile-project-search-path '("~/Projects/" "~/Projects/archive/")
+   projectile-ignored-projects '("~/.dotties/emacs/.emacs.d/straight/"))
   (projectile-mode 1))
 
 (use-feature dired-x
@@ -56,6 +57,7 @@
   :config
   (setq-default
    neo-theme 'icons
+   neo-smart-open t
    neo-hide-cursor t
    neo-show-slash-for-folder nil
    neo-autorefresh t
