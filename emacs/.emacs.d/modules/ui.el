@@ -27,6 +27,7 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package anzu
+  :after diminish
   :diminish
   :commands (global-anzu-mode)
   :config
