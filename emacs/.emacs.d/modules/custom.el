@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(anzu-replace-to-string-separator " => ")
+ '(auth-source-save-behavior nil)
  '(display-line-numbers-type 'relative))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
