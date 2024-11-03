@@ -17,3 +17,5 @@ straight/
 *~
 devdocs/
 tldr/
+.cache/
+flycheck_init.el

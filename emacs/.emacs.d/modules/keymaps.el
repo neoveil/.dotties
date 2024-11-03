@@ -23,7 +23,7 @@
 (keymap-global-set "C-c s a" 'async-shell-command)
 (keymap-global-set "C-c x c" 'compile)
 (keymap-global-set "C-c /" 'query-replace-global)
-(keymap-global-set "M-%" 'anzu-query-replace)
+(keymap-global-set "M-%" 'anzu-query-replace-regexp)
 (keymap-global-set "C-c b y" 'browse-kill-ring)
 
 (provide 'keymaps)

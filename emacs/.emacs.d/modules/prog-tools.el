@@ -101,7 +101,7 @@
   (advice-add 'compilation-filter :around (lambda (f p s) (funcall f p (xterm-color-filter s)))))
 
 (use-package quickrun
-  :bind ("C-c q r" . quickrun)
+  :bind ("C-c r r" . quickrun)
   :config
   (setq-default
    quickrun-focus-p nil
