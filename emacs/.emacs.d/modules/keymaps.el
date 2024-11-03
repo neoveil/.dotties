@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'functions)
 (require 'tools)
 

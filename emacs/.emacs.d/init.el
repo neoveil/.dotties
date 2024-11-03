@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (add-to-list 'load-path (file-name-concat user-emacs-directory "modules"))
 
 (require 'packages)

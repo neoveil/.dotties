@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; idea and chunks of code stolen from treemacs eldoc display
 
 (defcustom neotree-display-file-info t

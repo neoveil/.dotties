@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun put-buffer-name-on-clipboard ()
   (interactive)
   (kill-new (buffer-name))

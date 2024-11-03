@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'packages)
 
 (defun lsp-booster--advice-json-parse (old-fn &rest args)

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'packages)
 
 (use-packages
@@ -15,6 +17,12 @@
                                  (display-line-numbers-mode -1)
                                  (setq header-line-format nil))))
 
+(defun projectile--ignore-projects-starting-with (prefixes)
+  (lambda (root)
+    (seq-some
+     (lambda (prefix) (string-prefix-p prefix root t))
+     prefixes)))
+
 (use-package projectile
   :defer t
   :commands (projectile-mode projectile-dired)
@@ -23,7 +31,8 @@
   (setq-default
    projectile-switch-project-action 'projectile-dired
    projectile-project-search-path '("~/Projects/" "~/Projects/archive/")
-   projectile-ignored-projects '("~/.dotties/emacs/.emacs.d/straight/"))
+   projectile-ignored-project-function (projectile--ignore-projects-starting-with
+                                        '("~/.dotties/emacs/.emacs.d/straight/")))
   (projectile-mode 1))
 
 (use-feature dired-x

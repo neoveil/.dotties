@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq-default
  straight-repository-branch "develop"
  straight-process-buffer " *straight-process*"

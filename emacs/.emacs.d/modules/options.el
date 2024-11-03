@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'variables)
 
 (load-file custom-file-path)
