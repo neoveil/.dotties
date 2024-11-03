@@ -28,6 +28,7 @@
     (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
+  :diminish
   :defer t
   :hook (dired-mode . all-the-icons-dired-mode))
 
