@@ -21,3 +21,5 @@ tldr/
 flycheck_init.el
 history
 .lsp-session-v1
+eclipse.jdt.ls/
+.dap-breakpoints
