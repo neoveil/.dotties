@@ -82,6 +82,7 @@
       tree-sitter-major-mode-language-alist)))
 
 (use-package tree-sitter
+  :diminish
   :hook
   (after-init . global-tree-sitter-mode)
   (tree-sitter-after-on . tree-sitter-hl-mode)

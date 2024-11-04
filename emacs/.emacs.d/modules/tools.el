@@ -17,6 +17,9 @@
                                  (display-line-numbers-mode -1)
                                  (setq header-line-format nil))))
 
+(use-feature abbrev
+  :diminish)
+
 (defun projectile--ignore-projects-starting-with (prefixes)
   (lambda (root)
     (seq-some
@@ -29,7 +32,7 @@
   :bind-keymap ("C-c p" . projectile-command-map)
   :config
   (setq-default
-   projectile-switch-project-action 'projectile-dired
+   projectile-switch-project-action 'neotree-projectile-action
    projectile-project-search-path '("~/Projects/" "~/Projects/archive/")
    projectile-ignored-project-function (projectile--ignore-projects-starting-with
                                         '("~/.dotties/emacs/.emacs.d/straight/")))
@@ -80,7 +83,7 @@
    neo-create-file-auto-open t
    neo-show-hidden-files t
    neo-show-updir-line nil
-   neo-window-width 40))
+   neo-window-width 30))
 
 (use-feature neotree-file-info
   :after neotree
