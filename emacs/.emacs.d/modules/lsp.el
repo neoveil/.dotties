@@ -3,6 +3,7 @@
 (require 'packages)
 
 (use-package lsp-mode
+  :diminish lsp-mode
   :commands (lsp lsp-deferred)
   :defer t
   :hook
@@ -14,7 +15,12 @@
    lsp-use-plists t
    lsp-warn-no-matched-clients nil
    lsp-completion-provider :none
-   lsp-headerline-breadcrumb-enable nil))
+   lsp-headerline-breadcrumb-enable nil
+   lsp-restart 'ignore))
+
+(use-feature lsp-lens
+  :after lsp-mode
+  :diminish)
 
 (use-package lsp-haskell
   :after lsp-mode)
@@ -46,6 +52,7 @@
   (lsp-java--replace-vmargs '(("-Xmx" . "4G"))))
 
 (use-feature lsp-java-boot
+  :diminish lsp-java-boot-lens-mode
   :after lsp-java
   :hook (java-mode . lsp-java-boot-lens-mode))
 
