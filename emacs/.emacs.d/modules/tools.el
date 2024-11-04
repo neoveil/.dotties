@@ -8,7 +8,7 @@
 
 (use-package pinentry
   :commands (pinentry-start)
-  :config
+  :init
   (setq-default epg-pinentry-mode 'loopback)
   (pinentry-start))
 
@@ -85,6 +85,11 @@
 (use-feature neotree-file-info
   :after neotree
   :hook (neotree-mode . neotree-display-file-info))
+
+(use-package which-key
+  :diminish
+  :commands (which-key-mode)
+  :config (which-key-mode 1))
 
 (use-package smex
   :bind
