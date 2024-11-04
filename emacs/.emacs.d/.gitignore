@@ -19,3 +19,4 @@ devdocs/
 tldr/
 .cache/
 flycheck_init.el
+history

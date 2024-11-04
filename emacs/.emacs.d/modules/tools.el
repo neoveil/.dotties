@@ -60,6 +60,10 @@
    (lambda (fn) (advice-add fn :after (lambda (&rest _) (hl-line-mode))))
    '(wdired-finish-edit wdired-abort-changes)))
 
+(use-feature uniquify
+  :config
+  (setq-default uniquify-buffer-name-style 'forward))
+
 (use-package neotree
   :bind
   ("C-c n t" . neotree-toggle)

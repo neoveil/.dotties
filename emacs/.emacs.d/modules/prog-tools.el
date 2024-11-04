@@ -93,6 +93,10 @@
 (use-package dockerfile-mode
   :config (setq-default dockerfile-indent-offset 2))
 
+(use-feature elisp-mode
+  :bind (:map emacs-lisp-mode-map
+              ("C-c C-j" . eval-print-last-sexp)))
+
 (use-package xterm-color
   :commands (xterm-color-filter)
   :config

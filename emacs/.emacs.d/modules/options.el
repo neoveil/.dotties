@@ -13,7 +13,8 @@
  enable-recursive-minibuffers t
  ring-bell-function 'ignore
  confirm-kill-emacs 'y-or-n-p
- native-comp-async-report-warnings-errors nil)
+ native-comp-async-report-warnings-errors nil
+ apropos-do-all t)
 
 ;; files settings
 (setq-default
@@ -23,7 +24,10 @@
  require-final-newline t
  fill-column 120
  vc-follow-symlinks t
- confirm-nonexistent-file-or-buffer nil)
+ confirm-nonexistent-file-or-buffer nil
+ require-final-newline t
+ load-prefer-newer t
+ tramp-auto-save-directory "/tmp")
 
 ;; clipboard settings
 (setq-default
@@ -35,5 +39,6 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings 'meta)
 (pixel-scroll-precision-mode 1)
+(savehist-mode 1)
 
 (provide 'options)
