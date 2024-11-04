@@ -23,11 +23,12 @@
   "Retrieve file info message for file on given PATH"
   (let ((attr (file-attributes path)))
     (if attr
-        (let* ((size (neotree--human-readable-bytes (file-attribute-size attr)))
+        (let* ((name (file-name-nondirectory path))
+               (size (neotree--human-readable-bytes (file-attribute-size attr)))
                (last-modified (format-time-string "%F %T" (file-attribute-modification-time attr)))
                (permissions (file-attribute-modes attr)))
           (format "%s -- %s: %s %s: %s %s: %s"
-                  (propertize path 'face 'font-lock-string-face)
+                  (propertize name 'face 'font-lock-string-face)
                   (propertize "Size" 'face 'font-lock-keyword-face)
                   (propertize size 'face 'font-lock-type-face)
                   (propertize "Last Modified" 'face 'font-lock-keyword-face)

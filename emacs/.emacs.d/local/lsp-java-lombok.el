@@ -28,7 +28,7 @@
 
 (defun lsp-java-lombok--jar-path ()
   "Generate the path on disk for the lombok jar."
-  (file-name-concat lsp-java-lombok-install-dir (lsp-java-lombok--jar-file)))
+  (expand-file-name (file-name-concat lsp-java-lombok-install-dir (lsp-java-lombok--jar-file))))
 
 (defun lsp-java-lombok--install-jar ()
   "Download and install the lombok jar."
