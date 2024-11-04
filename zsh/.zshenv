@@ -49,6 +49,12 @@ export WEBKIT_DISABLE_COMPOSITING_MODE=1
 export GEM_HOME="$(gem env user_gemhome)"
 export PATH="$PATH:$GEM_HOME/bin"
 
+# go
+export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
+
+# java
+export JAVA_HOME="/usr/lib/jvm/default/"
+
 # fzf
 export FZF_DEFAULT_OPTS="\
 --color=fg:#f8f8f2,bg:#282a36,hl:#bd93f9 \

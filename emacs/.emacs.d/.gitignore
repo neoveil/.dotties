@@ -20,3 +20,4 @@ tldr/
 .cache/
 flycheck_init.el
 history
+.lsp-session-v1

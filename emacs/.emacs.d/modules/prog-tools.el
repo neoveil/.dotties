@@ -19,7 +19,6 @@
 (global-auto-revert-mode 1)
 (save-place-mode 1)
 (recentf-mode 1)
-(crux-reopen-as-root-mode 1)
 
 (use-feature cc-mode
   :commands (c-toggle-comment-style)
