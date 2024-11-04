@@ -14,7 +14,8 @@
  ring-bell-function 'ignore
  confirm-kill-emacs 'y-or-n-p
  native-comp-async-report-warnings-errors nil
- apropos-do-all t)
+ apropos-do-all t
+ read-process-output-max (* 4 1024 1024))
 
 ;; files settings
 (setq-default
