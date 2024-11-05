@@ -30,8 +30,13 @@
   "Generate the path on disk for the lombok jar."
   (expand-file-name (file-name-concat lsp-java-lombok-install-dir (lsp-java-lombok--jar-file))))
 
+(defun lsp-java-lombok--ensure-install-dir ()
+  (unless (file-exists-p lsp-java-lombok-install-dir)
+    (make-directory lsp-java-lombok-install-dir t)))
+
 (defun lsp-java-lombok--install-jar ()
   "Download and install the lombok jar."
+  (lsp-java-lombok--ensure-install-dir)
   (let* ((lombok-url (url-generic-parse-url lsp-java-lombok--jar-base-url))
          (base-path (file-name-as-directory (url-filename lombok-url)))
          (file-path (file-name-concat base-path (lsp-java-lombok--jar-file))))
@@ -51,4 +56,17 @@
       (lsp-java-lombok--install-jar))
     (lsp-java-lombok--append-vmargs)))
 
-(provide 'lsp-java-lombok)
+(defun lsp-java-replace-vmargs (pairs)
+  (defvar lsp-java-vmargs)
+  (dolist (pair pairs)
+    (let* ((prefix (car pair))
+           (new-value (cdr pair))
+           (full-arg (concat prefix new-value)))
+      (setq-default lsp-java-vmargs
+                    (mapcar (lambda (arg)
+                              (if (string-prefix-p prefix arg)
+                                  full-arg
+                                arg))
+                            lsp-java-vmargs)))))
+
+(provide 'lsp-java-x)

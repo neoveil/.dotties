@@ -51,4 +51,4 @@
   (when (derived-mode-p 'neotree-mode)
     (add-hook 'post-command-hook 'neotree--display-file-info-post-command nil t)))
 
-(provide 'neotree-file-info)
+(provide 'neotree-x)

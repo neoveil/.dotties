@@ -28,5 +28,6 @@
 (keymap-global-set "M-%" 'anzu-query-replace-regexp)
 (keymap-global-set "C-c b y" 'browse-kill-ring)
 (keymap-global-set "C-c s e" 'crux-sudo-edit)
+(keymap-global-set "C-c g h" (lambda () (interactive) (cd "~")))
 
 (provide 'keymaps)

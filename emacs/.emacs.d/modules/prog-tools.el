@@ -12,13 +12,15 @@
  indent-tabs-mode nil
  max-lisp-eval-depth 10000)
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
 (show-paren-mode 1)
 (electric-pair-mode 1)
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
 (save-place-mode 1)
 (recentf-mode 1)
+
+(use-feature simple
+  :hook (before-save . delete-trailing-whitespace))
 
 (use-feature cc-mode
   :commands (c-toggle-comment-style)
@@ -90,7 +92,8 @@
   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware"))
 
 (use-package dockerfile-mode
-  :config (setq-default dockerfile-indent-offset 2))
+  :config
+  (setq-default dockerfile-indent-offset 2))
 
 (use-feature elisp-mode
   :bind (:map emacs-lisp-mode-map

@@ -9,7 +9,8 @@
 (use-package pinentry
   :commands (pinentry-start)
   :init
-  (setq-default epg-pinentry-mode 'loopback)
+  (setq-default
+   epg-pinentry-mode 'loopback)
   (pinentry-start))
 
 (use-feature xwidget
@@ -29,10 +30,14 @@
 (use-package projectile
   :defer t
   :commands (projectile-mode projectile-dired)
-  :bind-keymap ("C-c p" . projectile-command-map)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :bind
+  (:map projectile-command-map
+        ("C-r p" . projectile-reset-known-projects))
   :config
   (setq-default
-   projectile-switch-project-action 'neotree-projectile-action
+   projectile-switch-project-action 'projectile-dired
    projectile-project-search-path '("~/Projects/" "~/Projects/archive/")
    projectile-ignored-project-function (projectile--ignore-projects-starting-with
                                         '("~/.dotties/emacs/.emacs.d/straight/")))
@@ -63,6 +68,10 @@
    (lambda (fn) (advice-add fn :after (lambda (&rest _) (hl-line-mode))))
    '(wdired-finish-edit wdired-abort-changes)))
 
+(use-package dired-subtree
+  :bind (:map dired-mode-map
+              ("<tab>" . dired-subtree-toggle)))
+
 (use-feature uniquify
   :config
   (setq-default uniquify-buffer-name-style 'forward))
@@ -75,6 +84,7 @@
   :config
   (setq-default
    neo-vc-integration '(face)
+   neo-keymap-style 'concise‎
    neo-theme 'icons
    neo-smart-open t
    neo-hide-cursor t
@@ -85,7 +95,7 @@
    neo-show-updir-line nil
    neo-window-width 30))
 
-(use-feature neotree-file-info
+(use-feature neotree-x
   :after neotree
   :hook (neotree-mode . neotree-display-file-info))
 
@@ -98,7 +108,9 @@
   :bind
   ("M-x" . smex)
   ("C-c C-c M-x" . execute-extended-command)
-  :config (setq-default smex-save-file (concat user-emacs-directory ".smex-items")))
+  :config
+  (setq-default
+   smex-save-file (concat user-emacs-directory ".smex-items")))
 
 (use-feature ido
   :commands (ido-everywhere)
@@ -129,7 +141,9 @@
   ("C-c m c c" . magit-clone)
   ("C-c m c s" . magit-clone-shallow)
   ("C-c m r a" . magit-remote-add)
-  :config (setq-default git-commit-summary-max-length 70))
+  :config
+  (setq-default
+   git-commit-summary-max-length 70))
 
 (use-package move-text
   :bind
