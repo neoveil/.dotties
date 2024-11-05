@@ -76,29 +76,6 @@
   :config
   (setq-default uniquify-buffer-name-style 'forward))
 
-(use-package neotree
-  :bind
-  ("C-c n t" . neotree-toggle)
-  (:map neotree-mode-map
-        ("." . neotree-select-up-node))
-  :config
-  (setq-default
-   neo-vc-integration '(face)
-   neo-keymap-style 'concise‎
-   neo-theme 'icons
-   neo-smart-open t
-   neo-hide-cursor t
-   neo-show-slash-for-folder nil
-   neo-autorefresh t
-   neo-create-file-auto-open t
-   neo-show-hidden-files t
-   neo-show-updir-line nil
-   neo-window-width 30))
-
-(use-feature neotree-x
-  :after neotree
-  :hook (neotree-mode . neotree-display-file-info))
-
 (use-package which-key
   :diminish
   :commands (which-key-mode)
