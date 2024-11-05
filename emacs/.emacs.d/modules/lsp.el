@@ -12,7 +12,6 @@
   (prog-mode . lsp-deferred)
   (nxml-mode . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
-  (dap-stopped . (lambda (_arg) (call-interactively 'dap-hydra)))
   :init
   (setq-default
    lsp-keymap-prefix "C-c l"
@@ -27,8 +26,7 @@
    lsp-xml-jar-file "/usr/share/java/lemminx/lemminx-0.28.0.jar"
    lsp-sql-server-path "/usr/bin/sql-language-server"
    lsp-clients-lua-language-server-bin "/usr/lib/lua-language-server/bin/lua-language-server"
-   lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua")
-  (dap-auto-configure-mode 1))
+   lsp-clients-lua-language-server-main-location "/usr/lib/lua-language-server/main.lua"))
 
 (use-feature lsp-lens
   :after lsp-mode
@@ -81,9 +79,6 @@
   :config
   (lsp-java-lombok-setup)
   (lsp-java-replace-vmargs '(("-Xmx" . "4G"))))
-
-(use-feature dap-java
-  :after lsp-java)
 
 (use-feature lsp-booster
   :commands (lsp-booster-setup)
