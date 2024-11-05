@@ -6,12 +6,14 @@
 
 (use-package lsp-mode
   :commands
-  (lsp lsp-deferred lsp-ensure-server dap-auto-configure-mode)
+  (lsp lsp-deferred lsp-ensure-server)
   :defer t
   :hook
   (prog-mode . lsp-deferred)
   (nxml-mode . lsp-deferred)
   (lsp-mode . lsp-enable-which-key-integration)
+  :bind-keymap
+  ("C-c l" . lsp-command-map)
   :init
   (setq-default
    lsp-keymap-prefix "C-c l"
