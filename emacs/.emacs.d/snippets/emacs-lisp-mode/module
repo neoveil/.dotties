@@ -2,6 +2,8 @@
 # name: emacs lisp module skeleton
 # key: module
 # --
+;; -*- lexical-binding: t; -*-
+
 $0
 
 (provide '${6:`(file-name-sans-extension (file-name-nondirectory (buffer-file-name)))`})
