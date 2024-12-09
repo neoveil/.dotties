@@ -3,10 +3,7 @@
 (setq-default
  straight-repository-branch "develop"
  straight-process-buffer " *straight-process*"
- straight-check-for-modifications (if (and (executable-find "watchexec")
-                                           (executable-find "python3"))
-                                      '(watch-files find-when-checking)
-                                    '(find-at-startup find-when-checking)))
+ straight-check-for-modifications '(watch-files find-when-checking))
 
 (defvar bootstrap-version)
 (let ((bootstrap-file
@@ -24,7 +21,6 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(declare-function straight-use-package nil)
 (straight-use-package 'use-package)
 
 (use-package straight
@@ -36,7 +32,6 @@
    straight-vc-git-default-clone-depth 1))
 
 (defmacro use-feature (name &rest args)
-  (declare (indent defun))
   `(use-package ,name
      :straight (:type built-in)
      ,@args))
@@ -44,19 +39,8 @@
 (defmacro use-packages (&rest packages)
   `(progn ,@(mapcar (lambda (pkg) `(use-package ,pkg)) packages)))
 
-(defmacro use-theme (name &rest settings)
-  `(use-package ,(intern (concat (symbol-name name) "-theme"))
-     :config
-     (progn
-       (load-theme ',name t)
-       ,@(when settings
-           (mapcar (lambda (setting)
-                     `(setq-default ,(car setting) ,(cadr setting)))
-                   (seq-partition settings 2))))))
-
 (use-packages
  dash
- crux
  diminish)
 
 (provide 'packages)

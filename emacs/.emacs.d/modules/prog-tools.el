@@ -12,7 +12,6 @@
  indent-tabs-mode nil
  max-lisp-eval-depth 10000)
 
-(show-paren-mode 1)
 (electric-pair-mode 1)
 (delete-selection-mode 1)
 (global-auto-revert-mode 1)
@@ -20,15 +19,18 @@
 (recentf-mode 1)
 
 (use-feature simple
-  :hook (before-save . delete-trailing-whitespace))
+  :hook
+  (before-save . delete-trailing-whitespace))
 
 (use-feature cc-mode
-  :commands (c-toggle-comment-style)
-  :hook (c-mode . (lambda () (c-toggle-comment-style -1)))
-  :config (setq-default c-basic-offset 2))
+  :hook
+  (c-mode . (lambda () (c-toggle-comment-style -1)))
+  :config
+  (setq-default c-basic-offset 2))
 
 (use-feature sh-script
-  :config (setq-default sh-basic-offset 2))
+  :config
+  (setq-default sh-basic-offset 2))
 
 (use-feature js
   :config
@@ -50,25 +52,23 @@
    python-indent-offset 2))
 
 (use-package markdown-mode
-  :hook (markdown-mode . (lambda () (toggle-word-wrap 1)))
-  :bind
-  (:map markdown-mode-map
-        ("C-c g s" . grip-start-preview)
-        ("C-c g d" . grip-stop-preview)
-        ("C-c g r" . grip-restart-preview)
-        ("C-c g g" . grip-browse-preview))
+  :hook
+  (markdown-mode . (lambda () (toggle-word-wrap 1)))
   :mode
-  ("\\.md\\'" . markdown-mode)
-  ("\\.markdown\\'" . markdown-mode)
-  ("README\\.md\\'" . gfm-mode)
+  (("\\.md\\'" . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode)
+   ("README\\.md\\'" . gfm-mode))
   :config
-  (setq-default markdown-fontify-code-blocks-natively t)
-  (dolist (face '(markdown-header-face-1
-                  markdown-header-face-2
-                  markdown-header-face-3))
-    (set-face-attribute face nil :height 'unspecified)))
+  (setq-default markdown-fontify-code-blocks-natively t))
 
 (use-package grip-mode
+  :after markdown-mode
+  :bind
+  (:map markdown-mode-map
+        (("C-c g s" . grip-start-preview)
+         ("C-c g d" . grip-stop-preview)
+         ("C-c g r" . grip-restart-preview)
+         ("C-c g g" . grip-browse-preview)))
   :config
   (setq-default
    grip-update-after-change nil
@@ -76,10 +76,12 @@
    grip-theme 'dark))
 
 (use-package clojure-mode
-  :hook (clojure-mode . subword-mode))
+  :hook
+  (clojure-mode . subword-mode))
 
 (use-package cider
-  :hook (cider-mode . eldoc-mode)
+  :hook
+  (cider-mode . eldoc-mode)
   :config
   (setq-default
    cider-repl-pop-to-buffer-on-connect 1
@@ -96,11 +98,11 @@
   (setq-default dockerfile-indent-offset 2))
 
 (use-feature elisp-mode
-  :bind (:map emacs-lisp-mode-map
-              ("C-c C-j" . eval-print-last-sexp)))
+  :bind
+  (:map emacs-lisp-mode-map
+        ("C-c C-j" . eval-print-last-sexp)))
 
 (use-package xterm-color
-  :commands (xterm-color-filter)
   :config
   (setq-default
    compilation-environment '("TERM=xterm-256color")
@@ -109,7 +111,8 @@
   (advice-add 'compilation-filter :around (lambda (f p s) (funcall f p (xterm-color-filter s)))))
 
 (use-package quickrun
-  :bind ("C-c r r" . quickrun)
+  :bind
+  ("C-c r r" . quickrun)
   :config
   (setq-default
    quickrun-focus-p nil

@@ -2,44 +2,34 @@
 
 (require 'packages)
 
-(use-packages
- svg-lib)
-
-(use-theme dracula
-           dracula-use-24-bit-colors-on-256-colors-terms t)
+(use-package doom-themes
+  :config
+  (setq-default
+   doom-themes-enable-bold t
+   doom-themes-enable-italic t)
+  (load-theme 'doom-dracula t)
+  (doom-themes-treemacs-config)
+  (doom-themes-org-config))
 
 (use-feature faces
   :config
-  (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 150)
-  (set-face-attribute 'line-number nil :slant 'normal)
-  (set-face-attribute 'line-number-current-line nil :foreground "#bd93f9")
-  (set-face-background 'show-paren-match "#41589c"))
+  (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 150))
 
 (use-package all-the-icons
-  :commands (all-the-icons-install-fonts)
   :config
-  (if (file-exists-p (file-name-concat
-                      (or (getenv "XDG_DATA_HOME")
-                          (file-name-concat (getenv "HOME") ".local" "share"))
-                      "fonts"
-                      all-the-icons-fonts-subdirectory
-                      "all-the-icons.ttf"))
-      (message "`all-the-icons' fonts already installed, skipping download/install process")
+  (unless (file-exists-p (file-name-concat
+			  (or (getenv "XDG_DATA_HOME")
+                              (file-name-concat (getenv "HOME") ".local" "share"))
+			  "fonts"
+			  all-the-icons-fonts-subdirectory
+			  "all-the-icons.ttf"))
+    (message "`all-the-icons' fonts are not installed, downloading and installing it...")
     (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
   :diminish
   :defer t
   :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package anzu
-  :after diminish
-  :diminish
-  :commands (global-anzu-mode)
-  :config
-  (set-face-attribute 'anzu-mode-line nil :foreground "#bd93f9" :weight 'bold)
-  (set-face-attribute 'anzu-mode-line-no-match nil :foreground "#ff6666" :weight 'bold)
-  (global-anzu-mode 1))
 
 (use-package dired-rainbow
   :config
@@ -63,15 +53,6 @@
   (dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
   (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
   (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
-
-;; looks nice, but i'm still thinking about it
-;; (use-package powerline
-;;   :commands (powerline-default-theme)
-;;   :config
-;;   (setq-default
-;;    powerline-display-hud nil
-;;    powerline-default-separator 'bar)
-;;   (powerline-default-theme))
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)

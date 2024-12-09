@@ -1,13 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'variables)
-
-(load-file custom-file-path)
-
 ;; basic settings
 (setq-default
  inhibit-startup-screen t
- custom-file custom-file-path
  blink-cursor-blinks 0
  isearch-wrap-pause 'no-ding
  enable-recursive-minibuffers t

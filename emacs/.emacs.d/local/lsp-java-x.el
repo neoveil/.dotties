@@ -57,7 +57,6 @@
     (lsp-java-lombok--append-vmargs)))
 
 (defun lsp-java-replace-vmargs (pairs)
-  (defvar lsp-java-vmargs)
   (dolist (pair pairs)
     (let* ((prefix (car pair))
            (new-value (cdr pair))
