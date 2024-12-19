@@ -19,42 +19,42 @@ confirm_exit() {
 # variable passed to rofi
 options="$shutdown\n$reboot\n$lock\n$logout\n$suspend\n$terminal"
 
-chosen="$(echo -e "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
-case $chosen in
-  $shutdown)
+chosen="$(printf "%s" "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
+case "$chosen" in
+  "$shutdown")
     ans=$(confirm_exit &)
-    if [[ $ans == "y" || $ans == "Y" ]]; then systemctl poweroff
+    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then systemctl poweroff
     else exit 0
     fi
     ;;
 
-  $reboot)
+  "$reboot")
     ans=$(confirm_exit &)
-    if [[ $ans == "y" || $ans == "Y" ]]; then systemctl reboot
+    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then systemctl reboot
     else exit 0
     fi
     ;;
 
-  $lock)
+  "$lock")
     ~/.config/i3/scripts/lock-screen
     ;;
 
-  $suspend)
+  "$suspend")
     ans=$(confirm_exit &)
-    if [[ $ans == "y" || $ans == "Y" ]]; then
+    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then
       playerctl -a pause
       systemctl suspend
     else exit 0
     fi
     ;;
 
-  $logout)
+  "$logout")
     ans=$(confirm_exit &)
-    if [[ $ans == "y" || $ans == "Y" ]]; then i3-msg exit
+    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then i3-msg exit
     else exit 0
     fi
     ;;
 
-  $terminal)
+  "$terminal")
     kitty ~/
 esac

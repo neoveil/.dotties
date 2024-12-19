@@ -1,34 +1,34 @@
 #!/bin/sh
 
-function check_for_dunstify {
-  if ! command -v dunstify &> /dev/null; then
+check_for_dunstify() {
+  if ! command -v dunstify > /dev/null 2>&1; then
     echo "dunstify could not be found. is it installed?"
     exit 1
   fi
 }
 
-function current_volume {
-  pactl get-sink-volume @DEFAULT_SINK@ | head -n $(($SINK + 1)) | awk '{print $5}' | sed 's/%//g'
+current_volume() {
+  pactl get-sink-volume @DEFAULT_SINK@ | head -n $((SINK + 1)) | awk '{print $5}' | sed 's/%//g'
 }
 
-function is_mute {
+is_mute() {
   pactl get-sink-mute @DEFAULT_SINK@ | grep -q 'yes'
 }
 
-function bar {
-  local volume=$1
-  local icon=""
-  local bar=""
+bar() {
+  volume="$1"
+  icon=""
+  bar=""
 
-  if [[ $volume -gt 0 ]]; then
-    bar=$(printf "%0.s❚" $(seq 1 $(($volume / 5))))
-    bar+=" $volume%"
+  if [ "$volume" -gt 0 ]; then
+    bar=$(printf "%0.s❚" $(seq 1 $((volume / 5))))
+    bar="$bar $volume%"
 
-    if [[ $volume -gt 66 ]]; then icon=" "
-    elif [[ $volume -gt 33 ]]; then icon=" "
+    if [ "$volume" -gt 66 ]; then icon=" "
+    elif [ "$volume" -gt 33 ]; then icon=" "
     else icon=""
     fi
-  elif [[ $volume -eq -1 ]]; then
+  elif [ "$volume" -eq -1 ]; then
     bar="mute"
     icon=" "
   else
@@ -39,12 +39,12 @@ function bar {
   echo "$icon $bar"
 }
 
-function notify_volume {
+notify_volume() {
   check_for_dunstify
-  dunstify -t 3000 -r 2593 -u normal "$(bar $(current_volume))"
+  dunstify -t 3000 -r 2593 -u normal "$(bar "$(current_volume)")"
 }
 
-function notify_mute {
+notify_mute() {
   check_for_dunstify
   dunstify -t 3000 -r 2593 -u normal "$(bar -1)"
 }
@@ -53,7 +53,7 @@ case $1 in
   up)
     current_vol=$(current_volume)
 
-    if (( $current_vol >= 100 )) || (( $current_vol + 5 > 100 )); then
+    if [ "$current_vol" -ge 100 ] || [ "$((current_vol + 5))" -gt 100 ]; then
       pactl set-sink-volume @DEFAULT_SINK@ 100%
     else
       pactl set-sink-volume @DEFAULT_SINK@ +5%
@@ -62,7 +62,7 @@ case $1 in
     notify_volume
     ;;
   down)
-    if [[ $(current_volume) -gt 0 ]]; then
+    if [ "$(current_volume)" -gt 0 ]; then
       pactl set-sink-volume @DEFAULT_SINK@ -5%
     fi
 

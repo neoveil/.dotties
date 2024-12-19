@@ -3,44 +3,43 @@
 BG_DIR="$HOME/.config/backgrounds"
 METAFILE="$BG_DIR/.bgmeta"
 
-function usage {
+usage() {
   echo "usage: $0 {next|refresh}"
 }
 
-function get_images {
+get_images() {
   sed '/---/q' "$METAFILE"
 }
 
-function get_image_count {
-  wc -l < <(get_images)
+get_image_count() {
+  get_images | wc -l
 }
 
-function refresh_meta {
+refresh_meta() {
   find "$BG_DIR" -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.jpeg" \) | shuf > "$METAFILE"
   echo "---" >> "$METAFILE"
-  echo "$((RANDOM % $(get_image_count)))" >> "$METAFILE"
+  awk -v max="$(get_image_count)" 'BEGIN { srand(); print int(rand() * max) }' >> "$METAFILE"
 }
 
-function current_index {
+current_index() {
   tail -n 1 "$METAFILE"
 }
 
-function get_current {
-  mapfile -t images < <(get_images)
-  echo "${images[$(current_index)]}"
+get_current() {
+  get_images | sed -n "$(($(current_index) + 1))p"
 }
 
-function update_index {
+update_index() {
   current=$(current_index)
   sed -i '$d' "$METAFILE"
-  echo "$((($current + 1) % $(get_image_count)))" >> "$METAFILE"
+  echo "$(((current + 1) % $(get_image_count)))" >> "$METAFILE"
 }
 
-function set_bg {
+set_bg() {
   feh --no-fehbg --bg-scale "$1"
 }
 
-function update_lockscreen_bg {
+update_lockscreen_bg() {
   betterlockscreen -u "$1" --fx blur
 }
 

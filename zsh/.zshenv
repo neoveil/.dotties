@@ -1,6 +1,6 @@
 # editor
-export EDITOR="emacsclient -c"
-export VISUAL="emacsclient -c"
+export EDITOR="emacs"
+export VISUAL="emacs"
 
 # browser
 export BROWSER="google-chrome-stable"

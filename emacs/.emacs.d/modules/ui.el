@@ -13,7 +13,7 @@
 
 (use-feature faces
   :config
-  (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 150))
+  (set-face-attribute 'default nil :family "JetBrainsMono NF" :height 150 :weight 'semibold))
 
 (use-package all-the-icons
   :config

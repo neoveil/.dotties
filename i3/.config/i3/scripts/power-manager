@@ -6,10 +6,10 @@ if ! pgrep -f xidlehook > /dev/null; then
     --not-when-audio \
     --detect-sleep \
     --timer 300 \
-    '~/.config/i3/scripts/dim-screen dim' \
-    '~/.config/i3/scripts/dim-screen undim' \
+    "$HOME/.config/i3/scripts/dim-screen dim" \
+    "$HOME/.config/i3/scripts/dim-screen undim" \
     --timer 1500 \
-    '~/.config/i3/scripts/dim-screen undim; ~/.config/i3/scripts/lock-screen' \
+    "$HOME/.config/i3/scripts/dim-screen undim; $HOME/.config/i3/scripts/lock-screen" \
     ''
 else
   echo "idle: $(xidlehook --print)"

@@ -56,7 +56,7 @@ tiling_drag modifier titlebar
 bindsym $mod+Return exec i3-sensible-terminal
 
 # start emacs
-bindsym $mod+e exec --no-startup-id emacsclient -nc
+bindsym $mod+e exec --no-startup-id emacs
 
 # start thunar
 bindsym Ctrl+$mod+f exec --no-startup-id thunar

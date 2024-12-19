@@ -1,22 +1,33 @@
 #!/bin/sh
 
-function usage {
+uninstall=false
+packages=""
+
+for dir in */; do
+  if [ "$(basename "$dir")" != ".git" ]; then
+    packages="$packages $(basename "$dir")"
+  fi
+done
+
+packages="${packages#"${packages%%[![:space:]]*}"}"
+
+usage() {
   echo "usage: install [-u|--uninstall] [-p|--packages <packages>]"
 }
 
-function version {
+version() {
   echo "dotties install - v0.1.0"
 }
 
-function has_package {
-  for element in "${packages[@]}"; do
-    if [[ "$element" == "$1" ]]; then return 0; fi
+has_package() {
+  for element in $packages; do
+    if [ "$element" = "$1" ]; then return 0; fi
   done
 
   return 1
 }
 
-function link {
+link() {
   package=$1
   from=$2
   to=$3
@@ -39,7 +50,7 @@ function link {
   done
 }
 
-function unlink {
+unlink() {
   package=$1
   from=$2
   matching_with=$3
@@ -58,37 +69,12 @@ function unlink {
   fi
 }
 
-if ! command -v stow &> /dev/null; then
+if ! command -v stow > /dev/null 2>&1; then
   echo "stow could not be found. is it installed?"
   exit 1
 fi
 
-uninstall=false
-packages=(
-  zsh
-  git
-  bin
-  kitty
-  nvim
-  rofi
-  picom
-  polybar
-  betterlockscreen
-  dunst
-  docker
-  fzf
-  gtk
-  xorg
-  yazi
-  bat
-  systemd
-  chrome
-  i3
-  emacs
-  grip
-)
-
-while (( $# > 0 )); do
+while [ $# -gt 0 ]; do
   case "$1" in
     -h|--help)
       usage
@@ -101,11 +87,12 @@ while (( $# > 0 )); do
       shift;;
     -p|--packages)
       shift
-      packages=()
-      while (( $# > 0 )) && [[ "$1" != -* ]]; do
-        packages+=("$1")
+      packages=""
+      while [ $# -gt 0 ] && [ "${1%"${1#?}"}" != "-" ]; do
+        packages="$packages $1"
         shift
-      done;;
+      done
+      packages="${packages#"${packages%%[![:space:]]*}"}";;
     *)
       echo "unknown option: $1"
       usage
@@ -114,13 +101,13 @@ while (( $# > 0 )); do
 done
 
 if [ "$uninstall" = true ]; then
-  unlink systemd $HOME/.config/systemd/user $HOME/.config/systemd/units
-  unlink systemd $HOME/.config/systemd/user $HOME/.config/systemd/timers
-  unlink bin $HOME/.local/bin $HOME/.local/.bin
-  stow -D -vv "${packages[@]}"
+  unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/units"
+  unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/timers"
+  unlink bin "$HOME/.local/bin" "$HOME/.local/.bin"
+  stow -D -vv $packages
 else
-  stow -vv "${packages[@]}"
-  link systemd $HOME/.config/systemd/units $HOME/.config/systemd/user
-  link systemd $HOME/.config/systemd/timers $HOME/.config/systemd/user
-  link bin $HOME/.local/.bin $HOME/.local/bin
+  stow -vv $packages
+  link systemd "$HOME/.config/systemd/units" "$HOME/.config/systemd/user"
+  link systemd "$HOME/.config/systemd/timers" "$HOME/.config/systemd/user"
+  link bin "$HOME/.local/.bin" "$HOME/.local/bin"
 fi

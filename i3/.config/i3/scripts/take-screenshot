@@ -1,6 +1,6 @@
 #!/bin/sh
 
-function usage {
+usage() {
   echo "Usage: $0 [-s|--selection] [-S|--screen] [-c|--clipboard] [-f|--file] [-h|--help]"
   exit 1
 }
@@ -8,7 +8,7 @@ function usage {
 flags=""
 destination="file"
 
-while (( $# > 0 )); do
+while [ $# -gt 0 ]; do
   case "$1" in
     -s|--selection )
       flags="-s -l -b 1.75 -c 0.4,0.1,0.6,0.55"
@@ -30,8 +30,8 @@ while (( $# > 0 )); do
   esac
 done
 
-if [[ "$destination" == "file" ]]; then
-  maim $flags $HOME/Pictures/$(date +%s).png
-elif [[ "$destination" == "clipboard" ]]; then
+if [ "$destination" = "file" ]; then
+  maim $flags "$HOME/Pictures/$(date +%s).png"
+elif [ "$destination" = "clipboard" ]; then
   maim $flags | xclip -selection clipboard -t image/png
 fi
