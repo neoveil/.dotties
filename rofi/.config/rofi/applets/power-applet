@@ -19,7 +19,7 @@ confirm_exit() {
 # variable passed to rofi
 options="$shutdown\n$reboot\n$lock\n$logout\n$suspend\n$terminal"
 
-chosen="$(printf "%s" "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
+chosen="$(echo -e "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
 case "$chosen" in
   "$shutdown")
     ans=$(confirm_exit &)
