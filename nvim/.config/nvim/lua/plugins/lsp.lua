@@ -53,7 +53,7 @@ return {
           'asm_lsp', 'bashls', 'clangd', 'clojure_lsp',
           'dockerls', 'docker_compose_language_service', 'gradle_ls', 'jsonls',
           'hls', 'html', 'jdtls', 'ts_ls',
-          'kotlin_language_server', 'lua_ls', 'autotools_ls', 'marksman',
+          'kotlin_language_server', 'lua_ls', 'marksman',
           'pyright', 'rust_analyzer', 'sqls', 'taplo',
           'lemminx', 'vimls', 'yamlls', 'zls'
         },
