@@ -1,6 +1,9 @@
-[manager]
+[mgr]
 show_hidden = true
 show_symlink = true
 
 [preview]
 tab_size = 2
+
+[tasks]
+image_bound = [0, 0]
