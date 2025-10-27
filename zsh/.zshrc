@@ -1,6 +1,3 @@
-# init completions
-autoload -U compinit && compinit
-
 # oh my zsh path
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -32,8 +29,9 @@ plugins=(
 
 # zsh completions
 fpath+=$ZSH_CUSTOM/plugins/zsh-completions/src
-fpath+=$ZSH_CUSTOM/eza
+autoload -U compinit && compinit
 
+# setup oh my zsh
 source $ZSH/oh-my-zsh.sh
 
 # zoxide

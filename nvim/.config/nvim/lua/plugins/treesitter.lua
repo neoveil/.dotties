@@ -4,14 +4,11 @@ return {
   main = 'nvim-treesitter.configs',
   opts = {
     ensure_installed = {
-      'asm', 'bash', 'c', 'clojure', 'cpp',
-      'css', 'dockerfile', 'git_config', 'git_rebase', 'gitattributes',
-      'gitcommit', 'gitignore', 'haskell', 'html', 'http',
-      'ini', 'java', 'javascript', 'json', 'kotlin',
-      'lua', 'make', 'markdown', 'markdown_inline', 'nasm',
-      'objdump', 'properties', 'proto', 'python', 'rust',
-      'sql', 'ssh_config', 'toml', 'tsx', 'typescript',
-      'vim', 'vimdoc', 'xml', 'yaml', 'zig'
+      'asm', 'bash', 'dockerfile', 'git_config', 'git_rebase',
+      'gitattributes', 'gitcommit', 'gitignore', 'ini', 'javascript',
+      'json', 'lua', 'make', 'markdown', 'markdown_inline', 'nasm',
+      'objdump', 'properties', 'proto', 'ssh_config', 'toml', 'vim',
+      'vimdoc', 'xml', 'yaml'
     },
     sync_install = false,
     auto_install = true,

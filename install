@@ -101,13 +101,9 @@ while [ $# -gt 0 ]; do
 done
 
 if [ "$uninstall" = true ]; then
-  unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/units"
-  unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/timers"
   unlink bin "$HOME/.local/bin" "$HOME/.local/.bin"
   stow -D -vv $packages
 else
   stow -vv $packages
-  link systemd "$HOME/.config/systemd/units" "$HOME/.config/systemd/user"
-  link systemd "$HOME/.config/systemd/timers" "$HOME/.config/systemd/user"
   link bin "$HOME/.local/.bin" "$HOME/.local/bin"
 fi

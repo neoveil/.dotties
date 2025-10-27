@@ -1,8 +1,17 @@
 # -*- mode: sh; -*-
 # vim:ft=sh
 
+# misc
 alias path="echo \$PATH | tr -s ':' '\n'"
 alias please="sudo"
+alias cummit='git commit -m "$(https whatthecommit.com/index.txt)"'
+alias whatsmyip="https -b ipinfo.io/ip | cat"
+alias weather="https -b wttr.in | cat"
+alias fzp='fzf --preview="\$HOME/.config/fzf/scripts/preview {}"'
+#alias pbcopy=""
+#alias pbpaste=""
+
+# ls utils
 alias eza="eza --time-style=long-iso --color=always --icons --group-directories-first --git"
 alias ls="eza"
 alias ll="ls -lg@"
@@ -14,25 +23,20 @@ alias llo="ll --octal-permissions"
 alias lo="llo -a"
 alias llto="llt --octal-permissions"
 alias lto="llto -a"
+
+# system management
 alias yayc="yay -Yc && yay -Scc --noconfirm && paccache -rk0"
 alias sctl="systemctl"
 alias suctl="systemctl --user"
+alias jenv="sudo archlinux-java"
+
+# better defaults
 alias df="df -h"
 alias du="du -ch"
-alias nmcli="nmclir -p -c auto"
-alias cummit="git commit -S -m \"\$(curl -s https://whatthecommit.com/index.txt)\""
-alias pbcopy="xsel --clipboard --input"
-alias pbpaste="xsel --clipboard --output"
 alias cat="bat"
-alias jenv="sudo archlinux-java"
-alias fzp="fzf --preview='\$HOME/.config/fzf/scripts/preview {}'"
-alias fzn="fzp | xargs -r nvim"
 alias mkdir="mkdir -pv"
-alias whatsmyip="https -b ipinfo.io/ip | cat"
-alias weather="https -b wttr.in | cat"
-alias switchbg="suctl start background"
-alias cmf="CM_LAUNCHER=fzf clipmenu"
 
+# kitty
 if [[ "$TERM" = "xterm-kitty" ]]; then
   alias ssh="kitten ssh"
   alias icat="kitten icat"

@@ -1,6 +1,0 @@
-[Unit]
-Description=Set background image
-
-[Service]
-Type=oneshot
-ExecStart=%h/.config/i3/scripts/background next

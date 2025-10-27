@@ -1,9 +1,0 @@
-# default options
-lock_timeout=0
-fx_list=(blur)
-
-# default theme
-locktext="type password to unlock"
-font="JetBrainsMono Nerd Font"
-veriftext="verifying..."
-wrongtext="failure!"

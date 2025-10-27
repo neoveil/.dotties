@@ -1,3 +1,6 @@
+# -*- mode: sh; -*-
+# vim:ft=sh
+
 # editor
 export EDITOR="emacs"
 export VISUAL="emacs"
@@ -17,15 +20,14 @@ if [ -d "$HOME/.local/bin" ]; then
 fi
 
 # gtk
-export GTK_THEME="Arc-Dark"
-export GTK_ICON_THEME="Adwaita"
+export GTK_THEME="Dracula"
+export GTK_ICON_THEME="Numix Circle"
 export GDK_DPI_SCALE="1.25"
 
 # dotfiles
 export DOTFILES="$HOME/.dotties"
 
 # github
-# export GITHUB_TOKEN=$(lssecret -s | grep -i -A1 'master' | tail -n 1 | sed 's/^secret:[[:space:]]//I')
 export GLAMOUR_STYLE="dracula"
 
 # ssh
@@ -35,9 +37,6 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/gcr/ssh"
 if [[ -n "$TTY" ]]; then
   export GPG_TTY=$(tty)
 fi
-
-# disable webkit gpu rendering (because xwidget render blank on emacs)
-export WEBKIT_DISABLE_COMPOSITING_MODE=1
 
 # rust
 . "$HOME/.cargo/env"
@@ -50,10 +49,10 @@ export GEM_HOME="$(gem env user_gemhome)"
 export PATH="$PATH:$GEM_HOME/bin"
 
 # go
-export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
+export PATH="$PATH:$(go env GOPATH)/bin"
 
 # java
-export JAVA_HOME="/usr/lib/jvm/default/"
+export JAVA_HOME="/usr/lib/jvm/default"
 
 # fzf
 export FZF_DEFAULT_OPTS="\

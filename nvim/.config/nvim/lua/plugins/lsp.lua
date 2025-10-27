@@ -50,24 +50,13 @@ return {
       dependencies = 'hrsh7th/cmp-nvim-lsp',
       opts = {
         ensure_installed = {
-          'asm_lsp', 'bashls', 'clangd', 'clojure_lsp',
-          'dockerls', 'docker_compose_language_service', 'gradle_ls', 'jsonls',
-          'hls', 'html', 'jdtls', 'ts_ls',
-          'kotlin_language_server', 'lua_ls', 'marksman',
-          'pyright', 'rust_analyzer', 'sqls', 'taplo',
-          'lemminx', 'vimls', 'yamlls', 'zls'
+          'asm_lsp', 'bashls', 'dockerls', 'docker_compose_language_service',
+	  'jsonls', 'lua_ls', 'marksman', 'vimls', 'yamlls'
         },
         handlers =  {
           function(lang_server)
             require 'lspconfig'[lang_server].setup {
               capabilities = require 'cmp_nvim_lsp'.default_capabilities()
-            }
-          end,
-
-          clangd = function()
-            require 'lspconfig'.clangd.setup {
-              capabilities = require 'cmp_nvim_lsp'.default_capabilities(),
-              cmd = { 'clangd', '--offset-encoding=utf-16' }
             }
           end,
 

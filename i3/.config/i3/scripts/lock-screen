@@ -1,5 +1,0 @@
-#!/bin/sh
-
-if ! pgrep -f betterlockscreen; then
-  betterlockscreen --lock blur
-fi
