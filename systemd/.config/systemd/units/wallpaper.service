@@ -5,4 +5,4 @@ Wants=hyprpaper.service
 
 [Service]
 Type=oneshot
-ExecStart=%E/hypr/scripts/set-random-wallpaper.sh
+ExecStart=%E/hypr/scripts/set-random-wallpaper
