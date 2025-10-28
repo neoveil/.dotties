@@ -1,0 +1,64 @@
+#!/bin/sh
+
+check_for_dunstify() {
+  if ! command -v dunstify > /dev/null 2>&1; then
+    echo "dunstify could not be found. is it installed?"
+    exit 1
+  fi
+}
+
+current_volume() {
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $2 * 100 }'
+}
+
+is_mute() {
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{ print $3 }' | grep -q '[MUTED]'
+}
+
+bar() {
+  volume="$1"
+  icon=""
+  bar=""
+
+  if [ "$volume" -gt 0 ]; then
+    bar=$(printf "%0.s❚" $(seq 1 $((volume / 5))))
+    bar="$bar $volume%"
+
+    if [ "$volume" -gt 66 ]; then icon=" "
+    elif [ "$volume" -gt 33 ]; then icon=" "
+    else icon=""
+    fi
+  elif [ "$volume" -eq -1 ]; then
+    bar="mute"
+    icon=" "
+  else
+    icon=""
+    bar="0%"
+  fi
+
+  echo "$icon $bar"
+}
+
+notify_volume() {
+  check_for_dunstify
+  dunstify -t 3000 -r 2593 -u normal "$(bar "$(current_volume)")"
+}
+
+notify_mute() {
+  check_for_dunstify
+  dunstify -t 3000 -r 2593 -u normal "$(bar -1)"
+}
+
+case $1 in
+  up)
+    wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+    notify_volume
+    ;;
+  down)
+    wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+    notify_volume
+    ;;
+  mute)
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+    if is_mute; then notify_mute; else notify_volume; fi;;
+esac

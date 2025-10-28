@@ -20,7 +20,7 @@ frame_color = "#9f3f9f"
 separator_color = frame
 sort = yes
 idle_threshold = 120
-font = JetBrainsMono Nerd Font Medium 12
+font = JetBrainsMono Nerd Font Medium 16
 line_height = 0
 markup = full
 format = "<span weight='bold'>%s</span>\n%b"
