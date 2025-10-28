@@ -1,0 +1,77 @@
+/* -*- mode: css; -*- */
+
+configuration {
+  modi: "calc";
+  terminal: "kitty";
+  hide-scrollbar: true;
+  sidebar-mode: true;
+  display-calc: "calc >";
+  font: "JetBrainsMono Nerd Font Medium 16";
+
+  calc {
+    calc-command: "echo -n '{result}' | wl-copy && wtype '{result}'";
+    calc-error-color: "#FF5555";
+    no-history: true;
+    hint-welcome: "";
+  }
+}
+
+@theme "/dev/null"
+
+* {
+  bg: #1E1E2E;
+  bg-alt: #585b7066;
+
+  fg: #c867eb;
+
+  border: 0;
+  margin: 0;
+  padding: 0;
+  spacing: 0;
+}
+
+window {
+  width: 30%;
+  background-color: @bg;
+  border-radius: 25px;
+}
+
+entry {
+  padding: 12;
+  background-color: @bg-alt;
+  text-color: @fg;
+}
+
+inputbar {
+  children: [prompt, entry];
+  background-color: @bg;
+}
+
+listview {
+  background-color: @bg;
+  columns: 1;
+  lines: 0;
+}
+
+mainbox {
+  children: [inputbar, listview, message];
+  background-color: @bg;
+}
+
+message {
+  background-color: @bg;
+  text-color: @fg;
+}
+
+textbox {
+  background-color: transparent;
+  text-color: inherit;
+  padding: 12 4 4 12;
+}
+
+prompt {
+  enabled: true;
+  padding: 12 0 0 12;
+  background-color: @bg-alt;
+  text-color: @fg;
+}
