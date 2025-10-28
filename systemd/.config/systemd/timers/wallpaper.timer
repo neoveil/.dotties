@@ -1,0 +1,8 @@
+[Unit]
+Description=Change the wallpaper every 15 minutes
+
+[Timer]
+OnUnitActiveSec=15min
+
+[Install]
+WantedBy=default.target
