@@ -8,8 +8,8 @@ alias cummit='git commit -m "$(https whatthecommit.com/index.txt)"'
 alias whatsmyip="https -b ipinfo.io/ip | cat"
 alias weather="https -b wttr.in | cat"
 alias fzp='fzf --preview="\$HOME/.config/fzf/scripts/preview {}"'
-#alias pbcopy=""
-#alias pbpaste=""
+alias pbcopy="wl-copy"
+alias pbpaste="wl-paste"
 
 # ls utils
 alias eza="eza --time-style=long-iso --color=always --icons --group-directories-first --git"

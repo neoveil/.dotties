@@ -1,2 +1,6 @@
 # -*- mode: sh; -*-
 # vim:ft=sh
+
+wl-copy() {
+  command wl-copy "$@" 2>/dev/null;
+}
