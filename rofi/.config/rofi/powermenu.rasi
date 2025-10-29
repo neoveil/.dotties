@@ -2,6 +2,9 @@
 
 configuration {
   font: "JetBrainsMono Nerd Font Medium 20";
+  me-select-entry: "";
+  me-accept-entry: "MousePrimary";
+  hover-select: true;
 }
 
 * {

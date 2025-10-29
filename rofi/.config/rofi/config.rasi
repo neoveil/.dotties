@@ -12,6 +12,9 @@ configuration {
   display-run: "run >";
   display-emoji: "emoji >";
   drun-display-format: "{icon} {name}";
+  me-select-entry: "";
+  me-accept-entry: "MousePrimary";
+  hover-select: true;
   font: "JetBrainsMono Nerd Font Medium 16";
 }
 
