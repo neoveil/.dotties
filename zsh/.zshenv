@@ -22,7 +22,7 @@ fi
 # gtk
 export GTK_THEME="Dracula"
 export GTK_ICON_THEME="Numix Circle"
-export GDK_DPI_SCALE="1.25"
+export GDK_DPI_SCALE="1.5"
 
 # dotfiles
 export DOTFILES="$HOME/.dotties"
