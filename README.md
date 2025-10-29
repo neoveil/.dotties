@@ -1,3 +1,3 @@
 # .dotties #
 
-like titties, but starts with `dot`
+like titties, but starts with `do`
