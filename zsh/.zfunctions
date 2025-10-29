@@ -10,3 +10,7 @@ imvpaste() {
     wl-paste > /dev/shm/clipboard.png && imv /dev/shm/clipboard.png
   fi
 }
+
+zathura() {
+  command zathura --fork "$@" > /dev/null 2>&1;
+}
