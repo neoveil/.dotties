@@ -4,3 +4,9 @@
 wl-copy() {
   command wl-copy "$@" 2>/dev/null;
 }
+
+imvpaste() {
+  if wl-paste --list-types | grep -q 'image/png'; then
+    wl-paste > /dev/shm/clipboard.png && imv /dev/shm/clipboard.png
+  fi
+}
