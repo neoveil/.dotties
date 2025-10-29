@@ -6,7 +6,7 @@ alias path="echo \$PATH | tr -s ':' '\n'"
 alias please="sudo"
 alias cummit='git commit -m "$(curl -sfL https://whatthecommit.com/index.txt)"'
 alias whatsmyip="curl -sfL https://ipinfo.io/ip | cat"
-alias weather="curl -sfL https://wttr.in | cat"
+alias howistheweather="weather | cat"
 alias fzp='fzf --preview="\$HOME/.config/fzf/scripts/preview {}"'
 alias pbcopy="wl-copy"
 alias pbpaste="wl-paste"
