@@ -10,6 +10,10 @@ version() {
   exit 0
 }
 
+sanitize_input() {
+  printf "%s" "$1" | sed -e "s/[[:space:]]/"$2"/g"
+}
+
 city=""
 format=""
 
@@ -20,10 +24,10 @@ while [ $# -gt 0 ]; do
     -v|--version)
       version;;
     -c|--city)
-      [ "$2" != "" ] && city="/$2" || usage
+      [ "$2" != "" ] && city="/$(sanitize_input "$2" "_")" || usage
       shift 2;;
     -f|--format)
-      [ "$2" != "" ] && format="?format=$2" || usage
+      [ "$2" != "" ] && format="?format=$(sanitize_input "$2" "+")" || usage
       shift 2;;
     *)
       echo "unknown argument: $1"; usage;;
