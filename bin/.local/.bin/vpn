@@ -1,0 +1,18 @@
+#!/bin/sh
+
+service="openvpn-client@proton0"
+
+case "$1" in
+  up|start)
+    sudo systemctl start "$service";;
+  down|stop)
+    sudo systemctl stop "$service";;
+  restart)
+    sudo systemctl restart "$service";;
+  status)
+    systemctl is-active --quiet "$service" && echo "up" || echo "down";;
+  log)
+    systemctl status "$service" --no-pager;;
+  *)
+    echo "Unknown command: '$1'"; exit 1;;
+esac

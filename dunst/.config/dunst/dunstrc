@@ -1,6 +1,6 @@
 [global]
 follow = mouse
-width = 450
+width = 500
 offset = (10, 40)
 progress_bar = true
 progress_bar_height = 10
