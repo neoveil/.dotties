@@ -21,7 +21,6 @@ local options = {
   history = 5000,
   hlsearch = true,
   incsearch = true,
-  scrolloff = 8,
   signcolumn = 'yes',
   swapfile = false,
   backup = false,
