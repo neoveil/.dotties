@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=HTTPie
+Exec=/home/lucas/.local/bin/httpie-desktop
+Terminal=false
+Type=Application
+Icon=httpie
+StartupWMClass=HTTPie
+Comment=HTTPie for Desktop
+MimeType=x-scheme-handler/pie;x-scheme-handler/pie;
+Categories=Development;
