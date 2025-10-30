@@ -1,0 +1,95 @@
+@import url("./dracula.css");
+
+* {
+  font-family: "JetBrainsMono Nerd Font", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+window#waybar {
+  border-radius: 10px;
+  border: 1pt solid @purple;
+  background: @background-darker;
+  color: @foreground;
+}
+
+tooltip {
+  background: @background-darker;
+  border-radius: 24px;
+  border: 1px solid @purple;
+}
+
+tooltip label {
+  color: @cyan;
+}
+
+#workspaces button {
+  margin: 6px 4px;
+  border-radius: 10px;
+  border: 2px solid @cyan;
+  background: @background-darker;
+  color: @cyan;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+  color: @pink;
+  border-color: @pink;
+}
+
+#workspaces button.urgent {
+  color: @red;
+  border-color: @red;
+}
+
+#workspaces button:hover,
+#workspaces button:hover.focused,
+#workspaces button:hover.active,
+#workspaces button:hover.urgent {
+  color: @yellow;
+  border-color: @yellow;
+}
+
+#window {
+  border-radius: 24px;
+  padding: 0px 6px;
+  margin: 6px 4px 6px 8px;
+  color: @pink;
+}
+
+#idle_inhibitor,
+#pulseaudio,
+#network,
+#cpu,
+#temperature,
+#memory,
+#clock {
+  padding: 0px 6px;
+  margin: 6px 4px;
+  color: @pink;
+  transition: color 0.2s ease-in-out;
+}
+
+#idle_inhibitor:hover,
+#pulseaudio:hover,
+#network:hover,
+#cpu:hover,
+#temperature:hover,
+#memory:hover,
+#clock:hover {
+  color: @yellow;;
+}
+
+#custom-separator {
+  color: @cyan;
+  padding: 0px 4px;
+  margin: 6px 0px;
+}
+
+#temperature.critical {
+  color: @red;
+}
+
+#clock {
+  margin-right: 8px;
+}
