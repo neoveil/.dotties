@@ -19,11 +19,6 @@ if [ -d "$HOME/.local/bin" ]; then
   export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# gtk
-export GTK_THEME="Dracula"
-export GTK_ICON_THEME="Numix Circle"
-export GDK_DPI_SCALE="1.5"
-
 # dotfiles
 export DOTFILES="$HOME/.dotties"
 
