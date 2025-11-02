@@ -1,0 +1,49 @@
+#!/bin/sh
+
+nvidia-smi --format=csv,noheader,nounits \
+  --query-gpu=name,driver_version,vbios_version,memory.total,memory.used,memory.free,\
+memory.reserved,utilization.gpu,utilization.memory,utilization.encoder,\
+utilization.decoder,temperature.gpu,fan.speed,power.draw.average,power.draw.instant,\
+power.draw,power.limit,clocks.current.graphics,clocks.current.sm,\
+clocks.current.memory,clocks.current.video,clocks.max.graphics,clocks.max.memory,\
+pci.bus_id,pci.domain,pci.device,pci.device_id,pci.sub_device_id,pcie.link.gen.gpucurrent,\
+pcie.link.width.current |\
+  jq -Rrsc '
+    split(", ") |
+    {text: " \(.[7])%",
+     alt: " \(.[7])% \(.[17])MHz",
+     class:
+      if (.[7] | tonumber) >= 90 then "critical"
+      elif (.[7] | tonumber) >= 75 then "warning"
+      else "" end,
+     tooltip:
+       "name: \(.[0])\n" +
+       "driver version: \(.[1])\n" +
+       "vbios version: \(.[2])\n" +
+       "memory: \(.[4])MiB used out of \(.[3])MiB (\(.[5])MiB free/\(.[6])MiB reserved)\n" +
+       "temperature: \(.[11])°C\n" +
+       "fan speed: \(.[12])%\n" +
+       "utilization:\n" +
+       "  gpu: \(.[7])%\n" +
+       "  memory: \(.[8])%\n" +
+       "  encoder: \(.[9])%\n" +
+       "  decoder: \(.[10])%\n" +
+       "power:\n" +
+       "  limit: \(.[16])W\n" +
+       "  draw: \(.[14])W (\(.[13])W average/\(.[15])W total)\n" +
+       "clocks:\n" +
+       "  current:\n" +
+       "    graphics: \(.[17])MHz\n" +
+       "    sm: \(.[18])MHz\n" +
+       "    memory: \(.[19])MHz\n" +
+       "    video: \(.[20])MHz\n" +
+       "  max:\n" +
+       "    graphics: \(.[21])MHz\n" +
+       "    memory: \(.[22])MHz\n" +
+       "pci:\n" +
+       "  bus id: \(.[23])\n" +
+       "  domain: \(.[24])\n" +
+       "  device: \(.[25])\n" +
+       "  device id: \(.[26])\n" +
+       "  sub device id: \(.[27])\n" +
+       "  pcie: \(.[29] | sub("\n$"; ""))x at Gen \(.[28])"}'

@@ -64,6 +64,7 @@ tooltip label {
 #cava,
 #idle_inhibitor,
 #cpu-temp,
+#nvidia-temp,
 #memory,
 #disk,
 #network,
@@ -81,6 +82,7 @@ tooltip label {
 #cava:hover,
 #idle_inhibitor:hover,
 #cpu-temp:hover,
+#nvidia-temp:hover,
 #memory:hover,
 #disk:hover,
 #network:hover,
@@ -91,7 +93,8 @@ tooltip label {
   color: @yellow;
 }
 
-#temperature {
+#temperature,
+#custom-nvidia-temperature {
   margin-left: 8px;
 }
 
@@ -100,14 +103,44 @@ tooltip label {
 }
 
 #cpu.warning,
+#custom-nvidia.warning,
+#custom-nvidia-temperature.warning,
 #memory.warning {
+  margin: 6px 4px;
   color: @orange;
+  background: @background-darker;
+  transition: color 0.2s ease-in-out;
+}
+
+#cpu.warning:hover,
+#custom-nvidia.warning:hover,
+#custom-nvidia-temperature.warning:hover,
+#memory.warning:hover {
+  color: @yellow;
 }
 
 #cpu.critical,
 #temperature.critical,
+#custom-nvidia.critical,
+#custom-nvidia-temperature.critical,
 #memory.critical {
+  margin: 6px 4px;
   color: @red;
+  background: @background-darker;
+  transition: color 0.2s ease-in-out;
+}
+
+#cpu.critical:hover,
+#custom-nvidia.critical:hover,
+#custom-nvidia-temperature.critical:hover,
+#memory.critical:hover {
+  color: @yellow;
+}
+
+#temperature.critical,
+#custom-nvidia-temperature.warning,
+#custom-nvidia-temperature.critical {
+  margin-left: 8px;
 }
 
 #custom-separator {

@@ -16,6 +16,8 @@
     "custom/separator",
     "group/cpu-temp",
     "custom/separator",
+    "group/nvidia-temp",
+    "custom/separator",
     "memory",
     "custom/separator",
     "disk",
@@ -99,6 +101,27 @@
   "group/cpu-temp": {
     "orientation": "horizontal",
     "modules": [ "cpu", "temperature" ]
+  },
+
+  "custom/nvidia": {
+    "interval": 2,
+    "exec": "~/.config/waybar/applets/nvidia-applet",
+    "exec-on-event": false,
+    "return-type": "json",
+    "format": "{text}",
+    "format-alt": "{alt}"
+  },
+
+  "custom/nvidia-temperature": {
+    "interval": 2,
+    "exec": "~/.config/waybar/applets/nvidia-temperature-applet",
+    "return-type": "json",
+    "format": "{text}"
+  },
+
+  "group/nvidia-temp": {
+    "orientation": "horizontal",
+    "modules": [ "custom/nvidia", "custom/nvidia-temperature" ]
   },
 
   "memory": {
