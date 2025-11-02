@@ -8,7 +8,7 @@
 
 window#waybar {
   border-radius: 10px;
-  border: 1pt solid @purple;
+  border: 2px solid @purple;
   background: @background-darker;
   color: @foreground;
 }
@@ -21,6 +21,16 @@ tooltip {
 
 tooltip label {
   color: @cyan;
+}
+
+#window {
+  margin-left: 4px;
+}
+
+#sys-window {
+  margin: 6px 4px 6px 12px;
+  color: @pink;
+  transition: color 0.2s ease-in-out;
 }
 
 #workspaces button {
@@ -50,46 +60,57 @@ tooltip label {
   border-color: @yellow;
 }
 
-#window {
-  border-radius: 24px;
-  padding: 0px 6px;
-  margin: 6px 4px 6px 8px;
-  color: @pink;
-}
-
+#custom-spotify,
+#cava,
 #idle_inhibitor,
-#pulseaudio,
-#network,
-#cpu,
-#temperature,
+#cpu-temp,
 #memory,
+#disk,
+#network,
+#pulseaudio,
+#language,
+#custom-weather,
 #clock {
-  padding: 0px 6px;
   margin: 6px 4px;
   color: @pink;
   transition: color 0.2s ease-in-out;
 }
 
+#sys-window:hover,
+#custom-spotify:hover,
+#cava:hover,
 #idle_inhibitor:hover,
-#pulseaudio:hover,
-#network:hover,
-#cpu:hover,
-#temperature:hover,
+#cpu-temp:hover,
 #memory:hover,
+#disk:hover,
+#network:hover,
+#pulseaudio:hover,
+#language:hover,
+#custom-weather:hover,
 #clock:hover {
-  color: @yellow;;
+  color: @yellow;
+}
+
+#temperature {
+  margin-left: 8px;
+}
+
+#clock {
+  margin-right: 12px;
+}
+
+#cpu.warning,
+#memory.warning {
+  color: @orange;
+}
+
+#cpu.critical,
+#temperature.critical,
+#memory.critical {
+  color: @red;
 }
 
 #custom-separator {
   color: @cyan;
-  padding: 0px 4px;
-  margin: 6px 0px;
-}
-
-#temperature.critical {
-  color: @red;
-}
-
-#clock {
-  margin-right: 8px;
+  margin: 6px 4px;
 }

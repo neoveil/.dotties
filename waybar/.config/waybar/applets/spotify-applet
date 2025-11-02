@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import gi
+gi.require_version("Playerctl", "2.0")
+
+from gi.repository import Playerctl, GLib
+import sys
+import signal
+import json
+
+def shorten(s, max_len=45):
+  return s if len(s) <= max_len else s[:max_len - 1] + "…"
+
+def on_status_changed(player, status, _=None):
+  on_metadata_changed(player, player.props.metadata)
+
+def on_metadata_changed(player, metadata, _=None):
+  label = f"{player.get_artist()} - {player.get_title()}"
+  status_icon = "" if player.props.status == "Playing" else ""
+  sys.stdout.write(f"{json.dumps({ "text": f" {status_icon} {shorten(label)}", "tooltip": label })}\n")
+  sys.stdout.flush()
+
+def on_player_vanished(manager, player):
+  if player.props.player_name == "spotify":
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+
+def init_player(manager, name):
+  if name.name != "spotify": return
+
+  player = Playerctl.Player.new_from_name(name)
+  player.connect("playback-status", on_status_changed)
+  player.connect("metadata", on_metadata_changed, None)
+  manager.manage_player(player)
+  on_metadata_changed(player, player.props.metadata)
+
+def main():
+  signal.signal(signal.SIGINT, lambda s, f: sys.exit(0))
+  signal.signal(signal.SIGTERM, lambda s, f: sys.exit(0))
+  signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+  manager = Playerctl.PlayerManager()
+  manager.connect("name-appeared", init_player)
+  manager.connect("player-vanished", on_player_vanished)
+
+  for player in manager.props.player_names:
+    init_player(manager, player)
+
+  GLib.MainLoop().run()
+
+if __name__ == "__main__":
+  main()

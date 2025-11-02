@@ -2,80 +2,189 @@
 {
   "margin": "8 20 -10",
 
-  // bar layout
   "modules-left": [
-    "hyprland/window"
+    "group/sys-window",
+    "custom/spotify"
   ],
   "modules-center": [
     "hyprland/workspaces"
   ],
   "modules-right": [
+    "cava",
+    "custom/separator",
     "idle_inhibitor",
     "custom/separator",
-    "pulseaudio",
-    "custom/separator",
-    "network",
-    "custom/separator",
-    "cpu",
-    "temperature",
+    "group/cpu-temp",
     "custom/separator",
     "memory",
     "custom/separator",
+    "disk",
+    "custom/separator",
+    "network",
+    "custom/separator",
+    "hyprland/language",
+    "custom/separator",
+    "pulseaudio",
+    "custom/separator",
+    "custom/weather",
     "clock"
   ],
 
-  // module configs
+  "custom/system-icon": {
+    "interval": "once",
+    "format": " ",
+    "tooltip": false,
+    "on-click": "rofi -show drun"
+  },
+
+  "hyprland/window": {
+    "format": "{title}",
+    "max-length": 75,
+    "on-click": "rofi -show drun"
+  },
+
+  "group/sys-window": {
+    "orientation": "horizontal",
+    "modules": [ "custom/system-icon", "hyprland/window" ]
+  },
+
+  "custom/spotify": {
+    "exec": "~/.config/waybar/applets/spotify-applet",
+    "exec-if": "pgrep spotify",
+    "exec-on-event": false,
+    "return-type": "json",
+    "escape": true,
+    "format": "<span color='#8be9fd'>|</span> {text}",
+    "on-click": "playerctl -p spotify play-pause",
+    "on-click-right": "killall spotify",
+    "on-scroll-up": "playerctl -p spotify next",
+    "on-scroll-down": "playerctl -p spotify previous"
+  },
+
+  "cava": {
+    "method": "pipewire",
+    "bars": 18,
+    "bar_delimiter": 0,
+    "format-icons": [ "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
+    "on-click": "playerctl play-pause"
+  },
+
   "idle_inhibitor": {
     "format": "{icon}",
+    "tooltip-format-activated": "idle inhibitor on",
+    "tooltip-format-deactivated": "idle inhibitor off",
     "format-icons": {
       "activated": " ",
       "deactivated": " "
     }
   },
-  "clock": {
-    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-    "format-alt": "{:%Y-%m-%d}"
-  },
+
   "cpu": {
-    "format": "  {usage}%",
-    "tooltip": false
+    "interval": 2,
+    "format": " {usage}%",
+    "format-alt": " {usage}% {avg_frequency}GHz",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    }
   },
-  "memory": {
-    "format": "  {}%"
-  },
+
   "temperature": {
+    "interval": 2,
+    "thermal-zone": "thermal-zone1",
     "critical-threshold": 80,
-    "format": "{icon} {temperatureC}°C",
-    "format-icons": [
-      "",
-      "",
-      ""
-    ]
+    "format": "{temperatureC}°C"
   },
+
+  "group/cpu-temp": {
+    "orientation": "horizontal",
+    "modules": [ "cpu", "temperature" ]
+  },
+
+  "memory": {
+    "interval": 2,
+    "format": " {percentage}%",
+    "format-alt": " {percentage}% {used}GiB",
+    "tooltip-format": "{used}GiB used out of {total}GiB ({avail}GiB free)\n{swapUsed}GiB swap used out of {swapTotal}GiB: {swapPercentage}% ({swapAvail}GiB free)",
+    "states": {
+      "warning": 75,
+      "critical": 90
+    }
+  },
+
+  "disk": {
+    "interval": 25,
+    "path": "/",
+    "format": " {percentage_used}%",
+    "format-alt": " {percentage_used}% {used}",
+    "tooltip-format": "{used} used out of {total} ({free} free)",
+    "states": {
+      "warning": 80,
+      "critical": 95
+    }
+  },
+
   "network": {
-    "format-wifi": "{essid} ({signalStrength}%)  ",
-    "format-ethernet": " {ipaddr}",
-    "tooltip-format": " {ifname} via {gwaddr}",
-    "format-linked": " {ifname} (No IP)",
+    "interval": 1,
+    "format": " {bandwidthDownBytes}  {bandwidthUpBytes}",
     "format-disconnected": " down",
-    "format-alt": " {ipaddr}/{cidr}"
+    "tooltip-format": "interface: {ifname}\nlocal IP: {ipaddr}\ngateway: {gwaddr}\nnetmask: {netmask}/{cidr}\nused bandwidth: {bandwidthTotalBytes}",
+    "tooltip-format-wifi": "interface: {ifname}\nlocal IP: {ipaddr}\ngateway: {gwaddr}\nnetmask: {netmask}/{cidr}\nssid: {essid}\nsignal strength: {signalStrength}%/{signaldBm}dBm\nfrequency: {frequency}GHz\nused bandwidth: {bandwidthTotalBytes}",
+    "tooltip-format-disconnected": "no network connection",
+    "on-click": "kitty --class nmtui -e 'nmtui'"
   },
+
+  "hyprland/language": {
+    "format-en": "  us",
+    "format-pt": "  br",
+    "keyboard-name": "hp--inc-hyperx-alloy-origins-core",
+    "on-click": "hyprctl switchxkblayout hp--inc-hyperx-alloy-origins-core next"
+  },
+
   "pulseaudio": {
     "format": "{icon} {volume}%",
-    "format-bluetooth": "{icon} {volume}%",
-    "format-bluetooth-muted": "",
-    "format-muted": "",
     "format-icons": {
-      "default": [
-        "",
-        " ",
-        " "
-      ]
+      "default": [ "", " ", " " ],
+      "default-muted": ""
     },
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
   },
+
+  "custom/weather": {
+    "interval": 300,
+    "exec": "~/.config/waybar/applets/weather-applet",
+    "exec-on-event": false,
+    "return-type": "json",
+    "hide-empty-text": true,
+    "format": "{text} <span color='#8be9fd'>|</span>",
+    "format-alt": "{alt} <span color='#8be9fd'>|</span>"
+  },
+
+  "clock": {
+    "interval": 1,
+    "tooltip-format": "<big><tt>{calendar}</tt></big>",
+    "format": "  {:%a %d %b %H:%M}",
+    "format-alt": "  {:%a %d %b %H:%M:%S}",
+    "calendar": {
+      "mode-mon-col": 3,
+      "format": {
+        "months": "<span color='#ff79c6'><b>{}</b></span>",
+        "days": "<span color='#8be9fd'><b>{}</b></span>",
+        "weekdays": "<span color='#ffb86c'><b>{}</b></span>",
+        "today": "<span color='#ff79c6'><b><u>{}</u></b></span>"
+      }
+    },
+    "actions": {
+      "on-click-right": "mode",
+      "on-click-middle": "shift_reset",
+      "on-scroll-up": "shift_up",
+      "on-scroll-down": "shift_down"
+    }
+  },
+
   "custom/separator": {
+    "interval": "once",
     "format": "|",
-    "interval": "once"
+    "tooltip": false
   }
 }

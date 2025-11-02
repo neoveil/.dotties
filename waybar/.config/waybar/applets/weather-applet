@@ -1,0 +1,60 @@
+#!/bin/sh
+
+get_icon() {
+  lc=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+
+  case "$lc" in
+    *thunder*|*storm*)
+      printf ' ';;
+    *sleet*)
+      printf ' ';;
+    *snow*)
+      case "$lc" in
+        *heavy*) printf ' ';;
+        *) printf ' ';;
+      esac;;
+    *overcast*|*very*cloud*)
+      printf ' ';;
+    *fog*|*mist*|*haze*)
+      printf ' ';;
+    *heavy*rain*|*torrential*)
+      printf ' ';;
+    *rain*|*drizzle*|*shower*)
+      printf ' ';;
+    *partly*cloud*|*partly\ cloudy*)
+      printf ' ';;
+    *cloud*)
+      printf ' ';;
+    *sunny*|*clear*)
+      printf ' ';;
+    *)
+      printf '';;
+  esac
+}
+
+jsonx() {
+  printf '%s' "$1" | jq -r "$2"
+}
+
+meta="$(
+  weather -f "%t|%f|%l|%h|%C" |
+  jq -Rsc '
+    def fix_temp:
+      sub("\\+(?<r>[0-9]+)°C"; "\(.r)°C");
+
+    split("|") |
+    {temp: (.[0] | fix_temp),
+    feel: (.[1] | fix_temp),
+    loc: .[2],
+    hum: .[3],
+    cond: (.[4] | sub("\n$"; ""))}')"
+
+text="$(get_icon "$(jsonx "$meta" ".cond")")$(jsonx "$meta" ".temp")"
+tooltip="$(jsonx "$meta" ".loc") (feels like $(jsonx "$meta" ".feel")), humidity $(jsonx "$meta" ".hum")"
+alt="$text ($(jsonx "$meta" ".loc") $(jsonx "$meta" ".feel")) $(jsonx "$meta" ".hum")"
+
+jq -nc \
+  --arg text "$text" \
+  --arg tooltip "$tooltip" \
+  --arg alt "$alt" '
+    {text: $text, tooltip: $tooltip, alt: $alt}'
