@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -euo pipefail
+
+add_flags() {
+	declare -g -a flags
+	local file name
+
+	for name; do
+		file="${XDG_CONFIG_HOME:-"$HOME/.config"}/${name}-flags.conf"
+		if ! [[ -f "${file}" ]]; then
+			continue
+		fi
+		while IFS='' read -r line; do
+			if ! [[ "${line}" =~ ^[[:space:]]*(#|$) ]]; then
+				flags+=("${line}")
+			fi
+		done <"${file}"
+	done
+}
+
+flags=()
+add_flags mongodb-compass
+add_flags electron
+
+exec /usr/bin/mongodb-compass "${flags[@]}" "$@"
