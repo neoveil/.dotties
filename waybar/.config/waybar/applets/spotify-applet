@@ -15,6 +15,11 @@ def on_status_changed(player, status, _=None):
   on_metadata_changed(player, player.props.metadata)
 
 def on_metadata_changed(player, metadata, _=None):
+  if player.get_artist() == "" or player.get_title() == "":
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+    return
+
   label = f"{player.get_artist()} - {player.get_title()}"
   status_icon = "" if player.props.status == "Playing" else ""
   sys.stdout.write(f"{json.dumps({ "text": f" {status_icon} {shorten(label)}", "tooltip": label })}\n")
