@@ -17,5 +17,4 @@
 (require 'tools)
 (require 'prog-tools)
 (require 'prog-exts)
-(require 'lsp)
 (require 'keymaps)

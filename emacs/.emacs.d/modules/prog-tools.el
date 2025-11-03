@@ -61,20 +61,6 @@
   :config
   (setq-default markdown-fontify-code-blocks-natively t))
 
-(use-package grip-mode
-  :after markdown-mode
-  :bind
-  (:map markdown-mode-map
-        (("C-c g s" . grip-start-preview)
-         ("C-c g d" . grip-stop-preview)
-         ("C-c g r" . grip-restart-preview)
-         ("C-c g g" . grip-browse-preview)))
-  :config
-  (setq-default
-   grip-update-after-change nil
-   grip-sleep-time 0
-   grip-theme 'dark))
-
 (use-package clojure-mode
   :hook
   (clojure-mode . subword-mode))
@@ -109,13 +95,5 @@
    xterm-color-use-bold-for-bright t
    compilation-scroll-output t)
   (advice-add 'compilation-filter :around (lambda (f p s) (funcall f p (xterm-color-filter s)))))
-
-(use-package quickrun
-  :bind
-  ("C-c r r" . quickrun)
-  :config
-  (setq-default
-   quickrun-focus-p nil
-   quickrun-timeout-seconds nil))
 
 (provide 'prog-tools)

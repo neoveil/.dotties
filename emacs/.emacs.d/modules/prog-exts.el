@@ -6,12 +6,7 @@
  tldr
  rainbow-mode
  yasnippet-snippets
- string-inflection
- tree-sitter-langs
- flycheck-projectile
- flycheck-pkg-config
- flycheck-pyflakes
- flycheck-clj-kondo)
+ string-inflection)
 
 (use-feature eldoc
   :diminish)
@@ -80,47 +75,5 @@
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
-
-(defun tree-sitter--ignore-langs (&rest langs)
-  (setq-default
-   tree-sitter-major-mode-language-alist
-   (cl-remove-if
-    (lambda (pair) (member (cdr pair) langs))
-    tree-sitter-major-mode-language-alist)))
-
-(use-package tree-sitter
-  :hook
-  ((after-init . global-tree-sitter-mode)
-   (tree-sitter-after-on . tree-sitter-hl-mode))
-  :config
-  (tree-sitter--ignore-langs 'dockerfile))
-
-(use-package flycheck
-  :config
-  (setq-default
-   flycheck-emacs-lisp-load-path 'inherit
-   flycheck-disabled-checkers '(emacs-lisp-checkdoc))
-  (global-flycheck-mode))
-
-(use-package flycheck-inline
-  :after flycheck
-  :hook
-  (flycheck-mode . flycheck-inline-mode))
-
-(use-package flycheck-pycheckers
-  :hook
-  (flycheck-mode . flycheck-pycheckers-setup))
-
-(use-package flycheck-checkbashisms
-  :hook
-  (flycheck-mode . flycheck-checkbashisms-setup))
-
-(use-package flycheck-rust
-  :hook
-  (flycheck-mode . flycheck-rust-setup))
-
-(use-package flycheck-kotlin
-  :hook
-  (flycheck-mode . flycheck-kotlin-setup))
 
 (provide 'prog-exts)
