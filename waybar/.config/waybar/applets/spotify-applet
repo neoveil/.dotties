@@ -8,21 +8,16 @@ import sys
 import signal
 import json
 
-def shorten(s, max_len=45):
-  return s if len(s) <= max_len else s[:max_len - 1] + "…"
-
-def on_status_changed(player, status, _=None):
-  on_metadata_changed(player, player.props.metadata)
-
 def on_metadata_changed(player, metadata, _=None):
-  if player.get_artist() == "" or player.get_title() == "":
+  artist = player.get_artist()
+  title = player.get_title()
+
+  if artist == "" or title == "":
     sys.stdout.write("\n")
     sys.stdout.flush()
     return
 
-  label = f"{player.get_artist()} - {player.get_title()}"
-  status_icon = "" if player.props.status == "Playing" else ""
-  sys.stdout.write(f"{json.dumps({ "text": f" {status_icon} {shorten(label)}", "tooltip": label })}\n")
+  sys.stdout.write(f"{json.dumps({ "text": f"{artist} - {title}", "tooltip": f"{artist} - {title}" })}\n")
   sys.stdout.flush()
 
 def on_player_vanished(manager, player):
@@ -34,7 +29,6 @@ def init_player(manager, name):
   if name.name != "spotify": return
 
   player = Playerctl.Player.new_from_name(name)
-  player.connect("playback-status", on_status_changed)
   player.connect("metadata", on_metadata_changed, None)
   manager.manage_player(player)
   on_metadata_changed(player, player.props.metadata)
