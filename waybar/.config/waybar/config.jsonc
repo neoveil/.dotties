@@ -96,7 +96,7 @@
 
   "temperature": {
     "interval": 2,
-    "thermal-zone": "thermal-zone1",
+    "hwmon-path": "/sys/devices/platform/coretemp.0/hwmon/hwmon7/temp1_input",
     "critical-threshold": 80,
     "format": "{temperatureC}°C"
   },
