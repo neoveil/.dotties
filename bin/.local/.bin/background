@@ -1,0 +1,46 @@
+#!/bin/sh
+
+BACKGROUND_DIR="$HOME/Pictures/.backgrounds/"
+METAFILE="$BACKGROUND_DIR/.metafile"
+
+usage() {
+  echo "usage: background {next|refresh|shuffle}" >&2
+  exit 1
+}
+
+refresh() {
+  fd -tf -e "jpg" -e "png" -e "jpeg" . "$BACKGROUND_DIR" | shuf > "$METAFILE"
+}
+
+shuffle() {
+  shuf "$METAFILE" | sponge "$METAFILE"
+}
+
+set_next_background() {
+  current_index=$(grep -n "$(hyprctl hyprpaper listloaded)" "$METAFILE" | cut -d: -f1)
+
+  if [ -z "$current_index" ]; then
+    next=$(head -n1 "$METAFILE")
+  else
+    next_index=$((current_index + 1))
+
+    if [ "$next_index" -gt "$(wc -l < "$METAFILE")" ]; then
+      next=$(head -n1 "$METAFILE")
+    else
+      next=$(sed -n "${next_index}p" "$METAFILE")
+    fi
+  fi
+
+  ln -sf "$next" "$BACKGROUND_DIR/current"
+  pidof hyprlock > /dev/null && kill -USR2 $(pidof hyprlock)
+  hyprctl hyprpaper reload ",$next"
+}
+
+if [ ! -f "$METAFILE" ]; then refresh; fi
+
+case "$1" in
+  refresh) refresh;;
+  shuffle) shuffle;;
+  next) set_next_background;;
+  *) usage;;
+esac

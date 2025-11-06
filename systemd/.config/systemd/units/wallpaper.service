@@ -6,4 +6,4 @@ StartLimitIntervalSec=0
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/flock -n %T/wallpaper.service.lock -c '%E/hypr/scripts/set-random-wallpaper'
+ExecStart=/usr/bin/flock -n %T/wallpaper.service.lock -c '%h/.local/bin/background next'
