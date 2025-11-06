@@ -19,6 +19,8 @@ get_icon() {
 }
 
 result="$(weather -f "%t|%f|%l|%h|%C")"
+if [ -z "$result" ]; then exit 1; fi
+
 printf "%s" "${result%|*}|$(get_icon "${result##*|}")" |\
   jq -Rrsc '
     def fix_temp:
