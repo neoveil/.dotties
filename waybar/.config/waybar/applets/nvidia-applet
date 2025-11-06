@@ -1,5 +1,18 @@
 #!/bin/sh
 
+case "$1" in
+  temperature)
+    nvidia-smi --format=csv,noheader,nounits --query-gpu=temperature.gpu |\
+      jq -Rrc '
+        {text: "\(.)°C",
+        class:
+          if (. | tonumber) >= 85 then "critical"
+          elif (. | tonumber) >= 70 then "warning"
+          else "" end,
+        tooltip: "\(.)°C"}'
+    exit 0;;
+esac
+
 nvidia-smi --format=csv,noheader,nounits \
   --query-gpu=name,driver_version,vbios_version,memory.total,memory.used,memory.free,\
 memory.reserved,utilization.gpu,utilization.memory,utilization.encoder,\

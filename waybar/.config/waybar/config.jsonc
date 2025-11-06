@@ -117,7 +117,7 @@
 
   "custom/nvidia-temperature": {
     "interval": 2,
-    "exec": "~/.config/waybar/applets/nvidia-temperature-applet",
+    "exec": "~/.config/waybar/applets/nvidia-applet temperature",
     "return-type": "json",
     "format": "{text}"
   },
