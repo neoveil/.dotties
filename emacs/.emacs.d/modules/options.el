@@ -21,7 +21,6 @@
  fill-column 120
  vc-follow-symlinks t
  confirm-nonexistent-file-or-buffer nil
- require-final-newline t
  load-prefer-newer t
  tramp-auto-save-directory "/tmp")
 

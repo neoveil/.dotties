@@ -2,10 +2,6 @@
 
 (require 'packages)
 
-(use-package browse-kill-ring
-  :bind
-  ("C-c b y" . browse-kill-ring))
-
 (use-package crux
   :bind
   (("C-<return>" . crux-smart-open-line)
@@ -17,12 +13,6 @@
   :init
   (setq-default epg-pinentry-mode 'loopback)
   (pinentry-start))
-
-(use-feature xwidget
-  :hook
-  (xwidget-webkit-mode . (lambda ()
-			   (display-line-numbers-mode -1)
-			   (setq header-line-format nil))))
 
 (use-feature abbrev
   :diminish)

@@ -23,15 +23,6 @@
   :config
   (yas-global-mode 1))
 
-(defun company--get-backends-with-yasnippet-appended ()
-  (mapcar
-   (lambda (backend)
-     (if (and (listp backend) (member 'company-yasnippet backend))
-         backend
-       (append (if (consp backend) backend (list backend))
-               '(:with company-yasnippet))))
-   company-backends))
-
 (use-package company
   :bind
   ((:map company-active-map
@@ -39,11 +30,10 @@
    ("M-/" . 'company-complete))
   :config
   (setq-default
-   company-minimum-prefix-length 1
-   company-idle-delay 0.0
+   company-minimum-prefix-length 2
+   company-idle-delay 0.1
    company-selection-wrap-around t
-   company-tooltip-align-annotations t
-   company-backends (company--get-backends-with-yasnippet-appended))
+   company-tooltip-align-annotations t)
   (global-company-mode t))
 
 (use-package company-box

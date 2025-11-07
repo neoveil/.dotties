@@ -8,7 +8,6 @@
    doom-themes-enable-bold t
    doom-themes-enable-italic t)
   (load-theme 'doom-dracula t)
-  (doom-themes-treemacs-config)
   (doom-themes-org-config))
 
 (use-feature faces
@@ -56,10 +55,8 @@
 
 (menu-bar-mode 0)
 (tool-bar-mode 0)
-(scroll-bar-mode 0)
 (column-number-mode 1)
 (global-display-line-numbers-mode 1)
-(add-to-list 'default-frame-alist '(alpha-background . 97))
 (assq-delete-all 'continuation fringe-indicator-alist)
 
 (provide 'ui)
