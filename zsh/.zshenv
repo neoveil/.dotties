@@ -2,8 +2,8 @@
 # vim:ft=sh
 
 # editor
-export EDITOR="emacs"
-export VISUAL="emacs"
+export EDITOR="emacsclient -r"
+export VISUAL="emacsclient -r -n"
 
 # browser
 export BROWSER="google-chrome-stable"

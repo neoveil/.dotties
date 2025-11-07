@@ -11,6 +11,12 @@ alias fzp='fzf --preview="\$HOME/.config/fzf/scripts/preview {}"'
 alias pbcopy="wl-copy"
 alias pbpaste="wl-paste"
 alias hyprpicker="hyprpicker -a -l 2>/dev/null"
+alias em="/usr/bin/emacs"
+alias emacs="emacsclient -n -r"
+alias temacs="emacsclient -t"
+alias remacsd="emacsd restart"
+alias semacsd="emacsd status"
+alias lemacsd="emacsd logs"
 
 # ls utils
 alias eza="eza --time-style=long-iso --color=always --icons --group-directories-first --git"
