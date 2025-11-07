@@ -25,3 +25,5 @@ eclipse.jdt.ls/
 .dap-breakpoints
 workspace/
 projectile.cache
+image-dired/
+tutorial/
