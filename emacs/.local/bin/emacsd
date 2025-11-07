@@ -2,9 +2,9 @@
 
 set -eu
 
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/emacsd"
-CURRENT_LOGFILE="$STATE_DIR/.emacsd-current.log"
-[ -d "$STATE_DIR" ] || mkdir -p "$STATE_DIR"
+EMACSD_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/emacsd"
+EMACSD_CURRENT_LOGFILE="$EMACSD_STATE_DIR/.emacsd-current.log"
+[ -d "$EMACSD_STATE_DIR" ] || mkdir -p "$EMACSD_STATE_DIR"
 
 usage() {
   cat << EOF
@@ -62,14 +62,14 @@ exit_emacs() {
 
 log() {
   echo "$1"
-  echo "$(date '+%F %T') emacsd: $1" >> "$CURRENT_LOGFILE"
+  echo "$(date '+%F %T') emacsd: $1" >> "$EMACSD_CURRENT_LOGFILE"
 }
 
 prune_logs() {
-  set -- "$STATE_DIR"/emacsd*.log
+  set -- "$EMACSD_STATE_DIR"/emacsd*.log
 
   if [ "$#" -ge 10 ]; then
-    to_remove=$(ls -1 "$STATE_DIR"/emacsd*.log | head -n -9)
+    to_remove=$(ls -1 "$EMACSD_STATE_DIR"/emacsd*.log | head -n -9)
     echo "more than 10 logfiles, going to remove $(basename "$to_remove")"
     rm -f "$to_remove"
     echo "removed $(basename "$to_remove") successfully"
@@ -78,29 +78,29 @@ prune_logs() {
 
 clean_logs() {
   if ! is_running; then
-    rm -f "$STATE_DIR"/*.log "$CURRENT_LOGFILE"
+    rm -f "$EMACSD_STATE_DIR"/*.log "$EMACSD_CURRENT_LOGFILE"
     return 0
   fi
 
-  fd -d1 -tf -E "emacsd*-$(pid).log" . "$STATE_DIR" -X rm -f
+  fd -d1 -tf -E "emacsd*-$(pid).log" . "$EMACSD_STATE_DIR" -X rm -f
 }
 
 show_logs() {
-  if [ ! -f "$CURRENT_LOGFILE" ]; then
+  if [ ! -f "$EMACSD_CURRENT_LOGFILE" ]; then
     echo "no logs to show"
     return 1
   fi
 
-  bat --language=log --style=numbers "$CURRENT_LOGFILE"
+  bat --language=log --style=numbers "$EMACSD_CURRENT_LOGFILE"
 }
 
 follow_logs() {
-  if [ ! -f "$CURRENT_LOGFILE" ]; then
+  if [ ! -f "$EMACSD_CURRENT_LOGFILE" ]; then
     echo "no logs to follow"
     return 1
   fi
 
-  tail -F -n +1 "$CURRENT_LOGFILE" 2> /dev/null \
+  tail -F -n +1 "$EMACSD_CURRENT_LOGFILE" 2> /dev/null \
     | bat --paging=never --language=log --style=numbers
 }
 
@@ -111,21 +111,21 @@ start() {
   fi
 
   ts="$(date +%Y%m%d%H%M%S)"
-  logfile="$STATE_DIR/emacsd-$ts.log"
+  logfile="$EMACSD_STATE_DIR/emacsd-$ts.log"
   prune_logs
-  ln -sf "$logfile" "$CURRENT_LOGFILE"
+  ln -sf "$logfile" "$EMACSD_CURRENT_LOGFILE"
 
   log "starting emacsd"
   setsid -f sh -c '/usr/bin/emacs --fg-daemon --chdir="'"$HOME"'" < /dev/null 2>&1 \
-    | while IFS= read -r l; do echo "$(date "+%F %T") emacs: $l"; done >> "'"$CURRENT_LOGFILE"'"' \
+    | while IFS= read -r l; do echo "$(date "+%F %T") emacs: $l"; done >> "'"$EMACSD_CURRENT_LOGFILE"'"' \
     > /dev/null 2>&1 < /dev/null &
 
   n=50
   while [ "$n" -gt 0 ]; do
     if is_running; then
-      new_logfile="$STATE_DIR/emacsd-$ts-$(pid).log"
+      new_logfile="$EMACSD_STATE_DIR/emacsd-$ts-$(pid).log"
       mv -f "$logfile" "$new_logfile"
-      ln -sf "$new_logfile" "$CURRENT_LOGFILE"
+      ln -sf "$new_logfile" "$EMACSD_CURRENT_LOGFILE"
 
       log "started emacsd"
       return 0
@@ -136,7 +136,7 @@ start() {
   done
 
   log "failed to start emacsd"
-  echo "see logs at $(readlink -f "$CURRENT_LOGFILE")"
+  echo "see logs at $(readlink -f "$EMACSD_CURRENT_LOGFILE")"
   return 1
 }
 
@@ -165,7 +165,7 @@ stop() {
   done
 
   log "failed to stop emacsd"
-  echo "see logs at $(readlink -f "$CURRENT_LOGFILE")"
+  echo "see logs at $(readlink -f "$EMACSD_CURRENT_LOGFILE")"
   return 1
 }
 
@@ -180,7 +180,7 @@ status() {
     echo "emacsd: up"
     echo "pid: $(pid)"
     emacsclient -e '(format "version: %s" emacs-version)' | tr -d '"'
-    echo "log: $(readlink -f "$CURRENT_LOGFILE")"
+    echo "log: $(readlink -f "$EMACSD_CURRENT_LOGFILE")"
   else
     echo "emacsd: down"
   fi
