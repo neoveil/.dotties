@@ -70,9 +70,9 @@ prune_logs() {
 
   if [ "$#" -ge 10 ]; then
     to_remove=$(ls -1 "$STATE_DIR"/emacsd*.log | head -n -9)
-    echo "more than 10 logfiles, going to remove $(basename $to_remove)"
+    echo "more than 10 logfiles, going to remove $(basename "$to_remove")"
     rm -f "$to_remove"
-    echo "removed $(basename $to_remove) successfully"
+    echo "removed $(basename "$to_remove") successfully"
   fi
 }
 
