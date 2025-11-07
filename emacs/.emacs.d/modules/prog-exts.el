@@ -27,23 +27,18 @@
   :bind
   ((:map company-active-map
          ("<tab>" . company-complete-selection))
-   ("M-/" . 'company-complete))
+   (:map global-map
+         ("C-<SPC>" . nil)
+         ("C-S-<SPC>" . set-mark-command))
+   ("C-S-i" . 'company-complete)
+   ("C-<SPC>" . 'hippie-expand))
   :config
   (setq-default
    company-minimum-prefix-length 2
-   company-idle-delay 0.1
+   company-idle-delay 0
    company-selection-wrap-around t
    company-tooltip-align-annotations t)
   (global-company-mode t))
-
-(use-package company-box
-  :diminish
-  :hook
-  (company-mode . company-box-mode)
-  :config
-  (setq-default
-   company-box-icons-alist 'company-box-icons-all-the-icons
-   company-box-scrollbar nil))
 
 (use-package paredit
   :bind

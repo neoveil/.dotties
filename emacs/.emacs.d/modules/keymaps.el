@@ -9,7 +9,6 @@
 (keymap-global-set "C-c /" 'query-replace-global)
 (keymap-global-set "M-%" 'query-replace-regexp)
 (keymap-global-set "M-|" 'align-regexp)
-(keymap-global-set "C-c M-/" 'hippie-expand)
 (keymap-global-set "C-;" 'comment-line)
 (keymap-global-set "C-c <left>" 'windmove-swap-states-left)
 (keymap-global-set "C-c <right>" 'windmove-swap-states-right)
@@ -19,5 +18,8 @@
 (keymap-global-set "C-c k o" 'kill-other-buffers)
 (keymap-global-set "C-c f p" 'find-file-at-point)
 (keymap-global-set "C-c g h" (lambda () (interactive) (cd "~")))
+(keymap-global-set "C-c c" 'compile)
+(keymap-global-set "C-c s c" 'shell-command)
+(keymap-global-set "C-c s a" 'async-shell-command)
 
 (provide 'keymaps)
