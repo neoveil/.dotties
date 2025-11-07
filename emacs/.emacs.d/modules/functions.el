@@ -14,4 +14,15 @@
     (goto-char (point-min))
     (call-interactively 'query-replace-regexp)))
 
+(defmacro put-all (&rest args)
+  `(progn
+     ,@(let ((r nil) (xs args))
+         (while xs
+           (push `(put ',(pop xs) ',(pop xs) ,(pop xs)) r))
+         r)))
+
+(put-all
+ upcase-region disabled nil
+ downcase-region disabled nil)
+
 (provide 'functions)
