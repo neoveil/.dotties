@@ -10,6 +10,11 @@
 (add-to-list 'load-path modules-directory)
 (add-to-list 'load-path local-directory)
 
+;; TODO:
+;;   setup lsp?
+;;   setup tree-sitter?
+;;   drop ido and company - replace for vertico, orderless, consult, marginalia, helm, corfu, cape
+
 (require 'packages)
 (require 'options)
 (require 'ui)

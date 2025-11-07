@@ -56,7 +56,9 @@
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (column-number-mode 1)
+(scroll-bar-mode 0)
 (global-display-line-numbers-mode 1)
+(add-to-list 'default-frame-alist '(alpha-background . 90))
 (assq-delete-all 'continuation fringe-indicator-alist)
 
 (provide 'ui)
