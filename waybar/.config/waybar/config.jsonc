@@ -10,8 +10,6 @@
     "hyprland/workspaces"
   ],
   "modules-right": [
-    "cava",
-    "custom/separator",
     "idle_inhibitor",
     "custom/separator",
     "group/cpu-temp",
@@ -58,20 +56,12 @@
     "escape": true,
     "format": "<span color='#8be9fd'>|</span> {icon} {text}",
     "tooltip-format": "{}",
-    "format-icons": " ",
+    "format-icons": "",
     "max-length": 45,
     "on-click": "playerctl -p spotify play-pause",
     "on-click-right": "killall spotify",
     "on-scroll-up": "playerctl -p spotify next",
     "on-scroll-down": "playerctl -p spotify previous"
-  },
-
-  "cava": {
-    "method": "pipewire",
-    "bars": 18,
-    "bar_delimiter": 0,
-    "format-icons": [ "▁", "▂", "▃", "▄", "▅", "▆", "▇", "█" ],
-    "on-click": "playerctl play-pause"
   },
 
   "idle_inhibitor": {
