@@ -1,10 +1,25 @@
 #!/bin/sh
+# TODO: write all this shit in C
 
 set -eu
 
 EMACSD_STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/emacsd"
 EMACSD_CURRENT_LOGFILE="$EMACSD_STATE_DIR/.emacsd-current.log"
+EMACSD_START_LOCKFILE="$EMACSD_STATE_DIR/.emacsd-start.lock"
 [ -d "$EMACSD_STATE_DIR" ] || mkdir -p "$EMACSD_STATE_DIR"
+
+EMACSD_START_TIMEOUT="${EMACSD_START_TIMEOUT:-5}"             # guaranteed minimum wait in secs
+EMACSD_START_HARDCAP="${EMACSD_START_HARDCAP:-900}"           # absolute max wait in secs
+EMACSD_START_INTERVAL="${EMACSD_START_INTERVAL:-0.2}"         # poll interval in secs
+EMACSD_LOG_STALE_TIMEOUT="${EMACSD_LOG_STALE_TIMEOUT:-12}"    # extends while logs fresh in secs
+
+EMACSD_STOP_TIMEOUT="${EMACSD_STOP_TIMEOUT:-12}"      # absolute max wait in secs
+EMACSD_STOP_INTERVAL="${EMACSD_STOP_INTERVAL:-0.2}"   # poll interval in secs
+
+EMACSD_NATIVE_COMP_WATCH_TIMEOUT=${EMACSD_NATIVE_COMP_WATCH_TIMEOUT:-20}      # keep watching for n secs
+EMACSD_NATIVE_COMP_WATCH_INTERVAL="${EMACSD_NATIVE_COMP_WATCH_INTERVAL:-5}"   # interval between sweeps in secs
+EMACSD_NATIVE_COMP_AGE_THRESHOLD="${EMACSD_NATIVE_COMP_AGE_THRESHOLD:-10}"    # max age in secs
+EMACSD_NATIVE_COMP_KILL_GRACE="${EMACSD_NATIVE_COMP_KILL_GRACE:-2}"           # time to die in sec
 
 usage() {
   cat << EOF
@@ -13,7 +28,7 @@ usage: emacsd {start/up|stop/down|restart|status|logs|version|help}
 commands:
   start|up    start emacs daemon
   stop|down   stop the running emacs daemon
-  restart     restart the running emacs daemon, if not running will start it
+  restart     restart the running emacs daemon
   status      show daemon status, pid, version and log path
   logs        manage daemon logs
     show      show daemon logs
@@ -26,6 +41,10 @@ EOF
 
 version() {
   echo "emacsd - v0.1.0"
+}
+
+is_emacs_daemon_process_open() {
+  pgrep -f -u "$(id -u -n)" "[e]macs --fg-daemon" > /dev/null 2>&1
 }
 
 is_running() {
@@ -60,9 +79,13 @@ exit_emacs() {
   emacsclient -e '(kill-emacs)' > /dev/null 2>&1
 }
 
+log_no_stdout() {
+  echo "$(date '+%F %T') emacsd: $1" >> "$EMACSD_CURRENT_LOGFILE"
+}
+
 log() {
   echo "$1"
-  echo "$(date '+%F %T') emacsd: $1" >> "$EMACSD_CURRENT_LOGFILE"
+  log_no_stdout "$1"
 }
 
 prune_logs() {
@@ -104,14 +127,74 @@ follow_logs() {
     | bat --paging=never --language=log --style=numbers
 }
 
+is_log_fresh() {
+  [ -f "$EMACSD_CURRENT_LOGFILE" ] || return 1
+
+  age=$(( $(date +%s) - $(stat -L -c %Y "$EMACSD_CURRENT_LOGFILE" 2> /dev/null)))
+  [ "$age" -le "$EMACSD_LOG_STALE_TIMEOUT" ]
+}
+
+unlock_start_lock() {
+  flock -u 9 2> /dev/null || :; exec 9>&- 2> /dev/null || :
+}
+
+reap_stuck_native_comp() {
+  pid="$(pid)" || return 0
+  [ -n "$pid" ] || return 0
+  log_no_stdout "started reap_stuck_native_comp watcher for emacs daemon $pid"
+
+  watch_start="$(date +%s)"
+
+  while :; do
+    if ! is_running; then
+      log_no_stdout "emacs daemon $pid is not running anymore, stopping reap_stuck_native_comp watcher"
+      return 0
+    fi
+
+    if [ $(( $(date +%s) - watch_start )) -ge "$EMACSD_NATIVE_COMP_WATCH_TIMEOUT" ]; then
+      log_no_stdout "finished reap_stuck_native_comp watching process for emacs daemon $pid"
+      return 0
+    fi
+
+    for ncp in $(pgrep -u "$(id -u -n)" -f '/usr/bin/emacs.*-no-comp-spawn.*-Q.*--batch'); do
+      ppid="$(ps -o ppid= -p "$ncp" 2> /dev/null | tr -d ' ')"
+      [ "$ppid" = "$pid" ] || continue
+
+      et="$(ps -o etimes= -p "$ncp" 2> /dev/null | tr -d ' ')"
+      [ -n "$et" ] || continue
+
+      if [ "$et" -ge "$EMACSD_NATIVE_COMP_AGE_THRESHOLD" ]; then
+        log_no_stdout "reaping stuck native compilation pid: $ncp, age: ${et}s for emacs daemon $pid"
+        kill "$ncp" 2> /dev/null || true
+        sleep "$EMACSD_NATIVE_COMP_KILL_GRACE"
+        kill -0 "$ncp" 2> /dev/null && kill -9 "$ncp" 2> /dev/null || true
+        log_no_stdout "successfully reaped stuck native compilation pid: $ncp, age: ${et}s for emacs daemon $pid"
+      fi
+    done
+
+    sleep "$EMACSD_NATIVE_COMP_WATCH_INTERVAL"
+  done
+
+  log_not_stdout "finished reap_stuck_native_comp watching process for emacs daemon $pid"
+}
+
 start() {
   if is_running; then
     echo "emacsd already running"
     return 1
   fi
 
-  ts="$(date +%Y%m%d%H%M%S)"
-  logfile="$EMACSD_STATE_DIR/emacsd-$ts.log"
+  exec 9> "$EMACSD_START_LOCKFILE" || :
+  if ! flock -n 9; then
+    echo "another emacsd start is in progress"
+    unlock_start_lock
+    return 1
+  fi
+
+  trap 'unlock_start_lock' EXIT INT TERM HUP
+
+  logfile_ts="$(date +%Y%m%d%H%M%S)"
+  logfile="$EMACSD_STATE_DIR/emacsd-$logfile_ts.log"
   prune_logs
   ln -sf "$logfile" "$EMACSD_CURRENT_LOGFILE"
 
@@ -120,23 +203,36 @@ start() {
     | while IFS= read -r l; do echo "$(date "+%F %T") emacs: $l"; done >> "'"$EMACSD_CURRENT_LOGFILE"'"' \
     > /dev/null 2>&1 < /dev/null &
 
-  n=50
-  while [ "$n" -gt 0 ]; do
+  soft_deadline=$(( $(date +%s) + ${EMACSD_START_TIMEOUT%.*} ))
+  hard_deadline=$(( $(date +%s) + ${EMACSD_START_HARDCAP%.*} ))
+
+  while :; do
     if is_running; then
-      new_logfile="$EMACSD_STATE_DIR/emacsd-$ts-$(pid).log"
+      new_logfile="$EMACSD_STATE_DIR/emacsd-$logfile_ts-$(pid).log"
       mv -f "$logfile" "$new_logfile"
       ln -sf "$new_logfile" "$EMACSD_CURRENT_LOGFILE"
 
       log "started emacsd"
+      trap - EXIT INT TERM HUP
+      unlock_start_lock
+      reap_stuck_native_comp &
       return 0
     fi
 
-    n=$((n - 1))
-    sleep 0.1
+    now="$(date +%s)"
+    if [ "$now" -ge "$soft_deadline" ]; then
+      if [ "$now" -ge "$hard_deadline" ] || { ! is_emacs_daemon_process_open && ! is_log_fresh; }; then
+        break;
+      fi
+    fi
+
+    sleep "$EMACSD_START_INTERVAL"
   done
 
   log "failed to start emacsd"
   echo "see logs at $(readlink -f "$EMACSD_CURRENT_LOGFILE")"
+  trap - EXIT INT TERM HUP
+  unlock_start_lock
   return 1
 }
 
@@ -153,15 +249,15 @@ stop() {
     return 1
   fi
 
-  n=50
-  while [ "$n" -gt 0 ]; do
+  deadline=$(( $(date +%s) + ${EMACSD_STOP_TIMEOUT%.*} ))
+  while :; do
     if ! is_running; then
       log "stopped emacsd"
       return 0
     fi
 
-    n=$((n - 1))
-    sleep 0.1
+    [ "$(date +%s)" -ge "$deadline" ] && break
+    sleep "$EMACSD_STOP_INTERVAL"
   done
 
   log "failed to stop emacsd"
