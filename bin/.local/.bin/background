@@ -2,14 +2,29 @@
 
 BACKGROUND_DIR="$HOME/Pictures/.backgrounds/"
 METAFILE="$BACKGROUND_DIR/.metafile"
+CURRENT_LN="$BACKGROUND_DIR/.current"
 
 usage() {
   echo "usage: background {next|refresh|shuffle}" >&2
   exit 1
 }
 
+rename() {
+  fd -tf -e jpg -e png -e jpeg . "$BACKGROUND_DIR" \
+    | nl -w1 -s ' ' \
+    | while read n f; do
+        mv -- "$f" "$BACKGROUND_DIR/$n.${f##*.}.tmp"
+      done
+
+  fd -tf -E tmp . "$BACKGROUND_DIR" -x mv -- {} {.}
+}
+
 refresh() {
-  fd -tf -e "jpg" -e "png" -e "jpeg" . "$BACKGROUND_DIR" | shuf > "$METAFILE"
+  rename
+  fd -tf -e jpg -e png -e jpeg . "$BACKGROUND_DIR" | shuf > "$METAFILE"
+  rm -f "$CURRENT_LN"
+  hyprctl hyprpaper unload all > /dev/null 2>&1
+  set_next_background
 }
 
 shuffle() {
@@ -31,9 +46,9 @@ set_next_background() {
     fi
   fi
 
-  ln -sf "$next" "$BACKGROUND_DIR/current"
+  ln -sf "$next" "$CURRENT_LN"
   pidof hyprlock > /dev/null && kill -USR2 $(pidof hyprlock)
-  hyprctl hyprpaper reload ",$next"
+  hyprctl hyprpaper reload ",$next" > /dev/null 2>&1
 }
 
 if [ ! -f "$METAFILE" ]; then refresh; fi
