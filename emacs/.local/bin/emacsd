@@ -174,8 +174,6 @@ reap_stuck_native_comp() {
 
     sleep "$EMACSD_NATIVE_COMP_WATCH_INTERVAL"
   done
-
-  log_not_stdout "finished reap_stuck_native_comp watching process for emacs daemon $pid"
 }
 
 start() {
