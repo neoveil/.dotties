@@ -3,7 +3,7 @@
 
 # editor
 export EDITOR="emacsclient -r"
-export VISUAL="emacsclient -r -n"
+export VISUAL="emacsclient -r"
 
 # browser
 export BROWSER="google-chrome-stable"
