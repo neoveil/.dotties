@@ -42,6 +42,7 @@ alias df="df -h"
 alias du="du -ch"
 alias cat="bat"
 alias mkdir="mkdir -pv"
+alias dd="dd status=progress"
 
 # kitty
 if [[ "$TERM" = "xterm-kitty" ]]; then
