@@ -1,0 +1,25 @@
+#!/bin/sh
+
+in_group() {
+  hyprctl activewindow -j |\
+    jq '((.grouped // []) | length) > 0' |\
+    rg -q true
+}
+
+move() {
+  direction="$1"
+
+  if in_group; then
+    case "$direction" in
+      l) direction="b";;
+      r) direction="f";;
+      *) exit 1;;
+    esac
+
+    hyprctl -q dispatch movegroupwindow "$direction"
+  else
+    hyprctl -q dispatch movewindow "$1"
+  fi
+}
+
+move "$1"
