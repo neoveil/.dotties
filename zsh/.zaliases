@@ -38,8 +38,8 @@ alias suctl="systemctl --user"
 alias jenv="sudo archlinux-java"
 
 # better defaults
-alias df="df -h"
-alias du="du -ch"
+alias df="duf"
+alias du="dust -b"
 alias cat="bat"
 alias mkdir="mkdir -pv"
 alias dd="dd status=progress"

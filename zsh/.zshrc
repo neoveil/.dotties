@@ -40,6 +40,9 @@ eval "$(zoxide init --cmd cd zsh)"
 # fzf
 source <(fzf --zsh)
 
+# procs
+source <(procs --gen-completion-out zsh)
+
 # aliases
 [ -f "$HOME/.zaliases" ] && . "$HOME/.zaliases"
 
