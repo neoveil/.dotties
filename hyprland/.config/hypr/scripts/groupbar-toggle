@@ -1,0 +1,12 @@
+#!/bin/sh
+
+GROUPBAR_OPTION="group:groupbar:enabled"
+
+next() {
+  hyprctl getoption "$GROUPBAR_OPTION" \
+    | rg -q 1 \
+    && printf false \
+    || printf true
+}
+
+hyprctl -q keyword "$GROUPBAR_OPTION" "$(next)"
