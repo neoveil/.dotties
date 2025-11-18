@@ -21,5 +21,6 @@
 (keymap-global-set "C-c c" 'compile)
 (keymap-global-set "C-c s c" 'shell-command)
 (keymap-global-set "C-c s a" 'async-shell-command)
+(keymap-global-set "C-c s s" 'term)
 
 (provide 'keymaps)

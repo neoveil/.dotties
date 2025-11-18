@@ -56,8 +56,10 @@
   :config
   (setq-default uniquify-buffer-name-style 'forward))
 
-(use-package which-key
+(use-feature which-key
   :diminish
+  :bind
+  (:map help-map ("C-h" . nil))
   :config
   (which-key-mode 1))
 
@@ -102,5 +104,23 @@
   :bind
   (("C-M-<up>" . move-text-up)
    ("C-M-<down>" . move-text-down)))
+
+(use-feature term
+  :config
+  (put 'term 'interactive-form
+       '(interactive
+         (list (or explicit-shell-file-name
+                   (getenv "ESHELL")
+                   shell-file-name
+                   (getenv "SHELL")
+                   "/usr/bin/zsh"))))
+
+  (advice-add 'term-handle-exit
+              :around
+              (lambda (f &optional proc msg)
+                (let ((inhibit-message t))
+                  (funcall f proc msg))
+                (message "%s | %s" proc (string-trim (or msg "")))
+                (kill-buffer (current-buffer)))))
 
 (provide 'tools)

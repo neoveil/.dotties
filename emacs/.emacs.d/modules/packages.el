@@ -39,6 +39,11 @@
 (defmacro use-packages (&rest packages)
   `(progn ,@(mapcar (lambda (pkg) `(use-package ,pkg)) packages)))
 
+(let* ((p 'lisp-indent-function)
+       (f (get 'use-package p)))
+  (put 'use-feature p f)
+  (put 'use-packages p f))
+
 (use-packages
  dash
  diminish)
