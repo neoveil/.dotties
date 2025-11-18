@@ -106,6 +106,8 @@
    ("C-M-<down>" . move-text-down)))
 
 (use-feature term
+  :hook
+  (term-mode . (lambda () (display-line-numbers-mode -1)))
   :config
   (put 'term 'interactive-form
        '(interactive
