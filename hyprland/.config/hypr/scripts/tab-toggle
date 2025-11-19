@@ -1,45 +1,32 @@
 #!/bin/sh
 set -eu
 
-INITIAL_FOCUSED=$(hyprctl activewindow -j) || exit 0
-INITIAL_FOCUSED_ADDRESS=$(printf '%s\n' "$INITIAL_FOCUSED" | jq -r '.address')
-WORKSPACE_ID=$(printf '%s\n' "$INITIAL_FOCUSED" | jq '.workspace.id')
+WINDOW=$(hyprctl activewindow -j) || exit 0
+WINDOW_ADDRESS=$(printf '%s\n' "$WINDOW" | jq -r '.address')
+WORKSPACE_ID=$(printf '%s\n' "$WINDOW" | jq '.workspace.id')
 
 in_group() {
-  hyprctl activewindow -j |\
-    jq '((.grouped // []) | length) > 0' |\
-    rg -q true
-}
-
-grouped_windows() {
-  hyprctl activewindow -j | jq -r '.grouped[]?'
+  hyprctl activewindow -j | jq -e '(.grouped // [] | length) > 0' > /dev/null 2>&1
 }
 
 workspace_windows() {
-  hyprctl clients -j |\
-    jq -r ".[] | select(.workspace.id == $WORKSPACE_ID) | .address"
+  hyprctl clients -j | jq -r ".[] | select(.workspace.id == $WORKSPACE_ID) | .address"
 }
 
-if in_group; then
-  for window in $(grouped_windows); do
-    hyprctl -q dispatch moveoutofgroup "address:$window"
-  done
-
-  hyprctl -q dispatch focuswindow "address:$INITIAL_FOCUSED_ADDRESS"
-  exit 0
-fi
-
+HAD_GROUP="$(in_group && echo true || echo false)"
 hyprctl -q dispatch togglegroup
 
-for window in $(workspace_windows); do
-  [ "$window" != "$INITIAL_FOCUSED_ADDRESS" ] || continue
+if [ "$HAD_GROUP" = false ]; then
+  for window in $(workspace_windows); do
+    [ "$window" = "$WINDOW_ADDRESS" ] && continue
 
-  hyprctl -q dispatch focuswindow "address:$window"
+    hyprctl -q dispatch focuswindow "address:$window"
 
-  for direction in l r u d; do
-    if in_group; then break; fi
-    hyprctl -q dispatch moveintogroup "$direction"
+    for direction in l r u d; do
+      if in_group; then break; fi
+      hyprctl -q dispatch moveintogroup "$direction"
+    done
   done
-done
+fi
 
-hyprctl -q dispatch focuswindow "address:$INITIAL_FOCUSED_ADDRESS"
+hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"

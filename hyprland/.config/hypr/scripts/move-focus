@@ -1,25 +1,20 @@
 #!/bin/sh
 
 in_group() {
-  hyprctl activewindow -j |\
-    jq '((.grouped // []) | length) > 0' |\
-    rg -q true
+  hyprctl activewindow -j | jq -e '(.grouped // [] | length) > 0' > /dev/null 2>&1
 }
 
-move() {
-  direction="$1"
+COMMAND="movefocus"
+DIRECTION="$1"
 
-  if in_group; then
-    case "$direction" in
-      l) direction="b";;
-      r) direction="f";;
-      *) exit 1;;
-    esac
+if in_group; then
+  case "$1" in
+    l) DIRECTION="b";;
+    r) DIRECTION="f";;
+    *) exit 1;;
+  esac
 
-    hyprctl -q dispatch changegroupactive "$direction"
-  else
-    hyprctl -q dispatch movefocus "$1"
-  fi
-}
+  COMMAND="changegroupactive"
+fi
 
-move "$1"
+hyprctl -q dispatch "$COMMAND" "$DIRECTION"

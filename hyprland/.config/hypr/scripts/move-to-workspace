@@ -1,0 +1,35 @@
+#!/bin/sh
+set -eu
+
+WINDOW_ADDRESS=$(hyprctl activewindow -j | jq -r '.address') || exit 0
+
+case "$1" in
+  [1-9]|10) WORKSPACE="$1";;
+  *) exit 1;;
+esac
+
+in_group() {
+  hyprctl activewindow -j | jq -e '(.grouped // []) | length > 0' > /dev/null 2>&1
+}
+
+workspace_has_group() {
+  hyprctl clients -j |\
+    jq -e "map(select(.workspace.id == $WORKSPACE)
+      | (.grouped // []) \
+      | length > 0) \
+      | any" > /dev/null 2>&1
+}
+
+if in_group; then hyprctl -q dispatch moveoutofgroup; fi
+hyprctl -q dispatch movetoworkspace "$WORKSPACE,address:$WINDOW_ADDRESS"
+
+if workspace_has_group; then
+  hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"
+
+  for direction in l r u d; do
+    in_group && break
+    hyprctl -q dispatch moveintogroup "$direction"
+  done
+fi
+
+hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"
