@@ -1,9 +1,12 @@
 ;; -*- lexical-binding: t; -*-
 
+;; user info settings
+(setq-default
+ user-full-name "Lucas A. F. Vitor"
+ user-mail-address "luca.oetdbem@gmail.com")
+
 ;; basic settings
 (setq-default
- inhibit-startup-screen t
- blink-cursor-blinks 0
  isearch-wrap-pause 'no-ding
  enable-recursive-minibuffers t
  ring-bell-function 'ignore
@@ -21,8 +24,7 @@
  fill-column 120
  vc-follow-symlinks t
  confirm-nonexistent-file-or-buffer nil
- load-prefer-newer t
- tramp-auto-save-directory "/tmp")
+ load-prefer-newer t)
 
 ;; clipboard settings
 (setq-default
@@ -30,10 +32,37 @@
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t)
 
+(eval-when-compile
+  (require 'functions)
+  (require 'packages))
+
+(use-feature windmove
+  :config
+  (windmove-default-keybindings 'meta))
+
+(use-feature savehist
+  :config
+  (savehist-mode 1))
+
+(use-feature saveplace
+  :config
+  (save-place-mode 1))
+
+(use-feature recentf
+  :config
+  (recentf-mode 1))
+
+(use-feature abbrev
+  :diminish)
+
+(use-feature subword
+  :diminish)
+
 ;; misc
 (fset 'yes-or-no-p 'y-or-n-p)
-(windmove-default-keybindings 'meta)
-(pixel-scroll-precision-mode 1)
-(savehist-mode 1)
+
+(put-all
+ upcase-region   disabled nil
+ downcase-region disabled nil)
 
 (provide 'options)

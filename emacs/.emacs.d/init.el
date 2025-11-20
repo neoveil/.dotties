@@ -1,7 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
 (defvar modules-directory (file-name-concat user-emacs-directory "modules"))
-(defvar local-directory (file-name-concat user-emacs-directory "local"))
+(defvar local-directory   (file-name-concat user-emacs-directory "local"))
 (defvar custom-file-path  (file-name-concat modules-directory "custom.el"))
 
 (setq-default custom-file custom-file-path)
@@ -13,7 +13,7 @@
 ;; TODO:
 ;;   setup lsp?
 ;;   setup tree-sitter?
-;;   drop ido and company - replace for vertico, orderless, consult, marginalia, helm, corfu, cape
+;;   drop ido and company - replace for ivy, vertico, orderless, consult, marginalia, helm, corfu, cape
 
 (require 'packages)
 (require 'options)

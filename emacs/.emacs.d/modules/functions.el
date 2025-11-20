@@ -2,7 +2,7 @@
 
 (defun kill-other-buffers ()
   (interactive)
-  (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
+  (mapc 'kill-buffer (remq (current-buffer) (buffer-list))))
 
 (defun kill-all-buffers ()
   (interactive)
@@ -20,9 +20,5 @@
          (while xs
            (push `(put ',(pop xs) ',(pop xs) ,(pop xs)) r))
          r)))
-
-(put-all
- upcase-region disabled nil
- downcase-region disabled nil)
 
 (provide 'functions)

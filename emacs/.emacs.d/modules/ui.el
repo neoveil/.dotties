@@ -1,12 +1,20 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'packages)
+(eval-when-compile
+  (require 'packages))
+
+(setq-default
+ inhibit-startup-screen t
+ blink-cursor-blinks 0)
+
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+(assq-delete-all 'continuation fringe-indicator-alist)
 
 (use-package doom-themes
+  :custom
+  (doom-themes-enable-bold t)
+  (doom-themes-enable-italic t)
   :config
-  (setq-default
-   doom-themes-enable-bold t
-   doom-themes-enable-italic t)
   (load-theme 'doom-dracula t)
   (doom-themes-org-config))
 
@@ -17,22 +25,22 @@
 (use-package all-the-icons
   :config
   (unless (file-exists-p (file-name-concat
-			  (or (getenv "XDG_DATA_HOME")
+			                    (or (getenv "XDG_DATA_HOME")
                               (file-name-concat (getenv "HOME") ".local" "share"))
-			  "fonts"
-			  all-the-icons-fonts-subdirectory
-			  "all-the-icons.ttf"))
+			                    "fonts"
+			                    all-the-icons-fonts-subdirectory
+			                    "all-the-icons.ttf"))
     (message "`all-the-icons' fonts are not installed, downloading and installing it...")
     (all-the-icons-install-fonts t)))
 
 (use-package all-the-icons-dired
   :diminish
   :defer t
-  :hook (dired-mode . all-the-icons-dired-mode))
+  :hook
+  (dired-mode . all-the-icons-dired-mode))
 
 (use-package dired-rainbow
   :config
-  (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
   (dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
   (dired-rainbow-define xml "#f2d024" ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
   (dired-rainbow-define document "#9561e2" ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
@@ -51,14 +59,31 @@
   (dired-rainbow-define fonts "#6cb2eb" ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
   (dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
   (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
+  (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
   (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 
-(menu-bar-mode 0)
-(tool-bar-mode 0)
-(column-number-mode 1)
-(scroll-bar-mode 0)
-(global-display-line-numbers-mode 1)
-(add-to-list 'default-frame-alist '(alpha-background . 90))
-(assq-delete-all 'continuation fringe-indicator-alist)
+(use-feature menu-bar
+  :config
+  (menu-bar-mode 0))
+
+(use-feature tool-bar
+  :config
+  (tool-bar-mode 0))
+
+(use-feature scroll-bar
+  :config
+  (scroll-bar-mode 0))
+
+(use-feature simple
+  :config
+  (column-number-mode 1))
+
+(use-feature display-line-numbers
+  :config
+  (global-display-line-numbers-mode 1))
+
+(use-feature pixel-scroll
+  :config
+  (pixel-scroll-precision-mode 1))
 
 (provide 'ui)

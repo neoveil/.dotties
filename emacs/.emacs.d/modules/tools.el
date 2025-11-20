@@ -1,65 +1,53 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'packages)
+(eval-when-compile
+  (require 'packages))
 
 (use-package crux
   :bind
-  (("C-<return>" . crux-smart-open-line)
+  (("C-<return>"   . crux-smart-open-line)
    ("C-S-<return>" . crux-smart-open-line-above)
-   ("C-," . crux-duplicate-current-line-or-region)
-   ("C-c s e" . crux-sudo-edit)))
-
-(use-package pinentry
-  :init
-  (setq-default epg-pinentry-mode 'loopback)
-  (pinentry-start))
-
-(use-feature abbrev
-  :diminish)
-
-(use-feature autorevert
-  :diminish 'auto-revert-mode)
+   ("C-,"          . crux-duplicate-current-line-or-region)
+   ("C-c s e"      . crux-sudo-edit)))
 
 (use-feature dired-x
   :config
   (setq-default dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
-(defun wdired--register-restore-line-hl-after-edit-advice ()
-  (mapc
-   (lambda (fn) (advice-add fn :after (lambda (&rest _) (hl-line-mode))))
-   '(wdired-finish-edit wdired-abort-changes)))
-
 (use-feature dired
   :hook
   ((dired-mode . hl-line-mode)
-   (dired-mode . auto-revert-mode)
-   (wdired-mode . (lambda () (hl-line-mode -1))))
+   (dired-mode . auto-revert-mode))
   :bind
   (:map dired-mode-map
-        (("." . dired-up-directory)
+        (("."   . dired-up-directory)
          ("C-." . dired-omit-mode)
-         ("q" . (lambda () (interactive) (quit-window t)))))
+         ("q"   . (lambda () (interactive) (quit-window t)))))
   :config
   (setq-default
    dired-dwim-target t
    dired-listing-switches "-alh --group-directories-first"
    dired-free-space 'separate
-   dired-kill-when-opening-new-dired-buffer t)
-  (wdired--register-restore-line-hl-after-edit-advice))
+   dired-kill-when-opening-new-dired-buffer t))
+
+(use-feature wdired
+  :hook
+  (wdired-mode . (lambda () (hl-line-mode -1)))
+  :config
+  (mapc
+   (lambda (f) (advice-add f :after (lambda (&rest _) (hl-line-mode))))
+   '(wdired-finish-edit wdired-abort-changes)))
 
 (use-package dired-subtree
   :bind
   (:map dired-mode-map
         ("<tab>" . dired-subtree-toggle)))
 
-(use-feature uniquify
-  :config
-  (setq-default uniquify-buffer-name-style 'forward))
-
 (use-feature which-key
   :diminish
   :bind
-  (:map help-map ("C-h" . nil))
+  (:map help-map
+        ("C-h" . nil))
   :config
   (which-key-mode 1))
 
@@ -90,39 +78,37 @@
 
 (use-package magit
   :bind
-  (("C-c m s" . magit-status)
-   ("C-c m l" . magit-log)
-   ("C-c m d" . magit-diff)
-   ("C-c m i" . magit-init)
-   ("C-c m c c" . magit-clone)
-   ("C-c m c s" . magit-clone-shallow)
-   ("C-c m r a" . magit-remote-add))
+  (("C-c m s"   . magit-status)
+   ("C-c m l"   . magit-log)
+   ("C-c m d"   . magit-diff)
+   ("C-c m i"   . magit-init)
+   ("C-c m c c" . magit-clone-shallow)
+   ("C-c m c f" . magit-clone))
   :config
   (setq-default git-commit-summary-max-length 70))
 
 (use-package move-text
   :bind
-  (("C-M-<up>" . move-text-up)
+  (("C-M-<up>"   . move-text-up)
    ("C-M-<down>" . move-text-down)))
 
 (use-feature term
   :hook
   (term-mode . (lambda () (display-line-numbers-mode -1)))
   :config
-  (put 'term 'interactive-form
-       '(interactive
-         (list (or explicit-shell-file-name
-                   (getenv "ESHELL")
-                   shell-file-name
-                   (getenv "SHELL")
-                   "/usr/bin/zsh"))))
-
-  (advice-add 'term-handle-exit
-              :around
-              (lambda (f &optional proc msg)
-                (let ((inhibit-message t))
-                  (funcall f proc msg))
-                (message "%s | %s" proc (string-trim (or msg "")))
-                (kill-buffer (current-buffer)))))
+  (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
+  (advice-add
+   'term-handle-exit
+   :around
+   (lambda (f &optional proc msg)
+     (let ((inhibit-message t))
+       (funcall f proc msg))
+     (message
+      "%s%s"
+      proc
+      (concat
+       (when msg " | ")
+       (string-trim (or msg ""))))
+     (kill-buffer (current-buffer)))))
 
 (provide 'tools)

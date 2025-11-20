@@ -1,20 +1,15 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'packages)
-
-(use-packages
- tldr
- rainbow-mode
- yasnippet-snippets
- string-inflection)
+(eval-when-compile
+  (require 'packages))
 
 (use-feature eldoc
   :diminish)
 
 (use-package devdocs
   :bind
-  (("C-h d" . nil)
-   ("C-h D" . apropos-documentation)
+  (("C-h d"   . nil)
+   ("C-h D"   . apropos-documentation)
    ("C-h d l" . devdocs-lookup)
    ("C-h d i" . devdocs-install)
    ("C-h d o" . devdocs-peruse)))
@@ -27,11 +22,10 @@
   :bind
   ((:map company-active-map
          ("<tab>" . company-complete-selection))
-   (:map global-map
-         ("C-<SPC>" . nil)
-         ("C-S-<SPC>" . set-mark-command))
-   ("C-S-i" . 'company-complete)
-   ("C-<SPC>" . 'hippie-expand))
+   (("C-<SPC>"   . nil)
+    ("C-S-<SPC>" . set-mark-command)
+    ("C-S-i"     . 'company-complete)
+    ("C-<SPC>"   . 'hippie-expand)))
   :config
   (setq-default
    company-minimum-prefix-length 2
@@ -43,22 +37,28 @@
 (use-package paredit
   :bind
   (:map paredit-mode-map
-        (("M-<down>" . nil)
-         ("M-<up>" . nil)
-         ("C-<left>" . nil)
+        (("M-<down>"  . nil)
+         ("M-<up>"    . nil)
+         ("C-<left>"  . nil)
          ("C-<right>" . nil))))
 
 (use-package multiple-cursors
   :bind
-  (("C-c e l" . mc/edit-lines)
-   ("C->" . mc/mark-next-like-this)
+  (("C-c e l"       . mc/edit-lines)
+   ("C->"           . mc/mark-next-like-this)
    ("M-S-<mouse-1>" . mc/add-cursor-on-click)
-   ("C-c C->" . mc/mark-all-like-this)
-   ("C-S->" . mc/skip-to-next-like-this)
-   ("C-<" . mc/unmark-next-like-this)))
+   ("C-c C->"       . mc/mark-all-like-this)
+   ("C-S->"         . mc/skip-to-next-like-this)
+   ("C-<"           . mc/unmark-next-like-this)))
 
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
+
+(use-packages
+ tldr
+ rainbow-mode
+ yasnippet-snippets
+ string-inflection)
 
 (provide 'prog-exts)

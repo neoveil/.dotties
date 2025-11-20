@@ -1,22 +1,25 @@
 ;; -*- lexical-binding: t; -*-
 
-(require 'packages)
-
-(use-packages
- yaml-mode
- json-mode
- systemd)
+(eval-when-compile
+  (require 'packages))
 
 (setq-default
  tab-width 2
  indent-tabs-mode nil
  max-lisp-eval-depth 10000)
 
-(electric-pair-mode 1)
-(delete-selection-mode 1)
-(global-auto-revert-mode 1)
-(save-place-mode 1)
-(recentf-mode 1)
+(use-feature elec-pair
+  :config
+  (electric-pair-mode 1))
+
+(use-feature delsel
+  :config
+  (delete-selection-mode 1))
+
+(use-feature autorevert
+  :diminish 'auto-revert-mode
+  :config
+  (global-auto-revert-mode 1))
 
 (use-feature simple
   :hook
@@ -34,9 +37,7 @@
 
 (use-feature js
   :config
-  (setq-default
-   tab-width 2
-   js-indent-level 2))
+  (setq-default js-indent-level 2))
 
 (use-package lua-mode
   :config
@@ -47,15 +48,13 @@
 
 (use-feature python
   :config
-  (setq-default
-   tab-width 2
-   python-indent-offset 2))
+  (setq-default python-indent-offset 2))
 
 (use-package markdown-mode
   :hook
   (markdown-mode . (lambda () (toggle-word-wrap 1)))
   :mode
-  (("\\.md\\'" . markdown-mode)
+  (("\\.md\\'"       . markdown-mode)
    ("\\.markdown\\'" . markdown-mode)
    ("README\\.md\\'" . gfm-mode))
   :config
@@ -66,18 +65,25 @@
   (clojure-mode . subword-mode))
 
 (use-package cider
+  :after clojure-mode
+  :bind
+  ((:map clojure-mode-map
+         (("C-c j s" . cider-jack-in)
+          ("C-c j c" . cider-connect)))
+   (:map cider-mode-map
+         ("C-c C-j C-j" . cider-eval-print-last-sexp)))
   :hook
-  (cider-mode . eldoc-mode)
+  ((cider-mode . eldoc-mode)
+   (cider-repl-mode . subword-mode))
   :config
   (setq-default
-   cider-repl-pop-to-buffer-on-connect 1
-   cider-show-error-buffer t
-   cider-auto-select-error-buffer t
    cider-repl-history-file (concat user-emacs-directory ".cider-history")
    cider-repl-wrap-history t
-   cider-prompt-for-symbol nil
-   nrepl-log-messages nil)
-  (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl/cider-middleware"))
+   cider-repl-display-help-banner nil
+   cider-allow-jack-in-without-project t
+   cider-font-lock-dynamically t
+   cider-save-file-on-load t)
+  (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl.middleware/cider-middleware"))
 
 (use-package dockerfile-mode
   :config
@@ -94,6 +100,15 @@
    compilation-environment '("TERM=xterm-256color")
    xterm-color-use-bold-for-bright t
    compilation-scroll-output t)
-  (advice-add 'compilation-filter :around (lambda (f p s) (funcall f p (xterm-color-filter s)))))
+  (advice-add
+   'compilation-filter
+   :around
+   (lambda (f p s)
+     (funcall f p (xterm-color-filter s)))))
+
+(use-packages
+ yaml-mode
+ json-mode
+ systemd)
 
 (provide 'prog-tools)
