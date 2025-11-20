@@ -213,7 +213,7 @@ start() {
       log "started emacsd"
       trap - EXIT INT TERM HUP
       unlock_start_lock
-      reap_stuck_native_comp &
+      nohup reap_stuck_native_comp &
       return 0
     fi
 
