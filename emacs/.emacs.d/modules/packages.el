@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;;; packages.el -*- lexical-binding: t; -*-
 
 (setq-default
  straight-repository-branch "develop"
@@ -32,12 +32,42 @@
    straight-vc-git-default-clone-depth 1))
 
 (defmacro use-feature (name &rest args)
+  "Declare configuration for a built-in feature NAME via `use-package'.
+
+This macro is a convenience wrapper around `use-package' for
+packages that ship with Emacs.  It expands into a `use-package'
+form with `:straight (:type built-in)' already inserted, allowing
+the remaining ARGS to specify additional keywords such as :bind,
+:config, :hook, etc.
+
+Example:
+  (use-feature simple
+    :bind (\"C-x C-b\" . buffer-menu))
+
+expands into:
+  (use-package simple
+    :straight (:type built-in)
+    :bind (\"C-x C-b\" . buffer-menu))"
   (declare (indent defun))
   `(use-package ,name
      :straight (:type built-in)
      ,@args))
 
 (defmacro use-packages (&rest packages)
+  "Load multiple PACKAGES using `use-package' in a compact form.
+
+Each element of PACKAGES should be a symbol naming a package.
+This macro expands into a PROGN form containing one `use-package'
+call per package, with no additional keywords.
+
+Example:
+  (use-packages foo bar baz)
+
+expands into:
+  (progn
+    (use-package foo)
+    (use-package bar)
+    (use-package baz))"
   `(progn ,@(mapcar (lambda (pkg) `(use-package ,pkg)) packages)))
 
 (use-packages

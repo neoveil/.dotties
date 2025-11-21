@@ -1,14 +1,15 @@
-;; -*- lexical-binding: t; -*-
+;;; ui.el -*- lexical-binding: t; -*-
 
 (eval-when-compile
   (require 'packages))
 
+(require 'functions)
+
 (setq-default
  inhibit-startup-screen t
- blink-cursor-blinks 0)
-
-(add-to-list 'default-frame-alist '(alpha-background . 90))
-(assq-delete-all 'continuation fringe-indicator-alist)
+ blink-cursor-blinks 0
+ fringe-indicator-alist (assq-delete-all 'continuation fringe-indicator-alist)
+ default-frame-alist (cons '(alpha-background . 90) default-frame-alist))
 
 (use-package doom-themes
   :custom
@@ -24,14 +25,7 @@
 
 (use-package all-the-icons
   :config
-  (unless (file-exists-p (file-name-concat
-			                    (or (getenv "XDG_DATA_HOME")
-                              (file-name-concat (getenv "HOME") ".local" "share"))
-			                    "fonts"
-			                    all-the-icons-fonts-subdirectory
-			                    "all-the-icons.ttf"))
-    (message "`all-the-icons' fonts are not installed, downloading and installing it...")
-    (all-the-icons-install-fonts t)))
+  (all-the-icons--install-fonts-if-not-installed))
 
 (use-package all-the-icons-dired
   :diminish
@@ -85,5 +79,18 @@
 (use-feature pixel-scroll
   :config
   (pixel-scroll-precision-mode 1))
+
+(use-feature windmove
+  :bind
+  (("C-c <left>"  . windmove-swap-states-left)
+   ("C-c <right>" . windmove-swap-states-right)
+   ("C-c <up>"    . windmove-swap-states-up)
+   ("C-c <down>"  . windmove-swap-states-down))
+  :config
+  (windmove-default-keybindings 'meta))
+
+(use-feature window
+  :bind
+  ("C-x C-o" . other-window))
 
 (provide 'ui)

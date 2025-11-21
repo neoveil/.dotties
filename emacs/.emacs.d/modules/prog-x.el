@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;;; prog-x.el -*- lexical-binding: t; -*-
 
 (eval-when-compile
   (require 'packages))
@@ -20,12 +20,10 @@
 
 (use-package company
   :bind
-  ((:map company-active-map
-         ("<tab>" . company-complete-selection))
-   (("C-<SPC>"   . nil)
-    ("C-S-<SPC>" . set-mark-command)
-    ("C-S-i"     . 'company-complete)
-    ("C-<SPC>"   . 'hippie-expand)))
+  (("C-S-<SPC>" . hippie-expand)
+   ("C-S-i"     . company-complete)
+   (:map company-active-map
+         ("<tab>" . company-complete-selection)))
   :config
   (setq-default
    company-minimum-prefix-length 2
@@ -61,4 +59,4 @@
  yasnippet-snippets
  string-inflection)
 
-(provide 'prog-exts)
+(provide 'prog-x)

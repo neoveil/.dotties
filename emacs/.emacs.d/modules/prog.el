@@ -1,12 +1,38 @@
-;; -*- lexical-binding: t; -*-
+;;; prog.el -*- lexical-binding: t; -*-
 
 (eval-when-compile
   (require 'packages))
+
+(require 'functions)
 
 (setq-default
  tab-width 2
  indent-tabs-mode nil
  max-lisp-eval-depth 10000)
+
+(use-feature isearch
+  :bind
+  (("C-s"   . isearch-forward-regexp)
+   ("C-r"   . isearch-backward-regexp)
+   ("C-M-s" . isearch-forward)
+   ("C-M-r" . isearch-backward)))
+
+(use-feature replace
+  :bind
+  (("C-c /" . query-replace-global)
+   ("M-%"   . query-replace-regexp)))
+
+(use-feature align
+  :bind
+  ("M-|" . align-regexp))
+
+(use-feature newcomment
+  :bind
+  ("C-;" . comment-line))
+
+(use-feature compile
+  :bind
+  ("C-c c" . compile))
 
 (use-feature elec-pair
   :config
@@ -17,7 +43,7 @@
   (delete-selection-mode 1))
 
 (use-feature autorevert
-  :diminish 'auto-revert-mode
+  :diminish auto-revert-mode
   :config
   (global-auto-revert-mode 1))
 
@@ -25,9 +51,21 @@
   :hook
   (before-save . delete-trailing-whitespace))
 
+(use-package move-text
+  :bind
+  (("C-M-<up>"   . move-text-up)
+   ("C-M-<down>" . move-text-down)))
+
+(use-package crux
+  :bind
+  (("C-<return>"   . crux-smart-open-line)
+   ("C-S-<return>" . crux-smart-open-line-above)
+   ("C-,"          . crux-duplicate-current-line-or-region)
+   ("C-c s e"      . crux-sudo-edit)))
+
 (use-feature cc-mode
   :hook
-  (c-mode . (lambda () (c-toggle-comment-style -1)))
+  (c-mode . enable-c-line-comment-style)
   :config
   (setq-default c-basic-offset 2))
 
@@ -52,7 +90,7 @@
 
 (use-package markdown-mode
   :hook
-  (markdown-mode . (lambda () (toggle-word-wrap 1)))
+  (markdown-mode . enable-word-wrap)
   :mode
   (("\\.md\\'"       . markdown-mode)
    ("\\.markdown\\'" . markdown-mode)
@@ -100,15 +138,11 @@
    compilation-environment '("TERM=xterm-256color")
    xterm-color-use-bold-for-bright t
    compilation-scroll-output t)
-  (advice-add
-   'compilation-filter
-   :around
-   (lambda (f p s)
-     (funcall f p (xterm-color-filter s)))))
+  (advice-add 'compilation-filter :around 'xterm-color--colorize-compilation-advice))
 
 (use-packages
  yaml-mode
  json-mode
  systemd)
 
-(provide 'prog-tools)
+(provide 'prog)

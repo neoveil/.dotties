@@ -1,4 +1,8 @@
-;; -*- lexical-binding: t; -*-
+;;; options.el -*- lexical-binding: t; -*-
+
+(eval-when-compile
+  (require 'functions)
+  (require 'packages))
 
 ;; user info settings
 (setq-default
@@ -32,14 +36,6 @@
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t)
 
-(eval-when-compile
-  (require 'functions)
-  (require 'packages))
-
-(use-feature windmove
-  :config
-  (windmove-default-keybindings 'meta))
-
 (use-feature savehist
   :config
   (savehist-mode 1))
@@ -59,7 +55,7 @@
   :diminish)
 
 ;; misc
-(fset 'yes-or-no-p 'y-or-n-p)
+(advice-add 'yes-or-no-p :override 'y-or-n-p)
 
 (put-all
  upcase-region   disabled nil

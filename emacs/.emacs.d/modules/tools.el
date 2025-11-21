@@ -1,42 +1,40 @@
-;; -*- lexical-binding: t; -*-
+;;; tools.el -*- lexical-binding: t; -*-
 
 (eval-when-compile
   (require 'packages))
 
-(use-package crux
-  :bind
-  (("C-<return>"   . crux-smart-open-line)
-   ("C-S-<return>" . crux-smart-open-line-above)
-   ("C-,"          . crux-duplicate-current-line-or-region)
-   ("C-c s e"      . crux-sudo-edit)))
+(require 'functions)
 
-(use-feature dired-x
-  :config
-  (setq-default dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
+(use-feature files
+  :bind
+  (("C-c g h" . go-home)
+   ("C-c f p" . find-file-at-point)
+   ("C-x C-b" . buffer-menu)
+   ("C-c k a" . kill-all-buffers)
+   ("C-c k o" . kill-other-buffers)))
 
 (use-feature dired
   :hook
-  ((dired-mode . hl-line-mode)
-   (dired-mode . auto-revert-mode))
+  ((dired-mode  . hl-line-mode)
+   (dired-mode  . auto-revert-mode)
+   (wdired-mode . disable-hl-line-mode))
   :bind
-  (:map dired-mode-map
-        (("."   . dired-up-directory)
-         ("C-." . dired-omit-mode)
-         ("q"   . (lambda () (interactive) (quit-window t)))))
+  (("C-x C-d" . dired)
+   (:map dired-mode-map
+         (("."   . dired-up-directory)
+          ("C-." . dired-omit-mode)
+          ("q"   . quit-window-kill-buffer))))
   :config
   (setq-default
    dired-dwim-target t
    dired-listing-switches "-alh --group-directories-first"
    dired-free-space 'separate
-   dired-kill-when-opening-new-dired-buffer t))
+   dired-kill-when-opening-new-dired-buffer t)
+  (wdired--register-restore-hl-line-mode-on-exit))
 
-(use-feature wdired
-  :hook
-  (wdired-mode . (lambda () (hl-line-mode -1)))
+(use-feature dired-x
   :config
-  (mapc
-   (lambda (f) (advice-add f :after (lambda (&rest _) (hl-line-mode))))
-   '(wdired-finish-edit wdired-abort-changes)))
+  (setq-default dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
 (use-package dired-subtree
   :bind
@@ -87,28 +85,16 @@
   :config
   (setq-default git-commit-summary-max-length 70))
 
-(use-package move-text
-  :bind
-  (("C-M-<up>"   . move-text-up)
-   ("C-M-<down>" . move-text-down)))
-
 (use-feature term
   :hook
-  (term-mode . (lambda () (display-line-numbers-mode -1)))
+  (term-mode . disable-display-line-numbers-mode)
+  :bind
+  (("C-c s c" . shell-command)
+   ("C-c s a" . async-shell-command)
+   ("C-c s t" . term)
+   ("C-x 4 t" . term-other-window))
   :config
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
-  (advice-add
-   'term-handle-exit
-   :around
-   (lambda (f &optional proc msg)
-     (let ((inhibit-message t))
-       (funcall f proc msg))
-     (message
-      "%s%s"
-      proc
-      (concat
-       (when msg " | ")
-       (string-trim (or msg ""))))
-     (kill-buffer (current-buffer)))))
+  (advice-add 'term-handle-exit :around 'term--better-exit-handler-advice))
 
 (provide 'tools)
