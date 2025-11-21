@@ -1,4 +1,4 @@
-;; -*- lexical-binding: t; -*-
+;;; early-init.el -*- lexical-binding: t; -*-
 
 (setq-default
  gc-cons-threshold 104857600
