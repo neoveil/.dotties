@@ -213,7 +213,7 @@ start() {
       log "started emacsd"
       trap - EXIT INT TERM HUP
       unlock_start_lock
-      nohup reap_stuck_native_comp > /dev/null 2>&1 &
+      nohup "$0" __reap-stuck-native-comp < /dev/null > /dev/null 2>&1 &
       return 0
     fi
 
@@ -305,6 +305,7 @@ case "$cmd" in
     esac;;
   version) version;;
   help) usage;;
+  __reap-stuck-native-comp) reap_stuck_native_comp;;
   "") usage; exit 1;;
   *) echo "unknown argument: $cmd"; usage; exit 1;;
 esac
