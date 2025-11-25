@@ -62,7 +62,9 @@
   (:map copilot-completion-map
         ("<tab>" . copilot-accept-completion))
   :config
-  (setq-default copilot-indent-offset-warning-disable t))
+  (setq-default
+   copilot-indent-offset-warning-disable t
+   copilot-max-char-warning-disable t))
 
 (use-packages
  tldr
