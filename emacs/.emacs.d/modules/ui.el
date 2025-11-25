@@ -56,6 +56,12 @@
   (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
   (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
 
+(use-package dimmer
+  :config
+  (dimmer-configure-magit)
+  (dimmer-configure-which-key)
+  (dimmer-mode t))
+
 (use-feature menu-bar
   :config
   (menu-bar-mode 0))
