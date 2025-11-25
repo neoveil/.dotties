@@ -39,3 +39,4 @@
 (require 'tools)
 (require 'prog)
 (require 'prog-x)
+(require 'misc)
