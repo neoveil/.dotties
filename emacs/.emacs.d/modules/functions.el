@@ -18,13 +18,13 @@ Example:
 
 expands into:
   (progn
-    (advice-add 'find-file :before #'my-log)
-    (advice-add 'save-buffer :before #'my-log)
-    (advice-add 'write-file :before #'my-log))"
+    (advice-add #'find-file :before #'my-log)
+    (advice-add #'save-buffer :before #'my-log)
+    (advice-add #'write-file :before #'my-log))"
   (declare (indent defun))
   `(progn
      ,@(mapcar
-        (lambda (sym) `(advice-add ',sym ,how ,f))
+        (lambda (sym) `(advice-add #',sym ,how ,f))
         syms)))
 
 (defmacro advice-remove-all (&rest syms)
@@ -40,17 +40,17 @@ Example:
 
 expands into:
   (progn
-    (advice-mapc (lambda (a _) (advice-remove 'find-file a))
-                 'find-file)
-    (advice-mapc (lambda (a _) (advice-remove 'save-buffer a))
-                 'save-buffer))"
+    (advice-mapc (lambda (a _) (advice-remove #'find-file a))
+                 #'find-file)
+    (advice-mapc (lambda (a _) (advice-remove #'save-buffer a))
+                 #'save-buffer))"
   `(progn
      ,@(mapcar
         (lambda (sym)
           `(advice-mapc
             (lambda (a _)
-              (advice-remove ',sym a))
-            ',sym))
+              (advice-remove #',sym a))
+            #',sym))
         syms)))
 
 (defmacro put-all (&rest args)
@@ -99,7 +99,7 @@ To be used as :after advice to `wdired-finish-edit' and `wdired-abort-changes'"
 
 (defun wdired--register-restore-hl-line-mode-on-exit ()
   "Register advices to restore `hl-line-mode' upon `wdired' exit"
-  (advice-add-all :after 'wdired--restore-hl-line-advice
+  (advice-add-all :after #'wdired--restore-hl-line-advice
     wdired-finish-edit
     wdired-abort-changes))
 
@@ -151,25 +151,25 @@ To be used as :around advice to `compilation-filter'"
 (defun kill-other-buffers ()
   "Kill all buffers except the current one"
   (interactive)
-  (mapc 'kill-buffer (remq (current-buffer) (buffer-list))))
+  (mapc #'kill-buffer (remq (current-buffer) (buffer-list))))
 
 (defun kill-all-buffers ()
   "Kill all buffers"
   (interactive)
-  (mapc 'kill-buffer (buffer-list)))
+  (mapc #'kill-buffer (buffer-list)))
 
 (defun query-replace-global ()
   "Go to beginning of file and call `query-replace-regexp'"
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (call-interactively 'query-replace-regexp)))
+    (call-interactively #'query-replace-regexp)))
 
 (defun term-other-window ()
   "Open another window and call `term' on it"
   (interactive)
   (switch-to-buffer-other-window (get-buffer-create "*terminal*"))
-  (call-interactively 'term))
+  (call-interactively #'term))
 
 (defun go-home ()
   "Call `cd' with DIR \"~\""

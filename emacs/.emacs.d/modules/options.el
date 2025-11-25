@@ -13,8 +13,8 @@
 (setq-default
  isearch-wrap-pause 'no-ding
  enable-recursive-minibuffers t
- ring-bell-function 'ignore
- confirm-kill-emacs 'y-or-n-p
+ ring-bell-function #'ignore
+ confirm-kill-emacs #'y-or-n-p
  native-comp-async-report-warnings-errors nil
  apropos-do-all t
  read-process-output-max (* 4 1024 1024))
@@ -55,7 +55,7 @@
   :diminish)
 
 ;; misc
-(advice-add 'yes-or-no-p :override 'y-or-n-p)
+(advice-add #'yes-or-no-p :override #'y-or-n-p)
 
 (put-all
  upcase-region   disabled nil

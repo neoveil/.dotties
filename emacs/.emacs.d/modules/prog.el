@@ -138,7 +138,7 @@
    compilation-environment '("TERM=xterm-256color")
    xterm-color-use-bold-for-bright t
    compilation-scroll-output t)
-  (advice-add 'compilation-filter :around 'xterm-color--colorize-compilation-advice))
+  (advice-add #'compilation-filter :around #'xterm-color--colorize-compilation-advice))
 
 (use-packages
  yaml-mode

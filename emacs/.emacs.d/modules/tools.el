@@ -91,10 +91,10 @@
   :bind
   (("C-c s c" . shell-command)
    ("C-c s a" . async-shell-command)
-   ("C-c s t" . term)
-   ("C-x 4 t" . term-other-window))
+   ("C-c t t" . term)
+   ("C-c t o" . term-other-window))
   :config
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
-  (advice-add 'term-handle-exit :around 'term--better-exit-handler-advice))
+  (advice-add #'term-handle-exit :around #'term--better-exit-handler-advice))
 
 (provide 'tools)
