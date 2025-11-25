@@ -176,4 +176,40 @@ To be used as :around advice to `compilation-filter'"
   (interactive)
   (cd "~"))
 
+(defun make-temp-window (name mode)
+  "Show a temporary window using MODE.
+
+MODE is a function (symbol) naming a major mode, e.g. `fundamental-mode'
+or `literal-calc-mode'.
+
+NAME is the buffer name.
+
+The buffer is made writable and gets local bindings:
+  C-c C-q  -> `quit-window'
+  C-c C-k  -> `quit-window-kill-buffer'"
+  (let* ((buf (get-buffer name)))
+    (if buf
+        (pop-to-buffer buf)
+      (with-current-buffer-window name nil nil
+        (funcall mode))
+      (with-current-buffer name
+        (setq buffer-read-only nil)
+        (let ((keymap (make-sparse-keymap)))
+          (set-keymap-parent keymap (current-local-map))
+          (define-key keymap (kbd "C-c C-q") #'quit-window)
+          (define-key keymap (kbd "C-c C-k") #'quit-window-kill-buffer)
+          (use-local-map keymap))))
+    (when-let ((win (get-buffer-window name)))
+      (select-window win))))
+
+(defun open-temp-buffer ()
+  "Open the temporary buffer"
+  (interactive)
+  (make-temp-window "*temp*" #'fundamental-mode))
+
+(defun open-literate-calc-temp-buffer ()
+  "Open a temporary buffer with `literate-calc-mode'"
+  (interactive)
+  (make-temp-window "*calc*" #'literate-calc-mode))
+
 (provide 'functions)
