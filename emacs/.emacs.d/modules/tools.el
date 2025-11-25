@@ -7,7 +7,8 @@
 
 (use-feature files
   :bind
-  (("C-c g h" . go-home)
+  (("C-c o t" . open-temp-buffer)
+   ("C-c g h" . go-home)
    ("C-c f p" . find-file-at-point)
    ("C-x C-b" . buffer-menu)
    ("C-c k a" . kill-all-buffers)
@@ -118,5 +119,10 @@
 (use-package ace-link
   :config
   (ace-link-setup-default))
+
+(use-package literate-calc-mode
+  :mode "\\.calc\\'"
+  :bind
+  ("C-c o c" . open-literate-calc-temp-buffer))
 
 (provide 'tools)
