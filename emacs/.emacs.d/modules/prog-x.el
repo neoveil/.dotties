@@ -20,8 +20,7 @@
 
 (use-package company
   :bind
-  (("C-S-<SPC>" . hippie-expand)
-   ("C-S-i"     . company-complete)
+  (("C-<SPC>"   . company-complete)
    (:map company-active-map
          ("<tab>" . company-complete-selection)))
   :config

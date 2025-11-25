@@ -163,7 +163,7 @@ To be used as :around advice to `compilation-filter'"
   (interactive)
   (save-excursion
     (goto-char (point-min))
-    (call-interactively #'query-replace-regexp)))
+    (call-interactively #'anzu-query-replace-regexp)))
 
 (defun term-other-window ()
   "Open another window and call `term' on it"

@@ -97,4 +97,26 @@
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
   (advice-add #'term-handle-exit :around #'term--better-exit-handler-advice))
 
+(use-package helpful
+  :bind
+  (("C-h f" . helpful-callable)
+   ("C-h v" . helpful-variable)
+   ("C-h k" . helpful-key)
+   ("C-h x" . helpful-command)))
+
+(use-package anzu
+  :diminish
+  :bind
+  (([remap query-replace]        . anzu-query-replace)
+   ([remap query-replace-regexp] . anzu-query-replace-regexp)
+   (:map isearch-mode-map
+         (([remap isearch-query-replace]        . anzu-isearch-query-replace)
+          ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))))
+  :config
+  (global-anzu-mode 1))
+
+(use-package ace-link
+  :config
+  (ace-link-setup-default))
+
 (provide 'tools)
