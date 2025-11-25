@@ -41,16 +41,28 @@
 
 (use-package multiple-cursors
   :bind
-  (("C-c e l"       . mc/edit-lines)
-   ("C->"           . mc/mark-next-like-this)
-   ("M-S-<mouse-1>" . mc/add-cursor-on-click)
-   ("C-c C->"       . mc/mark-all-like-this)
-   ("C-S->"         . mc/skip-to-next-like-this)
-   ("C-<"           . mc/unmark-next-like-this)))
+  (("C-c e l"          . mc/edit-lines)
+   ("C->"              . mc/mark-next-like-this)
+   ("C-<"              . mc/unmark-next-like-this)
+   ("M-<down-mouse-1>" . nil)
+   ("M-<mouse-1>"      . mc/add-cursor-on-click)
+   ("C-c C->"          . mc/mark-all-like-this)
+   ("C-M->"            . mc/skip-to-next-like-this)))
 
 (use-package rainbow-delimiters
   :hook
   (prog-mode . rainbow-delimiters-mode))
+
+(use-package copilot
+  :diminish
+  :hook
+  ((text-mode . copilot-mode)
+   (prog-mode . copilot-mode))
+  :bind
+  (:map copilot-completion-map
+        ("<tab>" . copilot-accept-completion))
+  :config
+  (setq-default copilot-indent-offset-warning-disable t))
 
 (use-packages
  tldr

@@ -29,6 +29,7 @@
 ;; TODO:
 ;;   setup lsp?
 ;;   setup tree-sitter?
+;;   setup org-mode
 ;;   drop ido and company - replace for ivy, vertico, orderless, consult, marginalia, helm, corfu, cape
 
 (require 'packages)

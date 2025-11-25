@@ -141,6 +141,7 @@
   (advice-add #'compilation-filter :around #'xterm-color--colorize-compilation-advice))
 
 (use-packages
+ git-modes
  yaml-mode
  json-mode
  systemd)
