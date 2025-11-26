@@ -64,7 +64,7 @@
   :config
   (setq-default
    copilot-indent-offset-warning-disable t
-   copilot-max-lines -1))
+   copilot-max-char -1))
 
 (use-packages
  tldr
