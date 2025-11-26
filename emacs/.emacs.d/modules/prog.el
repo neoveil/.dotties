@@ -63,89 +63,69 @@
    ("C-,"          . crux-duplicate-current-line-or-region)
    ("C-c s e"      . crux-sudo-edit)))
 
-(use-package treesit-auto
+(use-feature cc-mode
+  :hook
+  (c-mode . enable-c-line-comment-style)
+  :config
+  (setq-default c-basic-offset 2))
+
+(use-feature sh-script
+  :config
+  (setq-default sh-basic-offset 2))
+
+(use-feature js
+  :config
+  (setq-default js-indent-level 2))
+
+(use-package lua-mode
   :config
   (setq-default
-   treesit-auto-install 't
-   treesit-font-lock-level 4
-   treesit-load-name-override-list '((janet "libtree-sitter-janet" "tree_sitter_janet_simple")))
+   lua-indent-level 2
+   lua-indent-nested-block-content-align nil
+   lua-indent-close-paren-align nil))
 
-  (treesit-auto--replace-recipe
-   :lang 'latex
-   :ts-mode 'latex-ts-mode
-   :remap 'latex-mode
-   :url "https://github.com/latex-lsp/tree-sitter-latex"
-   :revision "v0.3.0"
-   :ext "\\.tex\\'")
+(use-feature python
+  :config
+  (setq-default python-indent-offset 2))
 
-  (treesit-auto-add-to-auto-mode-alist 'all)
-  (treesit-auto-install-all)
-  (treesit-auto--kill-candidates-buffer)
-  (global-treesit-auto-mode))
+(use-package markdown-mode
+  :hook
+  (markdown-mode . enable-word-wrap)
+  :mode
+  (("\\.md\\'"       . markdown-mode)
+   ("\\.markdown\\'" . markdown-mode)
+   ("README\\.md\\'" . gfm-mode))
+  :config
+  (setq-default markdown-fontify-code-blocks-natively t))
 
-;; (use-feature cc-mode
-;;   :hook
-;;   (c-mode . enable-c-line-comment-style)
-;;   :config
-;;   (setq-default c-basic-offset 2))
+(use-package clojure-mode
+  :hook
+  (clojure-mode . subword-mode))
 
-;; (use-feature sh-script
-;;   :config
-;;   (setq-default sh-basic-offset 2))
+(use-package cider
+  :after clojure-mode
+  :bind
+  ((:map clojure-mode-map
+         (("C-c j s" . cider-jack-in)
+          ("C-c j c" . cider-connect)))
+   (:map cider-mode-map
+         ("C-c C-j C-j" . cider-eval-print-last-sexp)))
+  :hook
+  ((cider-mode . eldoc-mode)
+   (cider-repl-mode . subword-mode))
+  :config
+  (setq-default
+   cider-repl-history-file (concat user-emacs-directory ".cider-history")
+   cider-repl-wrap-history t
+   cider-repl-display-help-banner nil
+   cider-allow-jack-in-without-project t
+   cider-font-lock-dynamically t
+   cider-save-file-on-load t)
+  (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl.middleware/cider-middleware"))
 
-;; (use-feature js
-;;   :config
-;;   (setq-default js-indent-level 2))
-
-;; (use-package lua-mode
-;;   :config
-;;   (setq-default
-;;    lua-indent-level 2
-;;    lua-indent-nested-block-content-align nil
-;;    lua-indent-close-paren-align nil))
-
-;; (use-feature python
-;;   :config
-;;   (setq-default python-indent-offset 2))
-
-;; (use-package markdown-mode
-;;   :hook
-;;   (markdown-mode . enable-word-wrap)
-;;   :mode
-;;   (("\\.md\\'"       . markdown-mode)
-;;    ("\\.markdown\\'" . markdown-mode)
-;;    ("README\\.md\\'" . gfm-mode))
-;;   :config
-;;   (setq-default markdown-fontify-code-blocks-natively t))
-
-;; (use-package clojure-mode
-;;   :hook
-;;   (clojure-mode . subword-mode))
-
-;; (use-package cider
-;;   :after clojure-mode
-;;   :bind
-;;   ((:map clojure-mode-map
-;;          (("C-c j s" . cider-jack-in)
-;;           ("C-c j c" . cider-connect)))
-;;    (:map cider-mode-map
-;;          ("C-c C-j C-j" . cider-eval-print-last-sexp)))
-;;   :hook
-;;   ((cider-mode . eldoc-mode)
-;;    (cider-repl-mode . subword-mode))
-;;   :config
-;;   (setq-default
-;;    cider-repl-history-file (concat user-emacs-directory ".cider-history")
-;;    cider-repl-wrap-history t
-;;    cider-repl-display-help-banner nil
-;;    cider-allow-jack-in-without-project t
-;;    cider-font-lock-dynamically t
-;;    cider-save-file-on-load t)
-;;   (add-to-list 'cider-jack-in-nrepl-middlewares "cider.nrepl.middleware/cider-middleware"))
-
-;; (use-package dockerfile-mode
-;;   :config
-;;   (setq-default dockerfile-indent-offset 2))
+(use-package dockerfile-mode
+  :config
+  (setq-default dockerfile-indent-offset 2))
 
 (use-feature elisp-mode
   :bind
@@ -160,8 +140,10 @@
    compilation-scroll-output t)
   (advice-add #'compilation-filter :around #'xterm-color--colorize-compilation-advice))
 
-;; (use-packages
-;;  git-modes
-;;  systemd)
+(use-packages
+ git-modes
+ yaml-mode
+ json-mode
+ systemd)
 
 (provide 'prog)
