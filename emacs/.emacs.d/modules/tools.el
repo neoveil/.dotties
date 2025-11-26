@@ -98,13 +98,6 @@
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
   (advice-add #'term-handle-exit :around #'term--better-exit-handler-advice))
 
-(use-package helpful
-  :bind
-  (("C-h f" . helpful-callable)
-   ("C-h v" . helpful-variable)
-   ("C-h k" . helpful-key)
-   ("C-h x" . helpful-command)))
-
 (use-package anzu
   :diminish
   :bind
