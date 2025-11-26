@@ -1,5 +1,4 @@
 # -*- mode: sh; -*-
-# vim:ft=sh
 
 # editor
 export EDITOR="emacsclient -r"

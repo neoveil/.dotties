@@ -132,6 +132,13 @@
   (:map emacs-lisp-mode-map
         ("C-c C-j" . eval-print-last-sexp)))
 
+(use-package caddyfile-mode
+  :hook
+  (caddyfile-mode . set-local-tab-width)
+  :mode
+  (("Caddyfile\\'"    . caddyfile-mode)
+   ("caddy\\.conf\\'" . caddyfile-mode)))
+
 (use-package xterm-color
   :config
   (setq-default

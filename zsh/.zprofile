@@ -1,5 +1,4 @@
 # -*- mode: sh; -*-
-# vim:ft=sh
 
 # terminal
 export TERMINAL=kitty

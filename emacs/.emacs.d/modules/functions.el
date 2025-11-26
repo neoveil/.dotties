@@ -127,6 +127,11 @@ Applies `xterm-color-filter' to text `s'.
 To be used as :around advice to `compilation-filter'"
   (funcall f p (xterm-color-filter s)))
 
+(defun set-local-tab-width ()
+  "Set `tab-width' to 2 and `indent-tabs-mode' to nil locally"
+  (setq-local tab-width 2)
+  (setq-local indent-tabs-mode nil))
+
 (defun enable-c-line-comment-style ()
   "Enable line comment style for `cc-mode'"
   (c-toggle-comment-style -1))
