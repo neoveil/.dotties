@@ -139,6 +139,10 @@
   (("Caddyfile\\'"    . caddyfile-mode)
    ("caddy\\.conf\\'" . caddyfile-mode)))
 
+(use-package kotlin-mode
+  :config
+  (setq-default kotlin-tab-width 2))
+
 (use-package xterm-color
   :config
   (setq-default
