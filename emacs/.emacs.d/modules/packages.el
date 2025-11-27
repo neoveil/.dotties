@@ -21,6 +21,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(declare-function straight-use-package nil)
 (straight-use-package 'use-package)
 
 (use-package straight

@@ -16,6 +16,7 @@
 
 (use-package yasnippet
   :config
+  (declare-function yas-global-mode nil)
   (yas-global-mode 1))
 
 (use-package company
@@ -24,6 +25,7 @@
    (:map company-active-map
          ("<tab>" . company-complete-selection)))
   :config
+  (declare-function global-company-mode nil)
   (setq-default
    company-minimum-prefix-length 2
    company-idle-delay 0
@@ -65,6 +67,26 @@
 ;;   (setq-default
 ;;    copilot-indent-offset-warning-disable t
 ;;    copilot-max-char -1))
+
+(use-package flycheck
+  :hook
+  (after-init . global-flycheck-mode)
+  :config
+  (setq-default
+   flycheck-disabled-checkers '(emacs-lisp-checkdoc)
+   flycheck-emacs-lisp-load-path 'inherit))
+
+(use-package flycheck-inline
+  :after flycheck
+  :config
+  (declare-function global-flycheck-inline-mode nil)
+  (global-flycheck-inline-mode))
+
+(use-package flycheck-eglot
+  :after (flycheck eglot)
+  :config
+  (declare-function global-flycheck-eglot-mode nil)
+  (global-flycheck-eglot-mode))
 
 (use-packages
  tldr

@@ -59,17 +59,20 @@
 
 (use-feature ido
   :config
+  (declare-function ido-everywhere nil)
   (ido-mode 1)
   (ido-everywhere 1))
 
 (use-package ido-completing-read+
   :after ido
   :config
+  (declare-function ido-ubiquitous-mode nil)
   (ido-ubiquitous-mode 1))
 
 (use-package flx-ido
   :after ido-completing-read+
   :config
+  (declare-function flx-ido-mode nil)
   (setq-default
    ido-enable-flex-matching t
    flx-ido-use-faces nil)
@@ -95,6 +98,7 @@
    ("C-c t t" . term)
    ("C-c t o" . term-other-window))
   :config
+  (declare-function term-handle-exit nil)
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
   (advice-add #'term-handle-exit :around #'term--better-exit-handler-advice))
 
@@ -107,10 +111,12 @@
          (([remap isearch-query-replace]        . anzu-isearch-query-replace)
           ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))))
   :config
+  (declare-function global-anzu-mode nil)
   (global-anzu-mode 1))
 
 (use-package ace-link
   :config
+  (declare-function ace-link-setup-default nil)
   (ace-link-setup-default))
 
 (use-package literate-calc-mode

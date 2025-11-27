@@ -11,16 +11,16 @@ this macro expands into an `advice-add' call that adds F as
 advice with the given HOW.
 
 Example:
-  (advice-add-all :before #'my-log
+  (advice-add-all :before #`my-log'
     find-file
     save-buffer
     write-file)
 
 expands into:
   (progn
-    (advice-add #'find-file :before #'my-log)
-    (advice-add #'save-buffer :before #'my-log)
-    (advice-add #'write-file :before #'my-log))"
+    (advice-add #`find-file' :before #`my-log')
+    (advice-add #`save-buffer' :before #`my-log')
+    (advice-add #`write-file' :before #`my-log'))"
   (declare (indent defun))
   `(progn
      ,@(mapcar
@@ -40,10 +40,10 @@ Example:
 
 expands into:
   (progn
-    (advice-mapc (lambda (a _) (advice-remove #'find-file a))
-                 #'find-file)
-    (advice-mapc (lambda (a _) (advice-remove #'save-buffer a))
-                 #'save-buffer))"
+    (advice-mapc (lambda (a _) (advice-remove #`find-file' a))
+                 #`find-file')
+    (advice-mapc (lambda (a _) (advice-remove #`save-buffer' a))
+                 #`save-buffer'))"
   `(progn
      ,@(mapcar
         (lambda (sym)
@@ -60,7 +60,7 @@ ARGS is interpreted in groups of three elements:
   SYMBOL PROPERTY VALUE
 
 Each triplet expands into:
-  (put 'SYMBOL 'PROPERTY VALUE)
+  (put `SYMBOL' `PROPERTY' VALUE)
 
 The macro collects all triplets and wraps them in a single PROGN.
 
@@ -71,8 +71,8 @@ Example:
 
 expands into:
   (progn
-    (put 'foo 'bar 10)
-    (put 'baz 'qux \"hello\"))"
+    (put `foo' `bar' 10)
+    (put `baz' `qux' \"hello\"))"
   `(progn
      ,@(let ((r nil) (xs args))
          (while xs
@@ -81,6 +81,8 @@ expands into:
 
 (defun all-the-icons--install-fonts-if-not-installed ()
   "Install `all-the-icons' fonts if they are not yet installed, else no-op"
+  (defvar all-the-icons-fonts-subdirectory)
+  (declare-function all-the-icons-install-fonts nil)
   (unless (file-exists-p
            (file-name-concat
 			      (or (getenv "XDG_DATA_HOME")
@@ -99,6 +101,8 @@ To be used as :after advice to `wdired-finish-edit' and `wdired-abort-changes'"
 
 (defun wdired--register-restore-hl-line-mode-on-exit ()
   "Register advices to restore `hl-line-mode' upon `wdired' exit"
+  (declare-function wdired-finish-edit nil)
+  (declare-function wdired-abort-changes nil)
   (advice-add-all :after #'wdired--restore-hl-line-advice
     wdired-finish-edit
     wdired-abort-changes))
@@ -108,8 +112,11 @@ To be used as :after advice to `wdired-finish-edit' and `wdired-abort-changes'"
 
 It should kill the buffer associated with `term' upon exit.
 
-It also suppresses the default `term' exit message, substituting it for a better one.
-The message should look like \"PROC\" when there is no MSG, else \"PROC | MSG\".
+It also suppresses the default `term' exit message,
+substituting it for a better one.
+
+The message should look like \"PROC\" when there is no MSG,
+else \"PROC | MSG\".
 
 To be used as :around advice to `term-handle-exit'"
   (let ((inhibit-message t))
@@ -125,6 +132,7 @@ To be used as :around advice to `term-handle-exit'"
 Applies `xterm-color-filter' to text `s'.
 
 To be used as :around advice to `compilation-filter'"
+  (declare-function xterm-color-filter nil)
   (funcall f p (xterm-color-filter s)))
 
 (defun set-local-tab-width ()
@@ -134,6 +142,7 @@ To be used as :around advice to `compilation-filter'"
 
 (defun enable-c-line-comment-style ()
   "Enable line comment style for `cc-mode'"
+  (declare-function c-toggle-comment-style nil)
   (c-toggle-comment-style -1))
 
 (defun enable-word-wrap ()
@@ -166,6 +175,7 @@ To be used as :around advice to `compilation-filter'"
 (defun query-replace-global ()
   "Go to beginning of file and call `query-replace-regexp'"
   (interactive)
+  (declare-function anzu-query-replace-regexp nil)
   (save-excursion
     (goto-char (point-min))
     (call-interactively #'anzu-query-replace-regexp)))
@@ -215,6 +225,7 @@ The buffer is made writable and gets local bindings:
 (defun open-literate-calc-temp-buffer ()
   "Open a temporary buffer with `literate-calc-mode'"
   (interactive)
+  (declare-function literate-calc-mode nil)
   (make-temp-window "*calc*" #'literate-calc-mode))
 
 (provide 'functions)

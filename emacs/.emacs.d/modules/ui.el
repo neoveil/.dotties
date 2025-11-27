@@ -16,6 +16,7 @@
   (doom-themes-enable-bold t)
   (doom-themes-enable-italic t)
   :config
+  (declare-function doom-themes-org-config nil)
   (load-theme 'doom-dracula t)
   (doom-themes-org-config))
 
