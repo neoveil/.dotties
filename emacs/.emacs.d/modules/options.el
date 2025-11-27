@@ -17,7 +17,8 @@
  confirm-kill-emacs #'y-or-n-p
  native-comp-async-report-warnings-errors nil
  apropos-do-all t
- read-process-output-max (* 4 1024 1024))
+ read-process-output-max (* 4 1024 1024)
+ initial-scratch-message (concat ";; -*- lexical-binding: t; -*-\n\n" initial-scratch-message))
 
 ;; files settings
 (setq-default
@@ -36,6 +37,7 @@
  save-interprogram-paste-before-kill t
  mouse-yank-at-point t)
 
+;; misc
 (use-feature savehist
   :config
   (savehist-mode 1))
@@ -54,7 +56,6 @@
 (use-feature subword
   :diminish)
 
-;; misc
 (advice-add #'yes-or-no-p :override #'y-or-n-p)
 
 (put-all

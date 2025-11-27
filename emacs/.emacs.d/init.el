@@ -2,7 +2,7 @@
 
 ;; Author: Lucas A. F. Vitor <luca.oetdbem@gmail.com>
 ;; Created: 2025-11-21
-;;
+
 ;; actually it was created long before, maybe 1-2 years before
 ;; but i decided to include these now so i can reference it
 ;; in the future and be somewhat nostalgic (:
