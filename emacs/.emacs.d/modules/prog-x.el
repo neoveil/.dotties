@@ -53,18 +53,18 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-(use-package copilot
-  :diminish
-  :hook
-  ((text-mode . copilot-mode)
-   (prog-mode . copilot-mode))
-  :bind
-  (:map copilot-completion-map
-        ("<tab>" . copilot-accept-completion))
-  :config
-  (setq-default
-   copilot-indent-offset-warning-disable t
-   copilot-max-char -1))
+;; (use-package copilot
+;;   :diminish
+;;   :hook
+;;   ((text-mode . copilot-mode)
+;;    (prog-mode . copilot-mode))
+;;   :bind
+;;   (:map copilot-completion-map
+;;         ("<tab>" . copilot-accept-completion))
+;;   :config
+;;   (setq-default
+;;    copilot-indent-offset-warning-disable t
+;;    copilot-max-char -1))
 
 (use-packages
  tldr
