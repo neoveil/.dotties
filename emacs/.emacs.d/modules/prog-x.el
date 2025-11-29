@@ -3,6 +3,13 @@
 (eval-when-compile
   (require 'packages))
 
+(use-packages
+ tldr
+ rainbow-mode
+ yasnippet-snippets
+ string-inflection
+ project)
+
 (use-feature eldoc
   :diminish)
 
@@ -55,19 +62,6 @@
   :hook
   (prog-mode . rainbow-delimiters-mode))
 
-;; (use-package copilot
-;;   :diminish
-;;   :hook
-;;   ((text-mode . copilot-mode)
-;;    (prog-mode . copilot-mode))
-;;   :bind
-;;   (:map copilot-completion-map
-;;         ("<tab>" . copilot-accept-completion))
-;;   :config
-;;   (setq-default
-;;    copilot-indent-offset-warning-disable t
-;;    copilot-max-char -1))
-
 (use-package flycheck
   :hook
   (after-init . global-flycheck-mode)
@@ -88,10 +82,62 @@
   (declare-function global-flycheck-eglot-mode nil)
   (global-flycheck-eglot-mode))
 
-(use-packages
- tldr
- rainbow-mode
- yasnippet-snippets
- string-inflection)
+(use-package eglot
+  :functions eglot--ensure-all
+  :init
+  (eglot--ensure-all
+   '(sh c c++ cmake clojure clojurescript clojurec
+     html css json jsonc dockerfile go go-dot-mod
+     go-dot-work javascript typescript lua python
+     markdown rust vimrc yaml))
+  :bind
+  (:map eglot-mode-map
+        (("C-c l s s" . eglot-shutdown)
+         ("C-c l s a" . eglot-shutdown-all)
+         ("C-c l s r" . eglot-reconnect)
+         ("C-c l r"   . eglot-rename)
+         ("C-c l f"   . eglot-format)
+         ("C-c l a a" . eglot-code-actions)
+         ("C-c l a o" . eglot-code-action-organize-imports)
+         ("C-c l a q" . eglot-code-action-quickfix)
+         ("C-c l a e" . eglot-code-action-extract)
+         ("C-c l a i" . eglot-code-action-inline)
+         ("C-c l a r" . eglot-code-action-rewrite)
+         ("C-c l t s" . eglot-show-type-hierarchy)
+         ("C-c l t c" . eglot-show-call-hierarchy)
+         ("C-c l m"   . imenu)
+         ("C-c l h"   . eldoc)))
+  :config
+  (add-to-list 'eglot-code-action-indications 'mode-line)
+  (setq-default eglot-autoshutdown t))
+
+(use-package eglot-java
+  :after eglot
+  :defines eglot-java-mode-map
+  :hook
+  (java-mode . eglot-java-mode)
+  :bind
+  (:map eglot-java-mode-map
+        (("C-c l j n" . eglot-java-file-new)
+         ("C-c l j x" . eglot-java-run-main)
+         ("C-c l j t" . eglot-java-run-test)
+         ("C-c l j r" . eglot-java-project-build-refresh)
+         ("C-c l j b" . eglot-java-project-build-task)))
+  :config
+  (setq-default
+   eglot-java-workspace-folder (expand-file-name "~/Projects")))
+
+;; (use-package copilot
+;;   :diminish
+;;   :hook
+;;   ((text-mode . copilot-mode)
+;;    (prog-mode . copilot-mode))
+;;   :bind
+;;   (:map copilot-completion-map
+;;         ("<tab>" . copilot-accept-completion))
+;;   :config
+;;   (setq-default
+;;    copilot-indent-offset-warning-disable t
+;;    copilot-max-char -1))
 
 (provide 'prog-x)

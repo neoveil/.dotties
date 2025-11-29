@@ -27,7 +27,6 @@
 (add-to-list 'load-path local-directory)
 
 ;; TODO:
-;;   setup lsp?
 ;;   setup org-mode
 ;;   drop ido and company - replace for ivy, vertico, orderless, consult, marginalia, helm, corfu, cape
 

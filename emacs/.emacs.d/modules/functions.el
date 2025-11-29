@@ -79,6 +79,17 @@ expands into:
            (push `(put ',(pop xs) ',(pop xs) ,(pop xs)) r))
          r)))
 
+(defmacro eglot--ensure-all (modes)
+  "Add `eglot-ensure' for each symbol in MODES (a quoted list).
+
+Each element in MODES should be a symbol without “-mode”."
+  `(progn
+     ,@(mapcar
+        (lambda (m)
+          `(add-hook ',(intern (format "%s-mode-hook" m))
+                     #'eglot-ensure))
+        (cadr modes))))
+
 (defun all-the-icons--install-fonts-if-not-installed ()
   "Install `all-the-icons' fonts if they are not yet installed, else no-op"
   (defvar all-the-icons-fonts-subdirectory)

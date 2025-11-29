@@ -30,7 +30,8 @@
    use-package-always-demand t
    straight-use-package-by-default t
    straight-host-usernames '((github . "neoveil"))
-   straight-vc-git-default-clone-depth 1))
+   straight-vc-git-default-clone-depth 1
+   straight-built-in-pseudo-packages (append straight-built-in-pseudo-packages '(project xref))))
 
 (defmacro use-feature (name &rest args)
   "Declare configuration for a built-in feature NAME via `use-package'.

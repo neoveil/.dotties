@@ -92,9 +92,7 @@
   :hook
   (markdown-mode . enable-word-wrap)
   :mode
-  (("\\.md\\'"       . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode)
-   ("README\\.md\\'" . gfm-mode))
+  ("README\\.md\\'" . gfm-mode)
   :config
   (setq-default markdown-fontify-code-blocks-natively t))
 
@@ -156,6 +154,12 @@
  git-modes
  yaml-mode
  json-mode
+ cmake-mode
+ go-mode
+ vimrc-mode
+ typescript-mode
+ rust-mode
+ protobuf-mode
  systemd)
 
 (provide 'prog)
