@@ -109,7 +109,9 @@
          ("C-c l h"   . eldoc)))
   :config
   (add-to-list 'eglot-code-action-indications 'mode-line)
-  (setq-default eglot-autoshutdown t))
+  (setq-default
+   eglot-autoshutdown t
+   eglot-report-progress nil))
 
 (use-package eglot-java
   :after eglot
