@@ -26,19 +26,69 @@
   (declare-function yas-global-mode nil)
   (yas-global-mode 1))
 
-(use-package company
+(use-package corfu
+  :functions global-corfu-mode
+  :init
+  (global-corfu-mode 1)
   :bind
-  (("C-<SPC>"   . company-complete)
-   (:map company-active-map
-         ("<tab>" . company-complete-selection)))
+  (("C-<SPC>" . completion-at-point)
+   (:map corfu-map
+         ("RET" . nil)))
   :config
-  (declare-function global-company-mode nil)
   (setq-default
-   company-minimum-prefix-length 2
-   company-idle-delay 0
-   company-selection-wrap-around t
-   company-tooltip-align-annotations t)
-  (global-company-mode t))
+   corfu-count 20
+   corfu-cycle t
+   corfu-preselect 'first
+   corfu-preview-current nil
+   corfu-auto t
+   corfu-auto-delay 0
+   corfu-auto-prefix 2
+   corfu-auto-trigger "."))
+
+(use-feature corfu-echo
+  :after corfu
+  :functions corfu-echo-mode
+  :init
+  (corfu-echo-mode 1)
+  :config
+  (setq-default corfu-echo-delay 0))
+
+(use-feature corfu-history
+  :after corfu
+  :functions corfu-history-mode
+  :init
+  (corfu-history-mode 1))
+
+(use-feature corfu-popupinfo
+  :after corfu
+  :functions corfu-popupinfo-mode
+  :init
+  (corfu-popupinfo-mode 1)
+  :config
+  (setq-default
+   corfu-popupinfo-delay '(0 . 0)
+   corfu-popupinfo-max-height 30
+   corfu-popupinfo-max-width 150))
+
+(use-package nerd-icons-corfu
+  :after corfu
+  :functions nerd-icons-corfu-formatter
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+(use-package cape
+  :after (corfu eglot)
+  :functions (cape--register-capfs cape-wrap-buster)
+  :defines (cape-dabbrev cape-file cape-elisp-block cape-elisp-symbol)
+  :bind
+  ("C-c p" . cape-prefix-map)
+  :init
+  (cape--register-capfs
+   cape-dabbrev
+   cape-file
+   cape-elisp-block
+   cape-elisp-symbol)
+  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
 
 (use-package paredit
   :bind

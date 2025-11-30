@@ -90,6 +90,18 @@ Each element in MODES should be a symbol without “-mode”."
                      #'eglot-ensure))
         (cadr modes))))
 
+(defmacro cape--register-capfs (&rest capfs)
+  "Register multiple CAPFS for `cape'.
+
+Each FN in CAPFS is added to `completion-at-point-functions'
+with priority -10 and LOCAL=t, so they run after major-mode/LSP
+CAPFs and are buffer-local."
+  `(progn
+     ,@(mapcar
+        (lambda (fn)
+          `(add-hook 'completion-at-point-functions #',fn -10 t))
+        capfs)))
+
 (defun all-the-icons--install-fonts-if-not-installed ()
   "Install `all-the-icons' fonts if they are not yet installed, else no-op"
   (defvar all-the-icons-fonts-subdirectory)
