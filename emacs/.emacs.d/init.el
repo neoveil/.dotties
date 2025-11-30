@@ -28,7 +28,7 @@
 
 ;; TODO:
 ;;   setup org-mode
-;;   drop ido and company - replace for ivy, vertico, orderless, consult, marginalia, helm, corfu, cape
+;;   drop ido - replace for vertico, orderless, consult, marginalia (helm?, ivy?)
 
 (require 'packages)
 (require 'options)
