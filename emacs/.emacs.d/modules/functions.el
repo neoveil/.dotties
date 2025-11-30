@@ -158,6 +158,18 @@ To be used as :around advice to `compilation-filter'"
   (declare-function xterm-color-filter nil)
   (funcall f p (xterm-color-filter s)))
 
+(defun eglot-java--set-jdtls-xmx (size)
+  "Set the JDT LS Java heap SIZE.
+
+SIZE should be a XmX string e.g. \"1G\", \"2G\", \"4G\"."
+  (defvar eglot-java-eclipse-jdt-args)
+  (setq-default
+   eglot-java-eclipse-jdt-args
+   (cons (concat "-Xmx" size)
+         (seq-remove
+          (lambda (x) (string-prefix-p "-Xmx" x))
+          eglot-java-eclipse-jdt-args))))
+
 (defun set-local-tab-width ()
   "Set `tab-width' to 2 and `indent-tabs-mode' to nil locally"
   (setq-local tab-width 2)

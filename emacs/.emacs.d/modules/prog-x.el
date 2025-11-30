@@ -166,6 +166,7 @@
 (use-package eglot-java
   :after eglot
   :defines eglot-java-mode-map
+  :functions eglot-java--set-jdtls-xmx
   :hook
   (java-mode . eglot-java-mode)
   :bind
@@ -176,8 +177,14 @@
          ("C-c l j r" . eglot-java-project-build-refresh)
          ("C-c l j b" . eglot-java-project-build-task)))
   :config
-  (setq-default
-   eglot-java-workspace-folder (expand-file-name "~/Projects")))
+  (setq-default eglot-java-workspace-folder (expand-file-name "~/Projects"))
+  (eglot-java--set-jdtls-xmx "4G"))
+
+(use-feature eglot-java-lombok
+  :after eglot-java
+  :functions eglot-java-lombok-ensure
+  :config
+  (eglot-java-lombok-ensure))
 
 ;; (use-package copilot
 ;;   :diminish
