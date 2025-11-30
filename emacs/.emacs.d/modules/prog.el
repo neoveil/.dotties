@@ -142,8 +142,8 @@
   (setq-default kotlin-tab-width 2))
 
 (use-package xterm-color
+  :functions compilation-filter
   :config
-  (declare-function compilation-filter nil)
   (setq-default
    compilation-environment '("TERM=xterm-256color")
    xterm-color-use-bold-for-bright t

@@ -12,11 +12,11 @@
  default-frame-alist (cons '(alpha-background . 90) default-frame-alist))
 
 (use-package doom-themes
+  :functions doom-themes-org-config
   :custom
   (doom-themes-enable-bold t)
   (doom-themes-enable-italic t)
   :config
-  (declare-function doom-themes-org-config nil)
   (load-theme 'doom-dracula t)
   (doom-themes-org-config))
 

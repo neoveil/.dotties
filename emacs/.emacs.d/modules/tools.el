@@ -58,21 +58,21 @@
   (setq-default smex-save-file (file-name-concat user-emacs-directory ".smex-items")))
 
 (use-feature ido
+  :functions ido-everywhere
   :config
-  (declare-function ido-everywhere nil)
   (ido-mode 1)
   (ido-everywhere 1))
 
 (use-package ido-completing-read+
   :after ido
+  :functions ido-ubiquitous-mode
   :config
-  (declare-function ido-ubiquitous-mode nil)
   (ido-ubiquitous-mode 1))
 
 (use-package flx-ido
   :after ido-completing-read+
+  :functions flx-ido-mode
   :config
-  (declare-function flx-ido-mode nil)
   (setq-default
    ido-enable-flex-matching t
    flx-ido-use-faces nil)
@@ -90,6 +90,7 @@
   (setq-default git-commit-summary-max-length 70))
 
 (use-feature term
+  :functions term-handle-exit
   :hook
   (term-mode . disable-display-line-numbers-mode)
   :bind
@@ -98,12 +99,12 @@
    ("C-c t t" . term)
    ("C-c t o" . term-other-window))
   :config
-  (declare-function term-handle-exit nil)
   (put 'term 'interactive-form '(interactive (list "/usr/bin/zsh")))
   (advice-add #'term-handle-exit :around #'term--better-exit-handler-advice))
 
 (use-package anzu
   :diminish
+  :functions global-anzu-mode
   :bind
   (([remap query-replace]        . anzu-query-replace)
    ([remap query-replace-regexp] . anzu-query-replace-regexp)
@@ -111,12 +112,11 @@
          (([remap isearch-query-replace]        . anzu-isearch-query-replace)
           ([remap isearch-query-replace-regexp] . anzu-isearch-query-replace-regexp))))
   :config
-  (declare-function global-anzu-mode nil)
   (global-anzu-mode 1))
 
 (use-package ace-link
+  :functions ace-link-setup-default
   :config
-  (declare-function ace-link-setup-default nil)
   (ace-link-setup-default))
 
 (use-package literate-calc-mode

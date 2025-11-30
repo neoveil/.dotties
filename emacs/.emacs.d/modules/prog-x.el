@@ -22,8 +22,8 @@
    ("C-h d o" . devdocs-peruse)))
 
 (use-package yasnippet
+  :functions yas-global-mode
   :config
-  (declare-function yas-global-mode nil)
   (yas-global-mode 1))
 
 (use-package corfu
@@ -121,15 +121,15 @@
    flycheck-emacs-lisp-load-path 'inherit))
 
 (use-package flycheck-inline
+  :functions global-flycheck-inline-mode
   :after flycheck
   :config
-  (declare-function global-flycheck-inline-mode nil)
   (global-flycheck-inline-mode))
 
 (use-package flycheck-eglot
   :after (flycheck eglot)
+  :functions global-flycheck-eglot-mode
   :config
-  (declare-function global-flycheck-eglot-mode nil)
   (global-flycheck-eglot-mode))
 
 (use-package eglot
