@@ -17,3 +17,8 @@ zathura() {
 bak() {
   cp -r "$1" "$1.bak.$(date +'%Y%m%d%H%M%S')"
 }
+
+keygen() {
+  size=${1:-64}
+  tr -cd '[:alnum:]' < /dev/urandom | fold -w "$size" | head -n 1
+}
