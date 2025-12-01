@@ -170,6 +170,49 @@ SIZE should be a XmX string e.g. \"1G\", \"2G\", \"4G\"."
           (lambda (x) (string-prefix-p "-Xmx" x))
           eglot-java-eclipse-jdt-args))))
 
+(defun eldoc--snapshot ()
+  "Show `eldoc' docs for thing at point in a persistent buffer.
+
+This forces an `eldoc' refresh, then copies the resulting docs
+into *eldoc-snapshot* so they don't disappear when point moves."
+  (interactive)
+  (unless eldoc-mode
+    (eldoc-mode 1))
+
+  (let* ((retries 5)
+         (eldoc-buf nil))
+    (while (and (> retries 0)
+                (progn
+                  (eldoc)
+                  (sit-for 0.15)
+                  (setq eldoc-buf (ignore-errors (eldoc-doc-buffer)))
+                  (null eldoc-buf)))
+      (setq retries (1- retries)))
+
+    (when (and eldoc-buf (buffer-live-p eldoc-buf))
+      (with-current-buffer eldoc-buf
+        (when (string-match-p
+               "\\`[[:space:]\n\r]*\\'"
+               (buffer-substring-no-properties (point-min) (point-max)))
+          (setq eldoc-buf nil))))
+
+    (unless (and eldoc-buf (buffer-live-p eldoc-buf))
+      (user-error "No eldoc documentation available at point"))
+
+    (with-current-buffer (get-buffer-create "*eldoc-snapshot*")
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (insert-buffer-substring eldoc-buf)
+        (goto-char (point-min))
+        (special-mode))
+      (display-buffer (current-buffer)))))
+
+(defun eldoc--disable-line-numbers ()
+  "Disable line numbers for `eldoc' related special buffers."
+  (when (and (string-prefix-p "*eldoc" (buffer-name))
+             (boundp 'display-line-numbers))
+    (disable-display-line-numbers-mode)))
+
 (defun set-local-tab-width ()
   "Set `tab-width' to 2 and `indent-tabs-mode' to nil locally"
   (setq-local tab-width 2)

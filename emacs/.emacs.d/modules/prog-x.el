@@ -3,6 +3,8 @@
 (eval-when-compile
   (require 'packages))
 
+(require 'functions)
+
 (use-packages
  tldr
  rainbow-mode
@@ -11,7 +13,12 @@
  project)
 
 (use-feature eldoc
-  :diminish)
+  :diminish
+  :hook
+  (special-mode . eldoc--disable-line-numbers)
+  :bind
+  (("C-c h l" . eldoc)
+   ("C-c h h" . eldoc--snapshot)))
 
 (use-package devdocs
   :bind
@@ -31,7 +38,8 @@
   :init
   (global-corfu-mode 1)
   :bind
-  (("C-<SPC>" . completion-at-point)
+  (("C-<SPC>"   . completion-at-point)
+   ("C-S-<SPC>" . set-mark-command)
    (:map corfu-map
          ("RET" . nil)))
   :config
@@ -78,8 +86,13 @@
 
 (use-package cape
   :after (corfu eglot)
-  :functions (cape--register-capfs cape-wrap-buster)
-  :defines (cape-dabbrev cape-file cape-elisp-block cape-elisp-symbol)
+  :functions
+  (cape--register-capfs
+   cape-wrap-buster
+   cape-dabbrev
+   cape-file
+   cape-elisp-block
+   cape-elisp-symbol)
   :bind
   ("C-c p" . cape-prefix-map)
   :init
@@ -154,9 +167,7 @@
          ("C-c l a i" . eglot-code-action-inline)
          ("C-c l a r" . eglot-code-action-rewrite)
          ("C-c l t s" . eglot-show-type-hierarchy)
-         ("C-c l t c" . eglot-show-call-hierarchy)
-         ("C-c l m"   . imenu)
-         ("C-c l h"   . eldoc)))
+         ("C-c l t c" . eglot-show-call-hierarchy)))
   :config
   (add-to-list 'eglot-code-action-indications 'mode-line)
   (setq-default
