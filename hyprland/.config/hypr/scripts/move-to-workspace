@@ -1,7 +1,8 @@
-#!/bin/sh
-set -eu
+#!/bin/bash
+set -euo pipefail
 
-WINDOW_ADDRESS=$(hyprctl activewindow -j | jq -r '.address') || exit 0
+(( $# == 1 )) || exit 1
+WINDOW_ADDRESS="$(hyprctl activewindow -j | jq -r '.address')" || exit 0
 
 case "$1" in
   [1-9]|10) WORKSPACE="$1";;
@@ -20,16 +21,16 @@ workspace_has_group() {
       | any" > /dev/null 2>&1
 }
 
-if in_group; then hyprctl -q dispatch moveoutofgroup; fi
+in_group && hyprctl -q dispatch moveoutofgroup
 hyprctl -q dispatch movetoworkspace "$WORKSPACE,address:$WINDOW_ADDRESS"
 
-if workspace_has_group; then
+workspace_has_group && {
   hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"
 
   for direction in l r u d; do
     in_group && break
     hyprctl -q dispatch moveintogroup "$direction"
   done
-fi
+}
 
 hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"

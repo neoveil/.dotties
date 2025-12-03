@@ -1,7 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
 get_icon() {
-  lc=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+  local lc=${1,,}
 
   case "$lc" in
     *thunder*|*storm*) printf ' ';;
@@ -11,17 +12,17 @@ get_icon() {
     *fog*|*mist*|*haze*) printf ' ';;
     *heavy*rain*|*torrential*) printf ' ';;
     *rain*|*drizzle*|*shower*) printf ' ';;
-    *partly*cloud*|*partly\ cloudy*) printf ' ';;
+    *partly*cloud*) printf ' ';;
     *cloud*) printf ' ';;
     *sunny*|*clear*) printf ' ';;
-    *) printf '';;
+    *) ;;
   esac
 }
 
-result="$(weather -f "%t|%f|%l|%h|%C")"
-if [ -z "$result" ]; then exit 1; fi
+result=$(weather -f "%t|%f|%l|%h|%C") || exit 1
+[[ -z "$result" ]] && exit 1
 
-printf "%s" "${result%|*}|$(get_icon "${result##*|}")" |\
+printf '%s' "${result%|*}|$(get_icon "${result##*|}")" |\
   jq -Rrsc '
     def fix_temp:
       sub("\\+(?<r>[0-9]+)°C"; "\(.r)°C");

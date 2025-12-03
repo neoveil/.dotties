@@ -1,5 +1,5 @@
-#!/bin/sh
-set -eu
+#!/bin/bash
+set -euo pipefail
 
 WINDOW=$(hyprctl activewindow -j) || exit 0
 WINDOW_ADDRESS=$(printf '%s\n' "$WINDOW" | jq -r '.address')
@@ -13,20 +13,22 @@ workspace_windows() {
   hyprctl clients -j | jq -r ".[] | select(.workspace.id == $WORKSPACE_ID) | .address"
 }
 
-HAD_GROUP="$(in_group && echo true || echo false)"
+HAD_GROUP=false
+in_group && HAD_GROUP=true
+
 hyprctl -q dispatch togglegroup
 
-if [ "$HAD_GROUP" = false ]; then
-  for window in $(workspace_windows); do
-    [ "$window" = "$WINDOW_ADDRESS" ] && continue
+[[ "$HAD_GROUP" == false ]] && {
+  while IFS= read -r window; do
+    [[ "$window" == "$WINDOW_ADDRESS" ]] && continue
 
     hyprctl -q dispatch focuswindow "address:$window"
 
     for direction in l r u d; do
-      if in_group; then break; fi
+      in_group && break
       hyprctl -q dispatch moveintogroup "$direction"
     done
-  done
-fi
+  done < <(workspace_windows)
+}
 
 hyprctl -q dispatch focuswindow "address:$WINDOW_ADDRESS"

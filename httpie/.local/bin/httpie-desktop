@@ -1,28 +1,24 @@
 #!/bin/bash
-
 set -euo pipefail
 
-add_flags() {
-	declare -g -a flags
-	local file name
+FLAGS=()
 
-	for name; do
-		file="${XDG_CONFIG_HOME:-"$HOME/.config"}/${name}-flags.conf"
-		if ! [[ -f "${file}" ]]; then
-			continue
-		fi
-		while IFS='' read -r line; do
-			if ! [[ "${line}" =~ ^[[:space:]]*(#|$) ]]; then
-				flags+=("${line}")
-			fi
-		done <"${file}"
+add_flags() {
+	local name file line
+
+	for name in "$@"; do
+		file="${XDG_CONFIG_HOME:-"$HOME/.config"}/$name-flags.conf"
+    [[ -f "$file" ]] || continue
+
+		while IFS= read -r line; do
+      [[ "$line" =~ ^[[:space:]]*(#|$) ]] || FLAGS+=("$line")
+		done < "$file"
 	done
 }
 
-flags=()
-add_flags httpie
-add_flags electron
+add_flags httpie electron
 
 export DESKTOPINTEGRATION=0
 export APPIMAGELAUNCHER_DISABLE=1
-exec electron "${flags[@]}" /usr/lib/httpie-desktop/resources/app.asar "$@"
+
+exec electron "${FLAGS[@]}" /usr/lib/httpie-desktop/resources/app.asar "$@"

@@ -1,7 +1,29 @@
-#!/bin/sh
+#!/bin/bash
+#
+# the purpose of this script is to demonstrate how to preview a file or an
+# image in the preview window of fzf.
+#
+# this is my modified version of
+# https://github.com/junegunn/fzf/blob/master/bin/fzf-preview.sh
+
+if [[ $# -ne 1 ]]; then
+  >&2 echo "usage: $0 FILENAME[:LINENO][:IGNORED]"
+  exit 1
+fi
 
 file=${1/#\~\//$HOME/}
-type=$(file --dereference --mime -- "$file")
+center=0
+if [[ ! -r $file ]]; then
+  if [[ $file =~ ^(.+):([0-9]+)\ *$ ]] && [[ -r ${BASH_REMATCH[1]} ]]; then
+    file=${BASH_REMATCH[1]}
+    center=${BASH_REMATCH[2]}
+  elif [[ $file =~ ^(.+):([0-9]+):[0-9]+\ *$ ]] && [[ -r ${BASH_REMATCH[1]} ]]; then
+    file=${BASH_REMATCH[1]}
+    center=${BASH_REMATCH[2]}
+  fi
+fi
+
+type=$(file --brief --dereference --mime -- "$file")
 
 if [[ ! $type =~ image/ ]]; then
   if [[ $type =~ =binary ]]; then
@@ -9,19 +31,24 @@ if [[ ! $type =~ image/ ]]; then
     exit
   fi
 
-  bat --style="full" --theme="Dracula" --tabs=2 --color=always -P -- "$file"
+  bat --style="${BAT_STYLE:-full}" \
+      --theme="Dracula" \
+      --tabs=2 \
+      --color=always \
+      --pager=never \
+      --highlight-line="${center:-0}" -- "$file"
   exit
 fi
 
 dim=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}
-if [[ $dim = x ]]; then
-  dim=$(stty size < /dev/tty | awk '{ print $2 "x" $1 }')
-elif ! [[ $KITTY_WINDOW_ID ]] && (( FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}') )); then
+if [[ $dim == x ]]; then
+  dim=$(stty size < /dev/tty | awk '{print $2 "x" $1}')
+elif ! [[ $KITTY_WINDOW_ID ]] && ((FZF_PREVIEW_TOP + FZF_PREVIEW_LINES == $(stty size < /dev/tty | awk '{print $1}'))); then
   dim=${FZF_PREVIEW_COLUMNS}x$((FZF_PREVIEW_LINES - 1))
 fi
 
-if [[ $KITTY_WINDOW_ID ]]; then
-  kitty icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" | sed '$d' | sed $'$s/$/\e[m/'
+if [[ $KITTY_WINDOW_ID ]] || [[ $GHOSTTY_RESOURCES_DIR ]] && command -v kitten > /dev/null; then
+  kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --place="$dim@0x0" "$file" | sed '$d' | sed $'$s/$/\e[m/'
 else
   file "$file"
 fi

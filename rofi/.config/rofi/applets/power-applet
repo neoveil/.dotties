@@ -1,60 +1,31 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-uptime=$(uptime -p | sed 's/up //g')
-rofi_command="rofi -theme ~/.config/rofi/powermenu.rasi"
+THEME="${XDG_CONFIG_HOME:-$HOME/.config}/rofi/powermenu.rasi"
+ROFI_CMD=(rofi -theme "$THEME")
 
-# options
-terminal="  terminal"
-shutdown="  shutdown"
-reboot="󰜉  restart"
-suspend="󰒲  sleep"
-lock="  lock"
-logout="  logout"
+UPTIME=$(uptime -p | sed 's/^up //g')
+TERMINAL="  terminal"
+SHUTDOWN="  shutdown"
+REBOOT="󰜉  restart"
+SUSPEND="󰒲  sleep"
+LOCK="  lock"
+LOGOUT="  logout"
+OPTS="$SHUTDOWN\n$REBOOT\n$LOCK\n$LOGOUT\n$SUSPEND\n$TERMINAL"
 
-# confirmation
-confirm_exit() {
-  rofi -dmenu -i -no-fixed-num-lines -p "are you sure? (y/N) > " -theme ~/.config/rofi/powermenu.rasi
+confirm() {
+  local answer
+  answer="$("${ROFI_CMD[@]}" -dmenu -i -no-fixed-num-lines -p "are you sure? (y/N) > " || true)"
+  [[ "$answer" == "y" || "$answer" == "Y" ]]
 }
 
-# variable passed to rofi
-options="$shutdown\n$reboot\n$lock\n$logout\n$suspend\n$terminal"
-
-chosen="$(echo -e "$options" | $rofi_command -p "uptime: $uptime" -dmenu -selected-row 0)"
-case "$chosen" in
-  "$shutdown")
-    ans=$(confirm_exit &)
-    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then systemctl poweroff
-    else exit 0
-    fi
-    ;;
-
-  "$reboot")
-    ans=$(confirm_exit &)
-    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then systemctl reboot
-    else exit 0
-    fi
-    ;;
-
-  "$lock")
-    loginctl lock-session
-    ;;
-
-  "$suspend")
-    ans=$(confirm_exit &)
-    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then
-      playerctl -a pause
-      systemctl suspend
-    else exit 0
-    fi
-    ;;
-
-  "$logout")
-    ans=$(confirm_exit &)
-    if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then loginctl terminate-user ""
-    else exit 0
-    fi
-    ;;
-
-  "$terminal")
-    kitty ~/
+case "$(echo -e "$OPTS" | "${ROFI_CMD[@]}" -dmenu -selected-row 0 -p "uptime: $UPTIME")" in
+  "$SHUTDOWN") confirm && systemctl poweroff;;
+  "$REBOOT") confirm && systemctl reboot;;
+  "$LOCK") loginctl lock-session;;
+  "$SUSPEND") confirm && { playerctl -a pause 2> /dev/null || true; systemctl suspend; };;
+  "$LOGOUT") confirm && loginctl terminate-user "";;
+  "$TERMINAL") kitty ~/;;
+  "") exit 0;;
+  *) exit 1;;
 esac

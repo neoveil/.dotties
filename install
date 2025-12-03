@@ -1,48 +1,52 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
+shopt -s nullglob
 
-uninstall=false
-packages=""
+UNINSTALL=false
+PKGS=()
+EXCLUDED_PKGS=()
 
 for dir in */; do
-  if [ "$(basename "$dir")" != ".git" ]; then
-    packages="$packages $(basename "$dir")"
-  fi
+  name=${dir%/}
+  [[ $name == ".git" ]] && continue
+  PKGS+=("$name")
 done
 
-packages="${packages#"${packages%%[![:space:]]*}"}"
-
 usage() {
-  echo "usage: install [-u|--uninstall] [-p|--packages <packages>]"
-}
+  cat >&2 << EOF
+Usage: ${0##*/} [-u] [-p <packages...>] [-e <packages...>]
 
-version() {
-  echo "dotties install - v0.1.0"
+Manage stow-based dotfiles installation.
+
+Options:
+  -u  uninstall instead of install
+  -p  operate only on the given packages
+  -e  exclude given packages
+  -h  show this help and exit
+EOF
+  exit 1
 }
 
 has_package() {
-  for element in $packages; do
-    if [ "$element" = "$1" ]; then return 0; fi
+  local pkg="$1"
+
+  for element in "${PKGS[@]}"; do
+    [[ "$element" == "$pkg" ]] && return 0
   done
 
   return 1
 }
 
 link() {
-  package=$1
-  from=$2
-  to=$3
+  local pkg=$1 from=$2 to=$3
 
-  if ! has_package "$package"; then
-    echo "$package package not found. skipping linking phase"
-    return
-  fi
-
-  if [ ! -d "$to" ]; then mkdir -pv "$to"; fi
+  has_package "$pkg" || { echo "$pkg package not found. skipping linking phase"; return; }
+  mkdir -pv "$to"
 
   for file in "$from/"*; do
-    [ -e "$file" ] || continue
+    [[ -e "$file" ]] || continue
 
-    if [ -L "$to/$(basename "$file")" ]; then
+    if [[ -L "$to/$(basename "$file")" ]]; then
       echo "skipping $file: already linked"
     else
       ln -sv "$file" "$to"
@@ -51,62 +55,63 @@ link() {
 }
 
 unlink() {
-  package=$1
-  from=$2
-  matching_with=$3
+  local pkg=$1 from=$2 matching_with=$3 target
 
-  if ! has_package "$package"; then
-    echo "$package package not found. skipping unlinking phase"
-    return
-  fi
+  has_package "$pkg" || { echo "$pkg package not found. skipping unlinking phase"; return; }
+  [[ -d "$from" ]] || return
 
-  if [ -d "$from" ]; then
-    for file in "$matching_with/"*; do
-      if [ -L "$from/$(basename "$file")" ]; then
-        rm -v "$from/$(basename "$file")"
-      fi
-    done
-  fi
+  for file in "$matching_with/"*; do
+    target="$from/$(basename "$file")"
+    [[ -L "$target" ]] && rm -v "$target"
+  done
 }
 
-if ! command -v stow > /dev/null 2>&1; then
-  echo "stow could not be found. is it installed?"
-  exit 1
-fi
+command -v stow > /dev/null 2>&1 || { echo "stow could not be found. is it installed?" >&2; exit 1; }
 
-while [ $# -gt 0 ]; do
+while (( $# > 0 )); do
   case "$1" in
-    -h|--help)
-      usage
-      exit 0;;
-    -v|--version)
-      version
-      exit 0;;
-    -u|--uninstall)
-      uninstall=true
-      shift;;
-    -p|--packages)
-      shift
-      packages=""
-      while [ $# -gt 0 ] && [ "${1%"${1#?}"}" != "-" ]; do
-        packages="$packages $1"
-        shift
-      done
-      packages="${packages#"${packages%%[![:space:]]*}"}";;
-    *)
-      echo "unknown option: $1"
-      usage
-      exit 1;;
+    -h) usage;;
+    -u) UNINSTALL=true
+        shift;;
+    -p) shift
+        PKGS=()
+        while (( $# > 0 )) && [[ ${1:0:1} != "-" ]]; do
+          PKGS+=("$1")
+          shift
+        done;;
+    -e) shift
+        while (( $# > 0 )) && [[ ${1:0:1} != "-" ]]; do
+          EXCLUDED_PKGS+=("$1")
+          shift
+        done;;
+    -*) echo "unknown option: $1" >&2; usage;;
+    *) echo "unexpected argument: $1" >&2; usage;;
   esac
 done
 
-if [ "$uninstall" = true ]; then
+(( ${#EXCLUDED_PKGS[@]} > 0 )) && {
+  filtered=()
+
+  for pkg in "${PKGS[@]}"; do
+    skip=false
+
+    for ex in "${EXCLUDED_PKGS[@]}"; do
+      [[ "$pkg" == "$ex" ]] && { skip=true; break; }
+    done
+
+    [[ "$skip" == true ]] || filtered+=("$pkg")
+  done
+
+  PKGS=("${filtered[@]}")
+}
+
+if [[ "$UNINSTALL" == true ]]; then
   unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/units"
   unlink systemd "$HOME/.config/systemd/user" "$HOME/.config/systemd/timers"
   unlink bin "$HOME/.local/bin" "$HOME/.local/.bin"
-  stow -D -vv $packages
+  stow -D -vv "${PKGS[@]}"
 else
-  stow -vv $packages
+  stow -vv "${PKGS[@]}"
   link systemd "$HOME/.config/systemd/units" "$HOME/.config/systemd/user"
   link systemd "$HOME/.config/systemd/timers" "$HOME/.config/systemd/user"
   link bin "$HOME/.local/.bin" "$HOME/.local/bin"

@@ -1,20 +1,23 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
 in_group() {
   hyprctl activewindow -j | jq -e '(.grouped // [] | length) > 0' > /dev/null 2>&1
 }
 
-DIRECTION="$1"
+(( $# == 1 )) || exit 1
+
+DIRECTION=$1
 COMMAND="movewindow"
 
-if in_group; then
-  case "$1" in
+in_group && {
+  case "$DIRECTION" in
     l) DIRECTION="b";;
     r) DIRECTION="f";;
     *) exit 1;;
   esac
 
   COMMAND="movegroupwindow"
-fi
+}
 
 hyprctl -q dispatch "$COMMAND" "$DIRECTION"

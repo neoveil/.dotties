@@ -1,0 +1,104 @@
+#!/bin/bash
+set -euo pipefail
+
+BACKGROUND_DIR="$HOME/Pictures/.backgrounds/"
+mkdir -p "$BACKGROUND_DIR"
+
+METAFILE="$BACKGROUND_DIR/.metafile"
+CURRENT_LN="$BACKGROUND_DIR/.current"
+
+err() {
+  printf 'error: %s\n' "$*"
+}
+
+usage() {
+  cat >&2 << EOF
+Usage: ${0##*/} <operation>
+
+Manage backgrounds for hyprpaper: select next, refresh list, or shuffle list.
+
+Operations:
+  -n  set the next background in sequence
+  -r  put background files in the correct format,
+        refresh the list of backgrounds and
+        load the first one
+  -s  shuffle the background list
+  -h  show this help message and exit
+EOF
+  exit 1
+}
+
+rename() {
+  while IFS=$'\t' read -r n f; do
+    mv -- "$f" "$BACKGROUND_DIR/$n.${f##*.}.tmp"
+  done < <(fd -tf -e jpg -e png -e jpeg . "$BACKGROUND_DIR" | nl -w1 -s $'\t')
+
+  fd -tf -E tmp . "$BACKGROUND_DIR" -x mv -- {} '{.}'
+}
+
+refresh() {
+  rename
+  fd -tf -e jpg -e png -e jpeg . "$BACKGROUND_DIR" | shuf > "$METAFILE"
+  rm -f "$CURRENT_LN"
+  hyprctl hyprpaper unload all > /dev/null 2>&1
+  set_next_background
+}
+
+shuffle() {
+  shuf "$METAFILE" | sponge "$METAFILE"
+}
+
+set_next_background() {
+  loaded="$(hyprctl hyprpaper listloaded)"
+  next_index=-1
+  mapfile -t bgs < "$METAFILE"
+
+  (( ${#bgs[@]} == 0 )) && {
+    echo "no backgrounds found in $METAFILE" >&2
+    exit 1
+  }
+
+  for i in "${!bgs[@]}"; do
+    [[ "${bgs[i]}" == "$loaded" ]] && {
+      next_index=$i
+      break
+    }
+  done
+
+  if (( next_index == -1 )); then
+    next="${bgs[0]}"
+  else
+    next="${bgs[$(( (next_index + 1) % ${#bgs[@]} ))]}"
+  fi
+
+  ln -sf "$next" "$CURRENT_LN"
+  pidof hyprlock > /dev/null && kill -USR2 "$(pidof hyprlock)"
+  hyprctl hyprpaper reload ",$next" > /dev/null 2>&1
+}
+
+[[ -f "$METAFILE" ]] || refresh
+
+op=""
+(( $# == 0 )) && usage
+
+while getopts ":nrsh" opt; do
+  case "$opt" in
+    n) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="next";;
+    r) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="refresh";;
+    s) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="shuffle";;
+    h) usage;;
+    ?) err "unknown option: -$OPTARG"; usage;;
+  esac
+done
+shift $((OPTIND - 1))
+
+[[ -z "$op" ]] && { err "no operation specified"; usage; }
+
+case "$op" in
+  refresh) refresh;;
+  shuffle) shuffle;;
+  next) set_next_background;;
+esac

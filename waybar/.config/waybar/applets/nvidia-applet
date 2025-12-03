@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-case "$1" in
+case "${1-}" in
   temperature)
     nvidia-smi --format=csv,noheader,nounits --query-gpu=temperature.gpu |\
       jq -Rrc '

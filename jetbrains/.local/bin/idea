@@ -1,3 +1,4 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-nohup intellij-idea-ultimate-edition "$@" > /dev/null 2>&1 &
+nohup intellij-idea-ultimate-edition "$@" > /dev/null 2>&1 & disown

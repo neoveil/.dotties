@@ -1,8 +1,8 @@
-#!/bin/sh
-set -eu
+#!/bin/bash
+set -euo pipefail
 
-screenshots_dir="$HOME/Pictures/screenshots"
-[ -d "$screenshots_dir" ] || mkdir -p "$screenshots_dir"
+SCREENSHOT_DIR="$HOME/Pictures/screenshots"
+mkdir -p "$SCREENSHOT_DIR"
 
 show_menu() {
   printf '%s' "$2" | rofi -dmenu \
@@ -10,13 +10,14 @@ show_menu() {
     -markup-rows \
     -no-custom \
     -sep ':' \
-    -theme "$XDG_CONFIG_HOME/rofi/screenshot.$3.rasi"
+    -theme "${XDG_CONFIG_HOME:-$HOME/.config}/rofi/screenshot.$3.rasi"
 }
 
 choice_type=$(show_menu "screenshot type >" "󰍹  Screen:󱣴  Area" "type") || exit 1
 case "$choice_type" in
   "󰍹  Screen") type="screen";;
   "󱣴  Area") type="area";;
+  *) exit 1;;
 esac
 
 choice_action=$(show_menu "action >" "  Copy:  Save:  Copy &amp; Save" "action") || exit 1
@@ -24,15 +25,16 @@ case "$choice_action" in
   "  Copy") action="copy";;
   "  Save") action="save";;
   "  Copy &amp; Save") action="copysave";;
+  *) exit 1;;
 esac
 
-set -- -f -n
-[ "$type" = screen ] && set -- "$@" -c
-set -- "$@" "$action" "$type"
+args=(-f -n)
+[[ "$type" == screen ]] && args+=(-c)
+args+=("$action" "$type")
 
 sleep .2 # so rofi can close
 
-DEFAULT_TARGET_DIR="$screenshots_dir" \
+DEFAULT_TARGET_DIR="$SCREENSHOT_DIR" \
 DATE_FORMAT="%Y%m%d%H%M%S" \
 SLURP_ARGS="-d -b 10101022 -c e8e8e8ee -s bd9bd933" \
-grimblast "$@"
+grimblast "${args[@]}"

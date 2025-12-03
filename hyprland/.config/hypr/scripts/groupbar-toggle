@@ -1,5 +1,8 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
 GROUPBAR_OPTION="group:groupbar:enabled"
-NEXT="$(hyprctl getoption "$GROUPBAR_OPTION" | rg -q 1 && echo false || echo true)"
+NEXT=true
+
+hyprctl getoption "$GROUPBAR_OPTION" | rg -q '1' && NEXT=false
 hyprctl -q keyword "$GROUPBAR_OPTION" "$NEXT"

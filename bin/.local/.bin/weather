@@ -1,37 +1,45 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-usage() {
-  echo "usage: $0 [-f|--format] [-c|--city] [-h|--help] [-v|--version]"
-  exit 0
+err() {
+  printf 'error: %s\n' "$*" >&2
 }
 
-version() {
-  echo "weather - v0.1.0"
-  exit 0
+usage() {
+  cat >&2 << EOF
+Usage: ${0##*/} [-c CITY] [-f FORMAT]
+
+Query wttr.in for weather information.
+
+Options:
+  -c  set the city name (spaces will be replaced with underscores)
+  -f  set the wttr.in format string (spaces will be replaced with '+')
+  -h  show this help message and exit
+EOF
+  exit 1
 }
 
 sanitize_input() {
-  printf "%s" "$1" | sed -e "s/[[:space:]]/"$2"/g"
+  printf "%s" "$1" | sed -e "s/[[:space:]]/$2/g"
 }
 
 city=""
 format=""
 
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -h|--help)
-      usage;;
-    -v|--version)
-      version;;
-    -c|--city)
-      [ "$2" != "" ] && city="/$(sanitize_input "$2" "_")" || usage
-      shift 2;;
-    -f|--format)
-      [ "$2" != "" ] && format="?format=$(sanitize_input "$2" "+")" || usage
-      shift 2;;
-    *)
-      echo "unknown argument: $1"; usage;;
+while getopts ":c:f:h" opt; do
+  case "$opt" in
+    c) city="/$(sanitize_input "$OPTARG" "_")";;
+    f) format="?format=$(sanitize_input "$OPTARG" "+")";;
+    h) usage;;
+    :) err "option -$OPTARG requires an argument"; usage;;
+    ?) err "unknown option: -$OPTARG"; usage;;
   esac
 done
+shift $((OPTIND - 1))
 
-echo "$(curl -s "wttr.in$city$format")"
+if (( $# > 0 )); then
+  err "unexpected extra argument: $1"
+  usage
+fi
+
+curl -s "wttr.in$city$format"

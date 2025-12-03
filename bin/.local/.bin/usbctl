@@ -1,0 +1,153 @@
+#!/bin/bash
+set -euo pipefail
+
+BASE_PATH="/run/media/$USER"
+
+err() {
+  printf 'error: %s\n' "$*" >&2
+}
+
+usage() {
+  cat >&2 << EOF
+Usage: ${0##*/} <operation> <device>
+
+Manage USB storage devices: mount, unmount, or safely eject.
+
+Operations:
+  -m  mount all partitions from a USB storage device
+  -u  unmount all partitions from a USB storage device and clean mount dirs
+  -e  safely unmount and power off a USB storage device
+  -h  show this help message and exit
+EOF
+  exit 1
+}
+
+check_usb_device() {
+  local dev="$1" tran
+
+  [[ -z "$dev" ]] && { err "device not specified"; usage; }
+  [[ -b "/dev/$dev" ]] || { err "/dev/$dev is not a block device"; exit 1; }
+
+  tran=$(lsblk -no TRAN "/dev/$dev" 2> /dev/null | head -n1 || echo "")
+  [[ "$tran" != "usb" ]] && {
+    err "/dev/$dev is not a USB device (TRAN='$tran')"
+    err "aborting to avoid touching an internal disk"
+    exit 1
+  }
+
+  return 0
+}
+
+mount_usb() {
+  local dev="$1" path part mp fstype pname label safe_label
+
+  check_usb_device "$dev"
+
+  path="$BASE_PATH/$dev"
+  echo "mounting partitions from /dev/$dev under $path..."
+  sudo mkdir -p "$path"
+
+  for part in /dev/"$dev"?*; do
+    [[ -b "$part" ]] || continue
+
+    mp=$(lsblk -no MOUNTPOINT "$part")
+    [[ -n "$mp" ]] && { echo "  $part already mounted at $mp, skipping"; continue; }
+
+    fstype=$(lsblk -no FSTYPE "$part")
+    [[ -z "$fstype" ]] && { echo "  could not detect filesystem for $part, skipping"; continue; }
+
+    pname=$(basename "$part")
+    mp="$path/$pname"
+
+    echo "  mounting $part at $mp..."
+    sudo mkdir -p "$mp"
+    sudo mount -t "$fstype" "$part" "$mp"
+
+    label=$(lsblk -no LABEL "$part")
+    [[ -n "$label" ]] && {
+      safe_label=$(printf "%s" "$label" | tr ' ' '_')
+      echo "    linking label name: $safe_label -> $pname"
+      sudo ln -sfn "$pname" "$path/$safe_label"
+    }
+  done
+
+  echo "linking /mnt/$dev -> $path"
+  sudo ln -sfn "$path" "/mnt/$dev"
+  echo "done"
+}
+
+umount_usb() {
+  local dev="$1" path part mp
+
+  check_usb_device "$dev"
+
+  path="$BASE_PATH/$dev"
+  echo "unmounting partitions of /dev/$dev..."
+
+  for part in /dev/"$dev"?*; do
+    [[ -b "$part" ]] || continue
+
+    mp=$(lsblk -no MOUNTPOINT "$part")
+    if [[ -n "$mp" ]]; then
+      echo "  unmounting $part from $mp"
+      sudo umount "$mp"
+    else
+      echo "  $part was not mounted"
+    fi
+  done
+
+  echo "cleaning up symlinks and directories..."
+
+  [[ -L "/mnt/$dev" ]] && { echo "  removing /mnt/$dev"; sudo rm -f "/mnt/$dev"; }
+  [[ -d "$path" ]] && {
+    sudo find "$path" -maxdepth 1 -mindepth 1 -exec rm -rf {} +
+    echo "  removing $path"
+    sudo rmdir "$path" 2>/dev/null || true
+  }
+
+  echo "done"
+}
+
+eject_usb() {
+  local dev="$1"
+
+  check_usb_device "$dev"
+  umount_usb "$dev"
+
+  echo "ejecting /dev/$dev..."
+  udisksctl power-off -b "/dev/$dev"
+  echo "done"
+}
+
+op=""
+(( $# == 0 )) && usage
+
+while getopts ":mueh" opt; do
+  case "$opt" in
+    m) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="mount";;
+    u) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="umount";;
+    e) [[ -n "$op" ]] && { err "multiple operations specified"; usage; }
+       op="eject";;
+    h) usage;;
+    ?) err "unknown option: -$OPTARG"; usage;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if (( $# == 0 )); then
+  err "no device specified"
+  usage
+elif (( $# > 1 )); then
+  err "unexpected extra argument: $2"
+  usage
+fi
+
+[[ -z "$op" ]] && { err "no operation specified"; usage; }
+
+case "$op" in
+  mount) mount_usb "$1";;
+  umount) umount_usb "$1";;
+  eject) eject_usb "$1";;
+esac
