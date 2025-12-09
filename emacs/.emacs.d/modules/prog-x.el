@@ -9,6 +9,7 @@
  tldr
  rainbow-mode
  yasnippet-snippets
+ yasnippet-capf
  string-inflection
  project)
 
@@ -33,31 +34,65 @@
   :config
   (yas-global-mode 1))
 
-(use-package company
-  :functions global-company-mode
+(use-package corfu
+  :functions global-corfu-mode
+  :init
+  (global-corfu-mode 1)
   :bind
-  (("C-<SPC>"   . company-manual-begin)
+  (("C-<SPC>"   . completion-at-point)
    ("C-S-<SPC>" . set-mark-command)
-   (:map company-active-map
-         (("RET"      . nil)
-          ("<return>" . nil)
-          ("<tab>"    . company-complete-selection))))
+   (:map corfu-map
+         ("RET" . nil)))
   :config
   (setq-default
-   company-tooltip-limit 15
-   company-minimum-prefix-length 2
-   company-idle-delay 0
-   company-tooltip-idle-delay 0
-   company-selection-wrap-around t
-   company-tooltip-align-annotations t
-   company-backends (mapcar #'company--backend-with-yasnippet company-backends))
-  (global-company-mode 1))
+   corfu-count 15
+   corfu-cycle t
+   corfu-preselect 'first
+   corfu-preview-current nil
+   corfu-auto t
+   corfu-auto-delay 0
+   corfu-auto-prefix 2
+   corfu-auto-trigger "."))
 
-(use-package company-flx
-  :after company
-  :functions company-flx-mode
+(use-feature corfu-echo
+  :after corfu
+  :functions corfu-echo-mode
+  :init
+  (corfu-echo-mode 1)
   :config
-  (company-flx-mode 1))
+  (setq-default corfu-echo-delay 0))
+
+(use-feature corfu-history
+  :after corfu
+  :functions corfu-history-mode
+  :init
+  (corfu-history-mode 1))
+
+(use-feature corfu-popupinfo
+  :after corfu
+  :functions corfu-popupinfo-mode
+  :init
+  (corfu-popupinfo-mode 1)
+  :config
+  (setq-default
+   corfu-popupinfo-delay '(nil . 0)
+   corfu-popupinfo-max-height 30
+   corfu-popupinfo-max-width 150))
+
+(use-package nerd-icons-corfu
+  :after corfu
+  :functions nerd-icons-corfu-formatter
+  :config
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+
+(use-package cape
+  :after (corfu eglot)
+  :bind
+  ("C-c p" . cape-prefix-map)
+  :hook
+  ((prog-mode text-mode conf-mode temp-mode literal-calc-mode eglot-managed-mode) . cape--setup-capf)
+  :init
+  (advice-add 'eglot-completion-at-point :around 'cape-wrap-buster))
 
 (use-package paredit
   :bind
@@ -123,8 +158,6 @@
          ("C-c l a r" . eglot-code-action-rewrite)
          ("C-c l t s" . eglot-show-type-hierarchy)
          ("C-c l t c" . eglot-show-call-hierarchy)))
-  :hook
-  (eglot-managed-mode . eglot--setup-company-backends)
   :config
   (add-to-list 'eglot-code-action-indications 'mode-line)
   (setq-default

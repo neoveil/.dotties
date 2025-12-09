@@ -90,33 +90,26 @@ Each element in MODES should be a symbol without “-mode”."
                      #'eglot-ensure))
         (cadr modes))))
 
-(defun eglot--setup-company-backends ()
-  "Setup `company-backends' with `yasnippet'.
+(defconst cape--extra-capfs
+  (list 'yasnippet-capf 'cape-file 'cape-dabbrev 'cape-abbrev 'cape-keyword)
+  "Extra `completion-at-point-functions' to add via `cape-capf-super'.")
 
-Meant to be used as a hook for `eglot-managed-mode-hook'"
+(defun cape--setup-capf ()
+  "Combine existins `completion-at-point-functions' with `cape' + `yasnippet'.
+
+Meant to be used as a hook for `prog-mode', `text-mode',
+`conf-mode' and `eglot-managed-mode'"
   (setq-local
-   company-backends
-   (mapcar #'company--backend-with-yasnippet company-backends)))
-
-(defun company--backend-with-yasnippet (backend)
-  "Ensure that BACKEND uses `company-yasnippet' as a completion source.
-
-BACKEND may be a symbol naming a Company backend, or a list
-describing a composite backend.  If BACKEND already includes
-`company-yasnippet' (as a member of its list form), it is returned
-unchanged.
-
-Otherwise this function returns a new backend list where
-`:with' `company-yasnippet' is appended, effectively enabling
-Yasnippet expansions to be offered alongside BACKEND's own
-completion candidates.
-
-The returned value is always a list."
-  (if (and (listp backend) (member 'company-yasnippet backend))
-      backend
-    (append
-     (if (consp backend) backend (list backend))
-     '(:with company-yasnippet))))
+   completion-at-point-functions
+   (list (apply 'cape-capf-super
+                (append
+                 (if-let* ((out-of-eglot? (not (bound-and-true-p eglot--managed-mode)))
+                           (blacklist (append cape--extra-capfs '(t))))
+                     (cl-remove-if
+                      (lambda (x) (memq x blacklist))
+                      completion-at-point-functions)
+                   (list 'eglot-completion-at-point))
+                cape--extra-capfs)))))
 
 (defun all-the-icons--install-fonts-if-not-installed ()
   "Install `all-the-icons' fonts if they are not yet installed, else no-op"
@@ -298,28 +291,28 @@ or `literal-calc-mode'.
 
 NAME is the buffer name.
 
-The buffer is made writable and gets local bindings:
+The buffer gets local bindings:
   C-c C-q  -> `quit-window'
   C-c C-k  -> `quit-window-kill-buffer'"
-  (let* ((buf (get-buffer name)))
-    (if buf
-        (pop-to-buffer buf)
-      (with-current-buffer-window name nil nil
-        (funcall mode))
-      (with-current-buffer name
-        (setq buffer-read-only nil)
-        (let ((keymap (make-sparse-keymap)))
-          (set-keymap-parent keymap (current-local-map))
-          (define-key keymap (kbd "C-c C-q") #'quit-window)
-          (define-key keymap (kbd "C-c C-k") #'quit-window-kill-buffer)
-          (use-local-map keymap))))
-    (when-let ((win (get-buffer-window name)))
+  (let* ((buf (get-buffer-create name)))
+    (with-current-buffer buf
+      (funcall mode)
+      (let ((keymap (make-sparse-keymap)))
+        (set-keymap-parent keymap (current-local-map))
+        (define-key keymap (kbd "C-c C-q") #'quit-window)
+        (define-key keymap (kbd "C-c C-k") #'quit-window-kill-buffer)
+        (use-local-map keymap)))
+    (pop-to-buffer buf)
+    (when-let ((win (get-buffer-window buf)))
       (select-window win))))
+
+(define-derived-mode temp-mode fundamental-mode "temp"
+  "Temporary buffer major mode.")
 
 (defun open-temp-buffer ()
   "Open the temporary buffer"
   (interactive)
-  (make-temp-window "*temp*" #'fundamental-mode))
+  (make-temp-window "*temp*" #'temp-mode))
 
 (defun open-literate-calc-temp-buffer ()
   "Open a temporary buffer with `literate-calc-mode'"
