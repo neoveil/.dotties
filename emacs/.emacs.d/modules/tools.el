@@ -52,10 +52,9 @@
 
 (use-package orderless
   :config
-  (setq-default
-   orderless-matching-styles (append '(orderless-flex) orderless-matching-styles)
-   completion-styles (append '(orderless) completion-styles)
-   completion-category-overrides '((file (styles partial-completion)))))
+  (add-to-list 'completion-styles 'orderless)
+  (add-to-list 'orderless-matching-styles 'orderless-flex)
+  (setq-default completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package marginalia
   :functions marginalia-mode
@@ -66,6 +65,7 @@
   (marginalia-mode))
 
 (use-package vertico
+  :functions (vertico-mode vertico-mouse-mode vertico-reverse-mode)
   :config
   (setq-default
    vertico-resize t
