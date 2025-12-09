@@ -33,75 +33,25 @@
   :config
   (yas-global-mode 1))
 
-(use-package corfu
-  :functions global-corfu-mode
-  :init
-  (global-corfu-mode 1)
+(use-package company
+  :functions global-company-mode
   :bind
-  (("C-<SPC>"   . completion-at-point)
+  (("C-<SPC>"   . company-manual-begin)
    ("C-S-<SPC>" . set-mark-command)
-   (:map corfu-map
-         ("RET" . nil)))
+   (:map company-active-map
+         (("RET"      . nil)
+          ("<return>" . nil)
+          ("<tab>"    . company-complete-selection))))
   :config
   (setq-default
-   corfu-count 20
-   corfu-cycle t
-   corfu-preselect 'first
-   corfu-preview-current nil
-   corfu-auto t
-   corfu-auto-delay 0
-   corfu-auto-prefix 2
-   corfu-auto-trigger "."))
-
-(use-feature corfu-echo
-  :after corfu
-  :functions corfu-echo-mode
-  :init
-  (corfu-echo-mode 1)
-  :config
-  (setq-default corfu-echo-delay 0))
-
-(use-feature corfu-history
-  :after corfu
-  :functions corfu-history-mode
-  :init
-  (corfu-history-mode 1))
-
-(use-feature corfu-popupinfo
-  :after corfu
-  :functions corfu-popupinfo-mode
-  :init
-  (corfu-popupinfo-mode 1)
-  :config
-  (setq-default
-   corfu-popupinfo-delay '(0 . 0)
-   corfu-popupinfo-max-height 30
-   corfu-popupinfo-max-width 150))
-
-(use-package nerd-icons-corfu
-  :after corfu
-  :functions nerd-icons-corfu-formatter
-  :config
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
-
-(use-package cape
-  :after (corfu eglot)
-  :functions
-  (cape--register-capfs
-   cape-wrap-buster
-   cape-dabbrev
-   cape-file
-   cape-elisp-block
-   cape-elisp-symbol)
-  :bind
-  ("C-c p" . cape-prefix-map)
-  :init
-  (cape--register-capfs
-   cape-dabbrev
-   cape-file
-   cape-elisp-block
-   cape-elisp-symbol)
-  (advice-add 'eglot-completion-at-point :around #'cape-wrap-buster))
+   company-tooltip-limit 15
+   company-minimum-prefix-length 2
+   company-idle-delay 0
+   company-tooltip-idle-delay 0
+   company-selection-wrap-around t
+   company-tooltip-align-annotations t
+   company-backends (mapcar #'company--backend-with-yasnippet company-backends))
+  (global-company-mode 1))
 
 (use-package paredit
   :bind
@@ -146,7 +96,6 @@
   (global-flycheck-eglot-mode))
 
 (use-package eglot
-  :functions eglot--ensure-all
   :init
   (eglot--ensure-all
    '(sh c c++ cmake clojure clojurescript clojurec
@@ -176,8 +125,6 @@
 
 (use-package eglot-java
   :after eglot
-  :defines eglot-java-mode-map
-  :functions eglot-java--set-jdtls-xmx
   :hook
   (java-mode . eglot-java-mode)
   :bind
@@ -188,7 +135,6 @@
          ("C-c l j r" . eglot-java-project-build-refresh)
          ("C-c l j b" . eglot-java-project-build-task)))
   :config
-  (setq-default eglot-java-workspace-folder (expand-file-name "~/Projects"))
   (eglot-java--set-jdtls-xmx "4G"))
 
 (use-feature eglot-java-lombok

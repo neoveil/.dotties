@@ -12,4 +12,5 @@
  ;; If there is more than one, they won't work right.
  '(cursor ((t (:background "#8BE9FD"))))
  '(line-number-current-line ((t (:inherit default :foreground "#F1FA8C"))))
- '(show-paren-match ((t (:foreground "#FF79C6" :background "#424C6E")))))
+ '(show-paren-match ((t (:foreground "#FF79C6" :background "#424C6E"))))
+ '(company-scrollbar-fg ((t (:background "#ffb86c")))))

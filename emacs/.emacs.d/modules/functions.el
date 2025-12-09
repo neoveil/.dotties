@@ -90,17 +90,25 @@ Each element in MODES should be a symbol without “-mode”."
                      #'eglot-ensure))
         (cadr modes))))
 
-(defmacro cape--register-capfs (&rest capfs)
-  "Register multiple CAPFS for `cape'.
+(defun company--backend-with-yasnippet (backend)
+  "Ensure that BACKEND uses `company-yasnippet' as a completion source.
 
-Each FN in CAPFS is added to `completion-at-point-functions'
-with priority -10 and LOCAL=t, so they run after major-mode/LSP
-CAPFs and are buffer-local."
-  `(progn
-     ,@(mapcar
-        (lambda (fn)
-          `(add-hook 'completion-at-point-functions #',fn -10 t))
-        capfs)))
+BACKEND may be a symbol naming a Company backend, or a list
+describing a composite backend.  If BACKEND already includes
+`company-yasnippet' (as a member of its list form), it is returned
+unchanged.
+
+Otherwise this function returns a new backend list where
+`:with' `company-yasnippet' is appended, effectively enabling
+Yasnippet expansions to be offered alongside BACKEND's own
+completion candidates.
+
+The returned value is always a list."
+  (if (and (listp backend) (member 'company-yasnippet backend))
+      backend
+    (append
+     (if (consp backend) backend (list backend))
+     '(:with company-yasnippet))))
 
 (defun all-the-icons--install-fonts-if-not-installed ()
   "Install `all-the-icons' fonts if they are not yet installed, else no-op"
@@ -258,11 +266,16 @@ into *eldoc-snapshot* so they don't disappear when point moves."
     (goto-char (point-min))
     (call-interactively #'anzu-query-replace-regexp)))
 
+(defun term-zsh ()
+  "Open `term' with `zsh'"
+  (interactive)
+  (term "/usr/bin/zsh"))
+
 (defun term-other-window ()
   "Open another window and call `term' on it"
   (interactive)
   (switch-to-buffer-other-window (get-buffer-create "*terminal*"))
-  (call-interactively #'term))
+  (term-zsh))
 
 (defun go-home ()
   "Call `cd' with DIR \"~\""
