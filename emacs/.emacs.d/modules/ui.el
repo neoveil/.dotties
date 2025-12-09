@@ -28,6 +28,14 @@
   :config
   (all-the-icons--install-fonts-if-not-installed))
 
+(use-package all-the-icons-completion
+  :after (all-the-icons marginalia)
+  :functions all-the-icons-completion-mode
+  :hook
+  (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :config
+  (all-the-icons-completion-mode))
+
 (use-package all-the-icons-dired
   :diminish
   :defer t

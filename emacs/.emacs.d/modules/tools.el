@@ -50,33 +50,39 @@
   :config
   (which-key-mode 1))
 
-(use-package smex
-  :bind
-  (("M-x" . smex)
-   ("C-c C-c M-x" . execute-extended-command))
-  :config
-  (setq-default smex-save-file (file-name-concat user-emacs-directory ".smex-items")))
-
-(use-feature ido
-  :functions ido-everywhere
-  :config
-  (ido-mode 1)
-  (ido-everywhere 1))
-
-(use-package ido-completing-read+
-  :after ido
-  :functions ido-ubiquitous-mode
-  :config
-  (ido-ubiquitous-mode 1))
-
-(use-package flx-ido
-  :after ido-completing-read+
-  :functions flx-ido-mode
+(use-package orderless
   :config
   (setq-default
-   ido-enable-flex-matching t
-   flx-ido-use-faces nil)
-  (flx-ido-mode 1))
+   orderless-matching-styles (append '(orderless-flex) orderless-matching-styles)
+   completion-styles (append '(orderless) completion-styles)
+   completion-category-overrides '((file (styles partial-completion)))))
+
+(use-package marginalia
+  :functions marginalia-mode
+  :bind
+  (:map minibuffer-local-map
+        ("M-A" . marginalia-cycle))
+  :init
+  (marginalia-mode))
+
+(use-package vertico
+  :config
+  (setq-default
+   vertico-resize t
+   vertico-cycle t)
+  (vertico-mode 1)
+  (vertico-mouse-mode 1)
+  (vertico-reverse-mode 1))
+
+(use-feature vertico-directory
+  :after vertico
+  :bind
+  (:map vertico-map
+        (("RET" . vertico-directory-enter)
+         ("DEL" . vertico-directory-delete-char)
+         ("M-DEL" . vertico-directory-delete-word)))
+  :hook
+  (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
 (use-package magit
   :bind

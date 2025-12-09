@@ -26,9 +26,7 @@
 (add-to-list 'load-path modules-directory)
 (add-to-list 'load-path local-directory)
 
-;; TODO:
-;;   setup org-mode
-;;   drop ido - replace for vertico, orderless, consult, marginalia (helm?, ivy?)
+;; TODO: setup org-mode
 
 (require 'packages)
 (require 'options)
