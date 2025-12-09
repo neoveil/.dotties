@@ -53,6 +53,12 @@
    company-backends (mapcar #'company--backend-with-yasnippet company-backends))
   (global-company-mode 1))
 
+(use-package company-flx
+  :after company
+  :functions company-flx-mode
+  :config
+  (company-flx-mode 1))
+
 (use-package paredit
   :bind
   (:map paredit-mode-map
