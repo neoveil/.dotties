@@ -100,8 +100,8 @@
   (eglot--ensure-all
    '(sh c c++ cmake clojure clojurescript clojurec
      html css json jsonc dockerfile go go-dot-mod
-     go-dot-work javascript typescript lua python
-     markdown rust vimrc yaml))
+     go-dot-work js typescript lua python rust
+     markdown vimrc yaml))
   :bind
   (:map eglot-mode-map
         (("C-c l s s" . eglot-shutdown)
@@ -117,6 +117,8 @@
          ("C-c l a r" . eglot-code-action-rewrite)
          ("C-c l t s" . eglot-show-type-hierarchy)
          ("C-c l t c" . eglot-show-call-hierarchy)))
+  :hook
+  (eglot-managed-mode . eglot--setup-company-backends)
   :config
   (add-to-list 'eglot-code-action-indications 'mode-line)
   (setq-default

@@ -90,6 +90,14 @@ Each element in MODES should be a symbol without “-mode”."
                      #'eglot-ensure))
         (cadr modes))))
 
+(defun eglot--setup-company-backends ()
+  "Setup `company-backends' with `yasnippet'.
+
+Meant to be used as a hook for `eglot-managed-mode-hook'"
+  (setq-local
+   company-backends
+   (mapcar #'company--backend-with-yasnippet company-backends)))
+
 (defun company--backend-with-yasnippet (backend)
   "Ensure that BACKEND uses `company-yasnippet' as a completion source.
 
