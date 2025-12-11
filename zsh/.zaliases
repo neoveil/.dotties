@@ -42,6 +42,7 @@ alias du="dust -b"
 alias cat="bat"
 alias mkdir="mkdir -pv"
 alias dd="dd status=progress"
+alias rgv="rg --vimgrep"
 
 # kitty
 if [[ "$TERM" = "xterm-kitty" ]]; then

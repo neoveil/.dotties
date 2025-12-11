@@ -18,7 +18,7 @@
  native-comp-async-report-warnings-errors nil
  apropos-do-all t
  read-process-output-max (* 4 1024 1024)
- initial-scratch-message (concat ";; -*- lexical-binding: t; -*-\n\n" initial-scratch-message))
+ initial-scratch-message (concat ";; -*- lexical-binding: t; -*-\n;;\n" initial-scratch-message))
 
 ;; files settings
 (setq-default
