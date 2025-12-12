@@ -58,10 +58,11 @@
 
 (use-package crux
   :bind
-  (("C-<return>"   . crux-smart-open-line)
-   ("C-S-<return>" . crux-smart-open-line-above)
-   ("C-,"          . crux-duplicate-current-line-or-region)
-   ("C-c s e"      . crux-sudo-edit)))
+  (("C-<return>"                   . crux-smart-open-line)
+   ("C-S-<return>"                 . crux-smart-open-line-above)
+   ("C-,"                          . crux-duplicate-current-line-or-region)
+   ("C-c s e"                      . crux-sudo-edit)
+   ([remap move-beginning-of-line] . crux-move-beginning-of-line)))
 
 (use-feature cc-mode
   :hook
