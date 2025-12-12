@@ -136,6 +136,11 @@
   :config
   (global-flycheck-eglot-mode))
 
+(use-package consult-flycheck
+  :after (consult flycheck)
+  :bind
+  ("M-g f" . consult-flycheck))
+
 (use-package eglot
   :init
   (eglot--ensure-all

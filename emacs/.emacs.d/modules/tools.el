@@ -84,6 +84,39 @@
   :hook
   (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
+(use-package consult
+  :bind
+  (("C-x b"     . consult-buffer)
+   ("C-x 4 b"   . consult-buffer-other-window)
+   ("C-x r b"   . consult-bookmark)
+   ("M-y"       . consult-yank-pop)
+   ("M-g g"     . consult-goto-line)
+   ("M-g M-g"   . consult-goto-line)
+   ("M-g o"     . consult-outline)
+   ("M-g e"     . consult-compile-error)
+   ("M-g m"     . consult-mark)
+   ("M-g k"     . consult-global-mark)
+   ("M-g i"     . consult-imenu)
+   ("M-s f"     . consult-fd)
+   ("M-s g"     . consult-ripgrep)
+   ("M-s l"     . consult-line)
+   ("M-s L"     . consult-line-multi)
+   ("M-s m"     . consult-man)
+   ("M-s i"     . consult-info))
+  :config
+  (setq-default
+   xref-show-xrefs-function 'consult-xref
+   xref-show-definitions-function 'consult-xref
+   consult-ripgrep-args (concat
+                         "rg --hidden --glob !.git/**"
+                         (substring consult-ripgrep-args 2))
+   consult-fd-args (list
+                    (car consult-fd-args)
+                    (concat
+                     "--hidden "
+                     "--exclude .git "
+                     (cadr consult-fd-args)))))
+
 (use-package magit
   :bind
   (("C-c m s"   . magit-status)
