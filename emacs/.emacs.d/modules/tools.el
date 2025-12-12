@@ -10,9 +10,16 @@
   (("C-c o t" . open-temp-buffer)
    ("C-c g h" . go-home)
    ("C-c f p" . find-file-at-point)
-   ("C-x C-b" . buffer-menu)
    ("C-c k a" . kill-all-buffers)
    ("C-c k o" . kill-other-buffers)))
+
+(use-feature ibuffer
+  :bind
+  ("C-x C-b" . ibuffer)
+  :hook
+  (ibuffer-mode . ibuffer-auto-mode)
+  :config
+  (setq-default ibuffer-expert t))
 
 (use-feature dired
   :hook
