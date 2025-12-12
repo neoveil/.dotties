@@ -84,6 +84,25 @@
   :hook
   (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
+(use-package embark
+  :bind
+  (("C-."   . embark-act)
+   ("s-."   . embark-dwim)
+   ("C-h b" . embark-bindings)
+   ("C-h B" . describe-bindings))
+  :config
+  (setq-default
+   prefix-help-command 'embark-prefix-help-command)
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none)))))
+
+(use-package embark-consult
+  :after embark
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 (use-package consult
   :bind
   (("C-x b"     . consult-buffer)
