@@ -19,7 +19,9 @@
   :hook
   (ibuffer-mode . ibuffer-auto-mode)
   :config
-  (setq-default ibuffer-expert t))
+  (setq-default
+   ibuffer-expert t
+   ibuffer-default-sorting-mode 'filename/process))
 
 (use-feature dired
   :hook

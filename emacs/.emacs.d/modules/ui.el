@@ -42,6 +42,10 @@
   :hook
   (dired-mode . all-the-icons-dired-mode))
 
+(use-package all-the-icons-ibuffer
+  :hook
+  (ibuffer-mode . all-the-icons-ibuffer-mode))
+
 (use-package dired-rainbow
   :config
   (dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
