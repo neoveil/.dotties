@@ -15,6 +15,7 @@
  enable-recursive-minibuffers t
  ring-bell-function #'ignore
  confirm-kill-emacs #'y-or-n-p
+ use-short-answers t
  native-comp-async-report-warnings-errors nil
  apropos-do-all t
  read-process-output-max (* 4 1024 1024)
